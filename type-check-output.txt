@@ -1,0 +1,284 @@
+
+> infinite-pages-v3@3.0.0 type-check
+> tsc --noEmit
+
+app/api/admin/distribute-credits/route.ts(108,31): error TS2339: Property 'reader_id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(110,43): error TS2339: Property 'story_id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(120,60): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(125,20): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(131,53): error TS2339: Property 'subscription_period_start' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(132,51): error TS2339: Property 'subscription_period_end' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(136,40): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(141,28): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(142,38): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(144,52): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(145,75): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(157,32): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(164,21): error TS2345: Argument of type '{ credits_balance: any; credits_earned_total: any; }' is not assignable to parameter of type 'never'.
+app/api/admin/distribute-credits/route.ts(165,48): error TS2339: Property 'credits_balance' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(166,53): error TS2339: Property 'credits_earned_total' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(168,34): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(171,75): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(175,66): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(182,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "credit_transactions", never, "POST">', gave the following error.
+    Argument of type '{ user_id: any; amount: number; transaction_type: string; description: string; metadata: { distribution_month: string; subscription_tier: any; stories_read: any; base_credits: 1332 | 2497; bonus_credits: number; }; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "credit_transactions", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+app/api/admin/distribute-credits/route.ts(183,33): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(189,45): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(197,77): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(271,33): error TS2339: Property 'metadata' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(280,46): error TS2339: Property 'amount' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(283,32): error TS2339: Property 'metadata' does not exist on type 'never'.
+app/api/admin/distribute-credits/route.ts(288,54): error TS2339: Property 'amount' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(66,25): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type '{}'.
+  Type 'undefined' is not assignable to type '{}'.
+app/api/admin/process-payouts/route.ts(87,72): error TS2339: Property 'total_accumulated_usd' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(96,44): error TS2339: Property 'user_profiles' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(98,27): error TS2339: Property 'creator_id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(100,23): error TS2339: Property 'total_accumulated_usd' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(121,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "monthly_payout_batches", never, "POST">', gave the following error.
+    Argument of type '{ batch_date: string | undefined; processing_status: string; minimum_payout_usd: any; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "monthly_payout_batches", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'batch_date' does not exist in type 'never[]'.
+app/api/admin/process-payouts/route.ts(136,32): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(155,17): error TS2345: Argument of type '{ processing_status: string; }' is not assignable to parameter of type 'never'.
+app/api/admin/process-payouts/route.ts(165,71): error TS2339: Property 'total_accumulated_usd' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(170,27): error TS2339: Property 'creator_id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(171,27): error TS2339: Property 'total_accumulated_usd' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(177,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "individual_payouts", never, "POST">', gave the following error.
+    Argument of type '{ batch_id: any; creator_id: any; amount_usd: any; status: "pending"; }[]' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "individual_payouts", never, "POST">', gave the following error.
+    Argument of type '{ batch_id: any; creator_id: any; amount_usd: any; status: "pending"; }[]' is not assignable to parameter of type 'never[]'.
+      Type '{ batch_id: any; creator_id: any; amount_usd: any; status: "pending"; }' is not assignable to type 'never'.
+app/api/admin/process-payouts/route.ts(196,45): error TS2339: Property 'user_profiles' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(206,21): error TS2345: Argument of type '{ status: string; error_message: string; }' is not assignable to parameter of type 'never'.
+app/api/admin/process-payouts/route.ts(210,30): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(217,52): error TS2339: Property 'amount_usd' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(225,21): error TS2345: Argument of type '{ status: string; error_message: string; }' is not assignable to parameter of type 'never'.
+app/api/admin/process-payouts/route.ts(229,30): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(235,68): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(239,19): error TS2345: Argument of type '{ status: string; stripe_transfer_id: string; }' is not assignable to parameter of type 'never'.
+app/api/admin/process-payouts/route.ts(243,28): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(248,19): error TS2345: Argument of type '{ total_accumulated_usd: number; }' is not assignable to parameter of type 'never'.
+app/api/admin/process-payouts/route.ts(249,36): error TS2339: Property 'creator_id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(253,81): error TS2339: Property 'amount_usd' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(261,19): error TS2345: Argument of type '{ status: string; error_message: string; }' is not assignable to parameter of type 'never'.
+app/api/admin/process-payouts/route.ts(265,28): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/admin/process-payouts/route.ts(273,15): error TS2345: Argument of type '{ processing_status: string; total_creators_paid: number; }' is not assignable to parameter of type 'never'.
+app/api/billing/create-checkout/route.ts(46,31): error TS2339: Property 'stripe_customer_id' does not exist on type 'never'.
+app/api/billing/create-checkout/route.ts(57,17): error TS2345: Argument of type '{ stripe_customer_id: any; }' is not assignable to parameter of type 'never'.
+app/api/billing/create-portal/route.ts(20,19): error TS2339: Property 'stripe_customer_id' does not exist on type 'never'.
+app/api/billing/create-portal/route.ts(28,25): error TS2339: Property 'stripe_customer_id' does not exist on type 'never'.
+app/api/billing/webhook/route.ts(72,13): error TS2345: Argument of type '{ subscription_tier: string; subscription_status: string; current_period_end: string; tokens_remaining: 1332 | 2497; stripe_subscription_id: string; }' is not assignable to parameter of type 'never'.
+app/api/billing/webhook/route.ts(84,6): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; event_type: string; subscription_tier: string; credits_granted: 1332 | 2497; stripe_session_id: string; stripe_subscription_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+app/api/billing/webhook/route.ts(104,15): error TS2345: Argument of type '{ subscription_status: Stripe.Subscription.Status; current_period_end: string; }' is not assignable to parameter of type 'never'.
+app/api/billing/webhook/route.ts(113,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; event_type: string; subscription_status: Stripe.Subscription.Status; stripe_subscription_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+app/api/billing/webhook/route.ts(133,15): error TS2345: Argument of type '{ subscription_tier: string; subscription_status: string; current_period_end: null; tokens_remaining: 1332; stripe_subscription_id: null; }' is not assignable to parameter of type 'never'.
+app/api/billing/webhook/route.ts(145,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; event_type: string; subscription_tier: string; credits_granted: 1332; stripe_subscription_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+app/api/billing/webhook/route.ts(172,28): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/billing/webhook/route.ts(180,17): error TS2345: Argument of type '{ tokens_remaining: 1332 | 2497; current_period_end: string; }' is not assignable to parameter of type 'never'.
+app/api/billing/webhook/route.ts(189,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; event_type: string; subscription_tier: "basic" | "premium"; credits_granted: 1332 | 2497; stripe_invoice_id: string; stripe_subscription_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+app/api/billing/webhook/route.ts(215,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; event_type: string; stripe_invoice_id: string; stripe_subscription_id: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "subscription_logs", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+app/api/stories/route.ts(220,51): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/stories/route.ts(222,71): error TS2339: Property 'stories_created' does not exist on type 'never'.
+app/api/stories/route.ts(224,84): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/stories/route.ts(225,35): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/stories/route.ts(226,31): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/stories/route.ts(236,15): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/stories/route.ts(262,51): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/stories/route.ts(287,20): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+app/api/stories/route.ts(296,17): error TS2339: Property 'tokens_remaining' does not exist on type 'never'.
+app/api/stories/route.ts(301,31): error TS2339: Property 'tokens_remaining' does not exist on type 'never'.
+app/api/stories/route.ts(379,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "stories", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; title: any; genre: any; premise: any; foundation: any; total_tokens_used: number; total_cost_usd: number; status: string; word_count: number; chapter_count: number; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "stories", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+app/api/stories/route.ts(404,15): error TS2345: Argument of type '{ tokens_remaining: number; tokens_used_total: any; stories_created: any; words_generated: any; }' is not assignable to parameter of type 'never'.
+app/api/stories/route.ts(405,35): error TS2339: Property 'tokens_remaining' does not exist on type 'never'.
+app/api/stories/route.ts(406,37): error TS2339: Property 'tokens_used_total' does not exist on type 'never'.
+app/api/stories/route.ts(407,34): error TS2339: Property 'stories_created' does not exist on type 'never'.
+app/api/stories/route.ts(408,35): error TS2339: Property 'words_generated' does not exist on type 'never'.
+app/api/stories/route.ts(420,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "generation_logs", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; story_id: any; operation_type: "foundation"; tokens_input: number; tokens_output: number; cost_usd: number; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "generation_logs", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'user_id' does not exist in type 'never[]'.
+app/api/stories/route.ts(422,25): error TS2339: Property 'id' does not exist on type 'never'.
+app/api/stories/route.ts(441,32): error TS2339: Property 'tokens_remaining' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(221,22): error TS2339: Property 'type' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(223,23): error TS2339: Property 'title' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(224,23): error TS2339: Property 'genre' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(225,25): error TS2339: Property 'premise' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(226,29): error TS2339: Property 'description' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(227,22): error TS2339: Property 'tone' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(229,28): error TS2339: Property 'characters' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(230,25): error TS2339: Property 'setting' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(231,31): error TS2339: Property 'target_length' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(232,35): error TS2339: Property 'choice_complexity' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(233,37): error TS2339: Property 'target_ending_count' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(234,34): error TS2339: Property 'estimated_length' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(235,29): error TS2339: Property 'main_themes' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(236,33): error TS2339: Property 'target_audience' does not exist on type 'never'.
+src/components/features/stories/story-creator.tsx(331,17): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "stories", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; title: string; genre: string; premise: string; type: CreationMode; status: StoryStatus; description: string; tone: string; characters: string; setting: string; ... 5 more ...; target_audience: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "stories", never, "POST">', gave the following error.
+    Argument of type '{ user_id: string; title: string; genre: string; premise: string; type: CreationMode; status: StoryStatus; description: string; tone: string; characters: string; setting: string; ... 5 more ...; target_audience: string; }' is not assignable to parameter of type 'never[]'.
+      Type '{ user_id: string; title: string; genre: string; premise: string; type: CreationMode; status: StoryStatus; description: string; tone: string; characters: string; setting: string; ... 5 more ...; target_audience: string; }' is missing the following properties from type 'never[]': length, pop, push, concat, and 29 more.
+src/components/features/stories/story-creator.tsx(558,37): error TS2345: Argument of type '(prev: { title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }) => { ...; }' is not assignable to parameter of type 'SetStateAction<{ title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }>'.
+  Type '(prev: { title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }) => { ...; }' is not assignable to type '(prevState: { title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }) => { ......'.
+    Call signature return types '{ choice_complexity: "moderate" | "complex" | "simple"; title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; ... 4 more ...; target_audience: string; }' and '{ title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }' are incompatible.
+      The types of 'choice_complexity' are incompatible between these types.
+        Type '"moderate" | "complex" | "simple"' is not assignable to type '"moderate"'.
+          Type '"complex"' is not assignable to type '"moderate"'.
+src/lib/ai/streaming.ts(93,47): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(body: MessageCreateParamsNonStreaming, options?: RequestOptions<unknown> | undefined): APIPromise<Message>', gave the following error.
+    Type 'true' is not assignable to type 'false'.
+  Overload 2 of 3, '(body: MessageCreateParamsStreaming, options?: RequestOptions<unknown> | undefined): APIPromise<Stream<RawMessageStreamEvent>>', gave the following error.
+    Argument of type '{ model: string; max_tokens: number; temperature: number; system: string | undefined; messages: { role: "user"; content: string; }[]; stream: true; }' is not assignable to parameter of type 'MessageCreateParamsStreaming' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'system' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string | TextBlockParam[]'.
+          Type 'undefined' is not assignable to type 'string | TextBlockParam[]'.
+  Overload 3 of 3, '(body: MessageCreateParamsBase, options?: RequestOptions<unknown> | undefined): APIPromise<Message | Stream<RawMessageStreamEvent>>', gave the following error.
+    Argument of type '{ model: string; max_tokens: number; temperature: number; system: string | undefined; messages: { role: "user"; content: string; }[]; stream: true; }' is not assignable to parameter of type 'MessageCreateParamsBase' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'system' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string | TextBlockParam[]'.
+          Type 'undefined' is not assignable to type 'string | TextBlockParam[]'.
+src/lib/ai/streaming.ts(117,51): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+src/lib/auth/middleware.ts(64,19): error TS2339: Property 'is_admin' does not exist on type 'never'.
+src/lib/auth/middleware.ts(64,40): error TS2339: Property 'role' does not exist on type 'never'.
+src/lib/auth/middleware.ts(105,19): error TS2339: Property 'is_creator' does not exist on type 'never'.
+src/lib/billing/stripe.ts(58,41): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(params?: SessionCreateParams | undefined, options?: RequestOptions | undefined): Promise<Response<Session>>', gave the following error.
+    Argument of type '{ customer: string | undefined; payment_method_types: "card"[]; line_items: { price: string; quantity: number; }[]; mode: "subscription"; success_url: string; cancel_url: string; metadata: Record<string, string>; }' is not assignable to parameter of type 'SessionCreateParams' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'customer' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string'.
+          Type 'undefined' is not assignable to type 'string'.
+  Overload 2 of 2, '(options?: RequestOptions | undefined): Promise<Response<Session>>', gave the following error.
+    Object literal may only specify known properties, and 'customer' does not exist in type 'RequestOptions'.
+src/lib/character-manager.ts(103,38): error TS2345: Argument of type 'VoicePattern' is not assignable to parameter of type '{ [key: string]: unknown; name?: string; storyId?: string; voicePattern?: VoicePattern; characterName?: string; }'.
+  Index signature for type 'string' is missing in type 'VoicePattern'.
+src/lib/character-manager.ts(220,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "character_voice_patterns", never, "POST">', gave the following error.
+    Argument of type '{ character_name: string | undefined; story_id: string; speech_patterns: {}; vocabulary_style: {}; tonal_characteristics: {}; dialogue_examples: {}; consistency_markers: {}; created_at: string; updated_at: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, ... 5 more ..., "POST">', gave the following error.
+    Object literal may only specify known properties, and 'character_name' does not exist in type 'never[]'.
+src/lib/choice-books/choice-analytics.ts(578,30): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/lib/choice-books/choice-analytics.ts(579,28): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/lib/claude/analytics.ts(170,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "claude_analytics", never, "POST">', gave the following error.
+    Argument of type '{ id: string; user_id: string; operation: string; model: string; input_tokens: number; output_tokens: number; total_tokens: number; cost: number; response_time: number; success: boolean; error: string | undefined; cached: boolean; metadata: { ...; } | undefined; created_at: Date; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "claude_analytics", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'id' does not exist in type 'never[]'.
+src/lib/claude/analytics.ts(1396,40): error TS2345: Argument of type '{ timestamp: number; original: number; compressed: number; ratio: number; compressionSavings?: number; } | undefined' is not assignable to parameter of type '{ timestamp: number; original: number; compressed: number; ratio: number; compressionSavings?: number; }'.
+  Type 'undefined' is not assignable to type '{ timestamp: number; original: number; compressed: number; ratio: number; compressionSavings?: number; }'.
+src/lib/claude/analytics.ts(1397,41): error TS2345: Argument of type '{ timestamp: number; original: number; compressed: number; ratio: number; compressionSavings?: number; } | undefined' is not assignable to parameter of type '{ timestamp: number; original: number; compressed: number; ratio: number; compressionSavings?: number; }'.
+  Type 'undefined' is not assignable to type '{ timestamp: number; original: number; compressed: number; ratio: number; compressionSavings?: number; }'.
+src/lib/claude/batch.ts(211,60): error TS2345: Argument of type '{ [key: string]: unknown; title?: string; genre?: string; premise?: string; content?: string; feedback?: string; improvementType?: string; }' is not assignable to parameter of type '{ title?: string | undefined; genre: string; premise: string; }'.
+  Property 'genre' is optional in type '{ [key: string]: unknown; title?: string; genre?: string; premise?: string; content?: string; feedback?: string; improvementType?: string; }' but required in type '{ title?: string | undefined; genre: string; premise: string; }'.
+src/lib/claude/batch.ts(214,52): error TS2345: Argument of type '{ [key: string]: unknown; title?: string; genre?: string; premise?: string; content?: string; feedback?: string; improvementType?: string; }' is not assignable to parameter of type '{ storyContext: string | Record<string, unknown>; chapterNumber: number; previousChapters: { number: number; content: string; summary: string; }[]; targetWordCount?: number; chapterPlan?: { ...; }; useOptimizedContext?: boolean; }'.
+  Type '{ [key: string]: unknown; title?: string; genre?: string; premise?: string; content?: string; feedback?: string; improvementType?: string; }' is missing the following properties from type '{ storyContext: string | Record<string, unknown>; chapterNumber: number; previousChapters: { number: number; content: string; summary: string; }[]; targetWordCount?: number; chapterPlan?: { ...; }; useOptimizedContext?: boolean; }': storyContext, chapterNumber, previousChapters
+src/lib/claude/batch.ts(217,51): error TS2345: Argument of type '{ [key: string]: unknown; title?: string; genre?: string; premise?: string; content?: string; feedback?: string; improvementType?: string; }' is not assignable to parameter of type '{ content: string; feedback: string; improvementType?: "description" | "general" | "dialogue" | "pacing" | "character" | undefined; }'.
+  Property 'content' is optional in type '{ [key: string]: unknown; title?: string; genre?: string; premise?: string; content?: string; feedback?: string; improvementType?: string; }' but required in type '{ content: string; feedback: string; improvementType?: "description" | "general" | "dialogue" | "pacing" | "character" | undefined; }'.
+src/lib/claude/batch.ts(227,52): error TS2345: Argument of type '{ [key: string]: unknown; title?: string; genre?: string; premise?: string; content?: string; feedback?: string; improvementType?: string; }' is not assignable to parameter of type '{ prompt: string; model?: string | undefined; maxTokens?: number | undefined; temperature?: number | undefined; systemPrompt?: string | undefined; retries?: number | undefined; useCache?: boolean | undefined; userId?: string | undefined; operation?: string | undefined; trackAnalytics?: boolean | undefined; context?:...'.
+  Property 'prompt' is missing in type '{ [key: string]: unknown; title?: string; genre?: string; premise?: string; content?: string; feedback?: string; improvementType?: string; }' but required in type '{ prompt: string; model?: string | undefined; maxTokens?: number | undefined; temperature?: number | undefined; systemPrompt?: string | undefined; retries?: number | undefined; useCache?: boolean | undefined; userId?: string | undefined; operation?: string | undefined; trackAnalytics?: boolean | undefined; context?:...'.
+src/lib/claude/context-optimizer.ts(163,45): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/claude/infinitePagesCache.ts(496,61): error TS2345: Argument of type 'Awaited<T>' is not assignable to parameter of type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; }'.
+  Type 'T | (T extends object & { then(onfulfilled: infer F, ...args: infer _): any; } ? F extends (value: infer V, ...args: infer _) => any ? Awaited<V> : never : T)' is not assignable to type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; }'.
+    Type '(null | undefined) & T' is not assignable to type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; }'.
+      Type 'undefined & T' is not assignable to type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; }'.
+src/lib/claude/service.ts(656,34): error TS2345: Argument of type '{ id: string; type: "general" | "story_foundation" | "content_improvement" | "content_analysis" | "chapter_generation"; params: { prompt: string; model: string | undefined; maxTokens: number | undefined; temperature: number | undefined; }; userId: string | undefined; }[]' is not assignable to parameter of type 'BatchOperation[]'.
+  Type '{ id: string; type: "story_foundation" | "chapter_generation" | "content_improvement" | "content_analysis" | "general"; params: { prompt: string; model: string | undefined; maxTokens: number | undefined; temperature: number | undefined; }; userId: string | undefined; }' is not assignable to type 'BatchOperation' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    Types of property 'type' are incompatible.
+      Type '"general" | "story_foundation" | "content_improvement" | "content_analysis" | "chapter_generation"' is not assignable to type '"chapter" | "general" | "story_foundation" | "content_improvement" | "content_analysis"'.
+        Type '"chapter_generation"' is not assignable to type '"chapter" | "general" | "story_foundation" | "content_improvement" | "content_analysis"'.
+src/lib/claude/service.ts(759,52): error TS2345: Argument of type 'Record<string, unknown>' is not assignable to parameter of type '{ type: string; content: string; }[]'.
+  Type 'Record<string, unknown>' is missing the following properties from type '{ type: string; content: string; }[]': length, pop, push, concat, and 29 more.
+src/lib/claude/service.ts(791,7): error TS2345: Argument of type 'Record<string, unknown>' is not assignable to parameter of type '{ universe: Record<string, unknown>; series: Record<string, unknown>; book: Record<string, unknown>; chapter: Record<string, unknown>; }'.
+  Type 'Record<string, unknown>' is missing the following properties from type '{ universe: Record<string, unknown>; series: Record<string, unknown>; book: Record<string, unknown>; chapter: Record<string, unknown>; }': universe, series, book, chapter
+src/lib/creator-earnings.ts(39,83): error TS2345: Argument of type '{ p_creator_id: string; p_story_id: string; p_reader_id: string; p_credits_spent: number; p_creator_earnings: number; p_usd_equivalent: number; }' is not assignable to parameter of type 'undefined'.
+src/lib/creator-earnings.ts(91,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "creator_earnings_accumulation", never, "POST">', gave the following error.
+    Argument of type '{ creator_id: string; total_accumulated_usd: number; last_payout_date: null; last_payout_amount: null; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, ... 5 more ..., "POST">', gave the following error.
+    Object literal may only specify known properties, and 'creator_id' does not exist in type 'never[]'.
+src/lib/providers/QueryProvider.tsx(76,42): error TS2345: Argument of type '(event: { type: string; mutation: { options: { mutationKey?: unknown; }; state: { status: string; error?: unknown; }; }; }) => void' is not assignable to parameter of type 'MutationCacheListener'.
+  Types of parameters 'event' and 'event' are incompatible.
+    Type 'MutationCacheNotifyEvent' is not assignable to type '{ type: string; mutation: { options: { mutationKey?: unknown; }; state: { status: string; error?: unknown; }; }; }'.
+      Type 'NotifyEventMutationObserverOptionsUpdated' is not assignable to type '{ type: string; mutation: { options: { mutationKey?: unknown; }; state: { status: string; error?: unknown; }; }; }'.
+        Property 'mutation' is optional in type 'NotifyEventMutationObserverOptionsUpdated' but required in type '{ type: string; mutation: { options: { mutationKey?: unknown; }; state: { status: string; error?: unknown; }; }; }'.
+src/lib/request-tracking-init.ts(91,24): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+src/lib/security/content-sanitizer.ts(216,48): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/series-manager.ts(120,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "series", never, "POST">', gave the following error.
+    Argument of type '{ name: string; planned_books: number; universe_id: string; description: string; genre: string; target_audience: string; themes: string[]; created_at: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "series", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'name' does not exist in type 'never[]'.
+src/lib/series-manager.ts(146,9): error TS2345: Argument of type 'SeriesFacts' is not assignable to parameter of type '{ [key: string]: unknown; userId?: string; }'.
+  Index signature for type 'string' is missing in type 'SeriesFacts'.
+src/lib/series-manager.ts(327,52): error TS2345: Argument of type 'SeriesFacts | null' is not assignable to parameter of type 'SeriesFacts'.
+  Type 'null' is not assignable to type 'SeriesFacts'.
+src/lib/series-manager.ts(355,51): error TS2345: Argument of type 'SeriesFacts | null' is not assignable to parameter of type 'SeriesFacts'.
+  Type 'null' is not assignable to type 'SeriesFacts'.
+src/lib/series-manager.ts(542,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "series_facts", never, "POST">', gave the following error.
+    Argument of type '{ series_id: string; facts_data: string; updated_at: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, ... 5 more ..., "POST">', gave the following error.
+    Object literal may only specify known properties, and 'series_id' does not exist in type 'never[]'.
+src/lib/series/series-context-manager.ts(193,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<never, never, never, null, "character_arcs", never, "POST">', gave the following error.
+    Argument of type '{ series_id: string; character_name: string; current_book_development: { [bookNumber]: Partial<BookDevelopment>; }; last_appearance_book: number; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<never, never, never, null, "character_arcs", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'series_id' does not exist in type 'never[]'.
+src/lib/series/series-context-manager.ts(208,19): error TS2345: Argument of type '{ current_book_development: { [x: number]: Partial<BookDevelopment>; }; last_appearance_book: number; updated_at: string; }' is not assignable to parameter of type 'never'.
+src/lib/series/series-context-manager.ts(234,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<never, never, never, null, "world_state_changes", never, "POST">', gave the following error.
+    Argument of type '{ chapter_number?: number; change_type: "political" | "technological" | "social" | "geographic" | "magical" | "economic" | "cultural"; description: string; scope: "local" | "regional" | "global" | "cosmic"; ... 6 more ...; book_number: number; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<never, never, never, null, "world_state_changes", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'series_id' does not exist in type 'never[]'.
+src/lib/series/series-context-manager.ts(449,45): error TS2345: Argument of type 'unknown' is not assignable to parameter of type '{ geography?: { world_type?: string; }; }'.
+src/lib/series/series-context-manager.ts(463,49): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Record<string, unknown>'.
+src/lib/series/series-context-manager.ts(512,61): error TS2345: Argument of type 'Record<string, unknown> | undefined' is not assignable to parameter of type 'Record<string, unknown>'.
+  Type 'undefined' is not assignable to type 'Record<string, unknown>'.
+src/lib/series/series-context-manager.ts(668,61): error TS2345: Argument of type '{ series_uuid: string; }' is not assignable to parameter of type 'undefined'.

@@ -1,0 +1,476 @@
+
+> infinite-pages-v3@3.0.0 type-check
+> tsc --noEmit
+
+app/auth/signin/page.tsx(48,42): error TS4111: Property 'NEXT_PUBLIC_SITE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SITE_URL'].
+app/auth/signup/page.tsx(69,42): error TS4111: Property 'NEXT_PUBLIC_SITE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SITE_URL'].
+app/dashboard/page.tsx(267,40): error TS4111: Property 'full_name' comes from an index signature, so it must be accessed with ['full_name'].
+app/dashboard/page.tsx(395,17): error TS2820: Type '"story_foundation"' is not assignable to type '"CHAPTER_GENERATION" | "FACT_EXTRACTION" | "STORY_ANALYSIS" | "story" | "novel" | "STORY_FOUNDATION" | "CHAPTER_IMPROVEMENT" | "CONTENT_ANALYSIS" | "choice-book" | "ai-builder"'. Did you mean '"STORY_FOUNDATION"'?
+app/dashboard/page.tsx(401,18): error TS2741: Property 'userProfile' is missing in type '{}' but required in type 'UnifiedStoryCreatorProps'.
+app/dashboard/page.tsx(448,16): error TS2741: Property 'userId' is missing in type '{}' but required in type 'CreatorEarningsHubProps'.
+app/page.tsx(42,42): error TS4111: Property 'NEXT_PUBLIC_SITE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SITE_URL'].
+src/components/features/stories/story-creator.tsx(5,31): error TS2307: Cannot find module '@/types/database' or its corresponding type declarations.
+src/components/features/stories/story-creator.tsx(558,37): error TS2345: Argument of type '(prev: { title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }) => { ...; }' is not assignable to parameter of type 'SetStateAction<{ title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }>'.
+  Type '(prev: { title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }) => { ...; }' is not assignable to type '(prevState: { title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }) => { ......'.
+    Call signature return types '{ choice_complexity: "moderate" | "simple" | "complex"; title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; ... 4 more ...; target_audience: string; }' and '{ title: string; genre: string; premise: string; description: string; tone: string; length: string; characters: string; setting: string; target_length: number; choice_complexity: "moderate"; target_ending_count: number; estimated_length: number; main_themes: string[]; target_audience: string; }' are incompatible.
+      The types of 'choice_complexity' are incompatible between these types.
+        Type '"moderate" | "simple" | "complex"' is not assignable to type '"moderate"'.
+          Type '"simple"' is not assignable to type '"moderate"'.
+src/components/features/stories/story-creator.tsx(691,21): error TS2353: Object literal may only specify known properties, and 'user_id' does not exist in type '{ id: string; title: string; description?: string; status?: string; }'.
+src/components/pricing/credit-purchase.tsx(20,38): error TS2339: Property 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY' does not exist on type '{ readonly SUPABASE_URL: string; readonly SUPABASE_ANON_KEY: string; readonly SUPABASE_SERVICE_ROLE_KEY: string; readonly STRIPE_SECRET_KEY: string; readonly STRIPE_PRICE_ID: string; ... 10 more ...; readonly IS_DEVELOPMENT: boolean; }'.
+src/components/pricing/credit-purchase.tsx(44,6): error TS2375: Type '{ children: Element; open: boolean; onOpenChange: (() => void) | undefined; }' is not assignable to type 'DialogProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'onOpenChange' are incompatible.
+    Type '(() => void) | undefined' is not assignable to type '(open: boolean) => void'.
+      Type 'undefined' is not assignable to type '(open: boolean) => void'.
+src/lib/ai/claude-client.ts(129,51): error TS2367: This comparison appears to be unintentional because the types '"text_delta" | "input_json_delta"' and '"text"' have no overlap.
+src/lib/ai/claude-client.ts(130,34): error TS2339: Property 'text' does not exist on type 'never'.
+src/lib/ai/context-optimizer.ts(168,54): error TS2345: Argument of type 'StoryContext | undefined' is not assignable to parameter of type 'StoryContext'.
+  Type 'undefined' is not assignable to type 'StoryContext'.
+src/lib/ai/streaming.ts(32,24): error TS4111: Property 'ANTHROPIC_API_KEY' comes from an index signature, so it must be accessed with ['ANTHROPIC_API_KEY'].
+src/lib/ai/streaming.ts(37,29): error TS4111: Property 'ANTHROPIC_API_KEY' comes from an index signature, so it must be accessed with ['ANTHROPIC_API_KEY'].
+src/lib/ai/streaming.ts(56,19): error TS2339: Property 'test' does not exist on type '{ readonly pattern: RegExp; readonly reason: "explicit sexual content"; } | { readonly pattern: RegExp; readonly reason: "graphic violence"; } | { readonly pattern: RegExp; readonly reason: "illegal activities"; } | { ...; } | { ...; } | { ...; }'.
+  Property 'test' does not exist on type '{ readonly pattern: RegExp; readonly reason: "explicit sexual content"; }'.
+src/lib/ai/streaming.ts(62,41): error TS2339: Property 'MAX_PROMPT_LENGTH' does not exist on type '{ readonly STORY_TITLE_MAX_LENGTH: 200; readonly PREMISE_MIN_LENGTH: 10; readonly PREMISE_MAX_LENGTH: 2000; readonly GENRE_MAX_LENGTH: 50; readonly CHAPTER_TITLE_MAX_LENGTH: 100; readonly IMPROVEMENT_FEEDBACK_MAX_LENGTH: 1000; readonly MAX_CONTENT_LENGTH: 50000; }'.
+src/lib/ai/streaming.ts(63,75): error TS2339: Property 'MAX_PROMPT_LENGTH' does not exist on type '{ readonly STORY_TITLE_MAX_LENGTH: 200; readonly PREMISE_MIN_LENGTH: 10; readonly PREMISE_MAX_LENGTH: 2000; readonly GENRE_MAX_LENGTH: 50; readonly CHAPTER_TITLE_MAX_LENGTH: 100; readonly IMPROVEMENT_FEEDBACK_MAX_LENGTH: 1000; readonly MAX_CONTENT_LENGTH: 50000; }'.
+src/lib/ai/streaming.ts(92,47): error TS2769: No overload matches this call.
+  Overload 1 of 3, '(body: MessageCreateParamsNonStreaming, options?: RequestOptions<unknown> | undefined): APIPromise<Message>', gave the following error.
+    Type 'true' is not assignable to type 'false'.
+  Overload 2 of 3, '(body: MessageCreateParamsStreaming, options?: RequestOptions<unknown> | undefined): APIPromise<Stream<RawMessageStreamEvent>>', gave the following error.
+    Argument of type '{ model: string; max_tokens: number; temperature: number; system: string | undefined; messages: { role: "user"; content: string; }[]; stream: true; }' is not assignable to parameter of type 'MessageCreateParamsStreaming' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'system' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string | TextBlockParam[]'.
+          Type 'undefined' is not assignable to type 'string | TextBlockParam[]'.
+  Overload 3 of 3, '(body: MessageCreateParamsBase, options?: RequestOptions<unknown> | undefined): APIPromise<Message | Stream<RawMessageStreamEvent>>', gave the following error.
+    Argument of type '{ model: string; max_tokens: number; temperature: number; system: string | undefined; messages: { role: "user"; content: string; }[]; stream: true; }' is not assignable to parameter of type 'MessageCreateParamsBase' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'system' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string | TextBlockParam[]'.
+          Type 'undefined' is not assignable to type 'string | TextBlockParam[]'.
+src/lib/ai/streaming.ts(116,51): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+src/lib/billing/stripe.ts(58,41): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(params?: SessionCreateParams | undefined, options?: RequestOptions | undefined): Promise<Response<Session>>', gave the following error.
+    Argument of type '{ customer: string | undefined; payment_method_types: "card"[]; line_items: { price: string; quantity: number; }[]; mode: "subscription"; success_url: string; cancel_url: string; metadata: Record<string, string>; }' is not assignable to parameter of type 'SessionCreateParams' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'customer' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string'.
+          Type 'undefined' is not assignable to type 'string'.
+  Overload 2 of 2, '(options?: RequestOptions | undefined): Promise<Response<Session>>', gave the following error.
+    Object literal may only specify known properties, and 'customer' does not exist in type 'RequestOptions'.
+src/lib/character-manager.ts(52,9): error TS2353: Object literal may only specify known properties, and 'context' does not exist in type '{ prompt: string; model?: string; maxTokens?: number; temperature?: number; systemPrompt?: string; retries?: number; useCache?: boolean; userId?: string; operation?: string; trackAnalytics?: boolean; }'.
+src/lib/character-manager.ts(81,9): error TS2353: Object literal may only specify known properties, and 'context' does not exist in type '{ prompt: string; model?: string; maxTokens?: number; temperature?: number; systemPrompt?: string; retries?: number; useCache?: boolean; userId?: string; operation?: string; trackAnalytics?: boolean; }'.
+src/lib/character-manager.ts(106,38): error TS2345: Argument of type 'VoicePattern' is not assignable to parameter of type '{ [key: string]: unknown; name?: string; storyId?: string; voicePattern?: VoicePattern; characterName?: string; }'.
+  Index signature for type 'string' is missing in type 'VoicePattern'.
+src/lib/character-manager.ts(223,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "character_voice_patterns", never, "POST">', gave the following error.
+    Argument of type '{ character_name: string | undefined; story_id: string; speech_patterns: {}; vocabulary_style: {}; tonal_characteristics: {}; dialogue_examples: {}; consistency_markers: {}; created_at: string; updated_at: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, ... 5 more ..., "POST">', gave the following error.
+    Object literal may only specify known properties, and 'character_name' does not exist in type 'never[]'.
+src/lib/character-manager.ts(263,29): error TS2339: Property 'character_name' does not exist on type 'never'.
+src/lib/character-manager.ts(264,30): error TS2339: Property 'speech_patterns' does not exist on type 'never'.
+src/lib/character-manager.ts(265,31): error TS2339: Property 'vocabulary_style' does not exist on type 'never'.
+src/lib/character-manager.ts(266,36): error TS2339: Property 'tonal_characteristics' does not exist on type 'never'.
+src/lib/character-manager.ts(267,32): error TS2339: Property 'dialogue_examples' does not exist on type 'never'.
+src/lib/character-manager.ts(268,35): error TS2339: Property 'consistency_markers' does not exist on type 'never'.
+src/lib/choice-books/choice-analytics.ts(1,34): error TS2307: Cannot find module '@/lib/claude/analytics' or its corresponding type declarations.
+src/lib/choice-books/choice-analytics.ts(494,11): error TS18048: 'path.discovered_endings.length' is possibly 'undefined'.
+src/lib/choice-books/choice-analytics.ts(495,9): error TS18048: 'path.discovered_endings' is possibly 'undefined'.
+src/lib/choice-books/choice-analytics.ts(578,30): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/lib/choice-books/choice-analytics.ts(579,28): error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number | Date'.
+      Type 'undefined' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'string | undefined' is not assignable to parameter of type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+src/lib/choice-books/choice-generator.ts(3,34): error TS2307: Cannot find module '@/lib/claude/context-optimizer' or its corresponding type declarations.
+src/lib/choice-books/choice-generator.ts(4,55): error TS2307: Cannot find module '@/lib/claude/adaptive-context' or its corresponding type declarations.
+src/lib/choice-books/choice-generator.ts(5,34): error TS2307: Cannot find module '@/lib/claude/analytics' or its corresponding type declarations.
+src/lib/choice-books/choice-generator.ts(80,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/choice-books/choice-generator.ts(95,40): error TS2339: Property 'tokens_saved' does not exist on type 'ChoiceOptimizedContext'.
+src/lib/choice-books/choice-generator.ts(96,47): error TS2339: Property 'compression_ratio' does not exist on type 'ChoiceOptimizedContext'.
+src/lib/choice-books/choice-generator.ts(162,32): error TS2339: Property 'conflictLevel' does not exist on type 'ChoiceComplexity'.
+src/lib/choice-books/choice-generator.ts(214,29): error TS2339: Property 'conflictLevel' does not exist on type 'ChoiceComplexity'.
+src/lib/choice-books/choice-generator.ts(265,100): error TS2352: Conversion of type 'ChoiceOptimizedContext' to type '{ core_facts: { genre: string; setting: { location: string; }; protagonist: string; central_conflict: string; current_chapter_id?: string; }; active_characters: { name: string; current_goal: string; key_trait: string; current_emotion: string; }[]; recent_events: string[]; choice_context: { ...; }; branching_complexi...' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'ChoiceOptimizedContext' is missing the following properties from type '{ core_facts: { genre: string; setting: { location: string; }; protagonist: string; central_conflict: string; current_chapter_id?: string; }; active_characters: { name: string; current_goal: string; key_trait: string; current_emotion: string; }[]; recent_events: string[]; choice_context: { ...; }; branching_complexi...': core_facts, active_characters, recent_events
+src/lib/choice-books/choice-generator.ts(480,29): error TS2339: Property 'core_facts' does not exist on type 'ChoiceOptimizedContext'.
+src/lib/choice-books/choice-generator.ts(552,9): error TS18048: 'context.ending_proximity' is possibly 'undefined'.
+src/lib/choice-books/choice-generator.ts(608,20): error TS2339: Property 'conflictLevel' does not exist on type 'ChoiceComplexity'.
+src/lib/choice-books/choice-generator.ts(609,20): error TS2339: Property 'emotionalIntensity' does not exist on type 'ChoiceComplexity'.
+src/lib/choice-books/choice-generator.ts(629,27): error TS18048: 'c.consequences.length' is possibly 'undefined'.
+src/lib/choice-books/choice-generator.ts(667,20): error TS2339: Property 'conflictLevel' does not exist on type 'ChoiceComplexity'.
+src/lib/choice-books/choice-prompts.ts(2,35): error TS2307: Cannot find module '@/lib/claude/adaptive-context' or its corresponding type declarations.
+src/lib/choice-books/choice-prompts.ts(337,9): error TS2322: Type '{ type: string; description: string; magnitude: string; }[]' is not assignable to type 'ChoiceConsequence[]'.
+  Type '{ type: string; description: string; magnitude: string; }' is not assignable to type 'ChoiceConsequence'.
+    Types of property 'type' are incompatible.
+      Type 'string' is not assignable to type '"immediate" | "delayed" | "ending_modifier"'.
+src/lib/choice-books/choice-types.ts(4,54): error TS2307: Cannot find module '@/lib/claude/adaptive-context' or its corresponding type declarations.
+src/lib/claude/index.ts(3,64): error TS2307: Cannot find module './streaming' or its corresponding type declarations.
+src/lib/claude/index.ts(4,42): error TS2307: Cannot find module './cache' or its corresponding type declarations.
+src/lib/claude/index.ts(5,54): error TS2307: Cannot find module './batch' or its corresponding type declarations.
+src/lib/claude/index.ts(6,58): error TS2307: Cannot find module './analytics' or its corresponding type declarations.
+src/lib/claude/index.ts(7,62): error TS2307: Cannot find module './prompts' or its corresponding type declarations.
+src/lib/claude/index.ts(13,37): error TS2307: Cannot find module './streaming' or its corresponding type declarations.
+src/lib/claude/index.ts(14,47): error TS2307: Cannot find module './cache' or its corresponding type declarations.
+src/lib/claude/index.ts(15,74): error TS2307: Cannot find module './batch' or its corresponding type declarations.
+src/lib/claude/index.ts(16,54): error TS2307: Cannot find module './analytics' or its corresponding type declarations.
+src/lib/claude/index.ts(17,53): error TS2307: Cannot find module './prompts' or its corresponding type declarations.
+src/lib/claude/infinitePagesCache.ts(110,39): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_URL'].
+src/lib/claude/infinitePagesCache.ts(111,42): error TS4111: Property 'SUPABASE_SERVICE_ROLE_KEY' comes from an index signature, so it must be accessed with ['SUPABASE_SERVICE_ROLE_KEY'].
+src/lib/claude/infinitePagesCache.ts(116,9): error TS2322: Type 'unknown' is not assignable to type 'SupabaseClient<unknown, { PostgrestVersion: string; }, never, never, { PostgrestVersion: string; }>'.
+src/lib/claude/infinitePagesCache.ts(124,9): error TS2322: Type 'unknown' is not assignable to type 'SupabaseClient<unknown, { PostgrestVersion: string; }, never, never, { PostgrestVersion: string; }>'.
+src/lib/claude/infinitePagesCache.ts(133,7): error TS2322: Type 'unknown' is not assignable to type 'SupabaseClient<unknown, { PostgrestVersion: string; }, never, never, { PostgrestVersion: string; }>'.
+src/lib/claude/infinitePagesCache.ts(354,13): error TS2375: Type '{ title: string | undefined; premise: string; themes: string[] | undefined; _cacheAdapted: boolean; _originalCacheId: string; genre?: string; mainCharacters?: Array<{ name: string; }>; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; wordCount?: number; }' is not assignable to type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; _cacheAdapted?: boolean; _originalCacheId?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'title' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/claude/infinitePagesCache.ts(383,13): error TS2375: Type '{ title: string; premise: string; themes: string[] | undefined; _cacheAdapted: boolean; _originalCacheId: string; genre?: string; mainCharacters?: Array<{ name: string; }>; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; wordCount?: number; }' is not assignable to type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; _cacheAdapted?: boolean; _originalCacheId?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'themes' are incompatible.
+    Type 'string[] | undefined' is not assignable to type 'string[]'.
+      Type 'undefined' is not assignable to type 'string[]'.
+src/lib/claude/infinitePagesCache.ts(493,61): error TS2345: Argument of type 'Awaited<T>' is not assignable to parameter of type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; }'.
+  Type 'T | (T extends object & { then(onfulfilled: infer F, ...args: infer _): any; } ? F extends (value: infer V, ...args: infer _) => any ? Awaited<V> : never : T)' is not assignable to type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; }'.
+    Type '(null | undefined) & T' is not assignable to type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; }'.
+      Type 'undefined & T' is not assignable to type '{ [key: string]: unknown; title?: string; premise?: string; genre?: string; themes?: string[]; mainCharacters?: { name: string; }[]; plotStructure?: Record<string, unknown>; setting?: { time?: string; place?: string; }; targetAudience?: string; }'.
+src/lib/claude/service.ts(10,29): error TS2307: Cannot find module './cache' or its corresponding type declarations.
+src/lib/claude/service.ts(11,34): error TS2307: Cannot find module './analytics' or its corresponding type declarations.
+src/lib/claude/service.ts(12,39): error TS2307: Cannot find module './prompts' or its corresponding type declarations.
+src/lib/claude/service.ts(13,57): error TS2307: Cannot find module './context-optimizer' or its corresponding type declarations.
+src/lib/claude/service.ts(14,31): error TS2307: Cannot find module './sfsl-schema' or its corresponding type declarations.
+src/lib/claude/service.ts(32,24): error TS4111: Property 'ANTHROPIC_API_KEY' comes from an index signature, so it must be accessed with ['ANTHROPIC_API_KEY'].
+src/lib/claude/service.ts(37,29): error TS4111: Property 'ANTHROPIC_API_KEY' comes from an index signature, so it must be accessed with ['ANTHROPIC_API_KEY'].
+src/lib/claude/service.ts(189,20): error TS18046: 'error' is of type 'unknown'.
+src/lib/claude/service.ts(371,43): error TS4111: Property 'optimization' comes from an index signature, so it must be accessed with ['optimization'].
+src/lib/claude/service.ts(396,25): error TS7006: Parameter 'c' implicitly has an 'any' type.
+src/lib/claude/service.ts(399,21): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/lib/claude/service.ts(541,16): error TS2339: Property 'status' does not exist on type '{}'.
+src/lib/claude/service.ts(545,16): error TS2339: Property 'status' does not exist on type '{}'.
+src/lib/claude/service.ts(549,16): error TS2339: Property 'status' does not exist on type '{}'.
+src/lib/claude/service.ts(553,16): error TS2339: Property 'status' does not exist on type '{}'.
+src/lib/claude/service.ts(557,29): error TS2339: Property 'message' does not exist on type '{}'.
+src/lib/claude/service.ts(565,42): error TS2345: Argument of type 'number | undefined' is not assignable to parameter of type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+src/lib/claude/service.ts(590,33): error TS2379: Argument of type '{ prompt: any; model: string | undefined; maxTokens: number | undefined; temperature: number | undefined; userId: string | undefined; operation: any; useCache: boolean | undefined; trackAnalytics: boolean | undefined; }' is not assignable to parameter of type '{ prompt: string; model?: string; maxTokens?: number; temperature?: number; systemPrompt?: string; retries?: number; useCache?: boolean; userId?: string; operation?: string; trackAnalytics?: boolean; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'model' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/claude/service.ts(621,45): error TS2307: Cannot find module './batch' or its corresponding type declarations.
+src/lib/claude/service.ts(732,7): error TS2322: Type 'unknown' is not assignable to type 'string'.
+src/lib/claude/service.ts(732,28): error TS4111: Property 'userId' comes from an index signature, so it must be accessed with ['userId'].
+src/lib/claude/service.ts(775,7): error TS2739: Type '{ [key: string]: unknown; number: number; targetWordCount?: number; }' is missing the following properties from type '{ [key: string]: unknown; purpose: string; keyEvents: string[]; }': purpose, keyEvents
+src/lib/creator-earnings.ts(39,83): error TS2345: Argument of type '{ p_creator_id: string; p_story_id: string; p_reader_id: string; p_credits_spent: number; p_creator_earnings: number; p_usd_equivalent: number; }' is not assignable to parameter of type 'undefined'.
+src/lib/creator-earnings.ts(91,8): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "creator_earnings_accumulation", never, "POST">', gave the following error.
+    Argument of type '{ creator_id: string; total_accumulated_usd: number; last_payout_date: null; last_payout_amount: null; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, ... 5 more ..., "POST">', gave the following error.
+    Object literal may only specify known properties, and 'creator_id' does not exist in type 'never[]'.
+src/lib/database/supabase.ts(8,35): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_URL'].
+src/lib/database/supabase.ts(9,35): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_ANON_KEY' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_ANON_KEY'].
+src/lib/database/supabase.ts(40,35): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_URL'].
+src/lib/database/supabase.ts(41,38): error TS4111: Property 'SUPABASE_SERVICE_ROLE_KEY' comes from an index signature, so it must be accessed with ['SUPABASE_SERVICE_ROLE_KEY'].
+src/lib/error-monitoring.ts(85,20): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/error-monitoring.ts(135,61): error TS2339: Property 'url' does not exist on type 'Request | URL'.
+  Property 'url' does not exist on type 'URL'.
+src/lib/error-monitoring.ts(173,27): error TS2379: Argument of type '{ message: string; stack: string | undefined; category: "network_error"; severity: "high"; source: "client"; url: string; apiEndpoint: any; responseTime: number; }' is not assignable to parameter of type 'Omit<ErrorReport, "timestamp" | "sessionId" | "deviceInfo" | "userAgent">' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'stack' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/error-monitoring.ts(192,5): error TS2412: Type '"basic" | "premium" | undefined' is not assignable to type '"basic" | "premium"' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type '"basic" | "premium"'.
+src/lib/error-monitoring.ts(199,11): error TS2375: Type '{ timestamp: string; url: string; userAgent: string; userId: string | undefined; sessionId: string; userTier: "basic" | "premium" | undefined; deviceInfo: { platform?: never; browser?: never; version?: never; mobile?: never; } | { ...; }; ... 10 more ...; responseTime?: number; }' is not assignable to type 'ErrorReport' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/error-monitoring.ts(227,23): error TS2379: Argument of type '{ component?: string; operation?: string; customData?: Record<string, unknown>; message: string; stack: string | undefined; category: "javascript_error"; severity: "high"; source: "client"; url: string; }' is not assignable to parameter of type 'Omit<ErrorReport, "timestamp" | "sessionId" | "deviceInfo" | "userAgent">' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'stack' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/error-utils.ts(94,3): error TS2375: Type '{ customData: Record<string, unknown> | undefined; stack: string | undefined; message: string; category: ErrorCategory; severity: ErrorSeverity; source: "server"; timestamp: string; ... 7 more ...; memoryUsage?: number; }' is not assignable to type 'ServerErrorReport' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'stack' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/feature-flags.ts(38,33): error TS4111: Property 'ENABLE_FACT_EXTRACTION' comes from an index signature, so it must be accessed with ['ENABLE_FACT_EXTRACTION'].
+src/lib/feature-flags.ts(39,36): error TS4111: Property 'ENABLE_HIERARCHICAL_CACHE' comes from an index signature, so it must be accessed with ['ENABLE_HIERARCHICAL_CACHE'].
+src/lib/feature-flags.ts(40,37): error TS4111: Property 'ENABLE_THREE_PHASE_WORKFLOW' comes from an index signature, so it must be accessed with ['ENABLE_THREE_PHASE_WORKFLOW'].
+src/lib/feature-flags.ts(41,38): error TS4111: Property 'ENABLE_CHARACTER_GENERATION' comes from an index signature, so it must be accessed with ['ENABLE_CHARACTER_GENERATION'].
+src/lib/feature-flags.ts(42,31): error TS4111: Property 'ENABLE_WORLD_BUILDER' comes from an index signature, so it must be accessed with ['ENABLE_WORLD_BUILDER'].
+src/lib/feature-flags.ts(43,40): error TS4111: Property 'ENABLE_TIMELINE_VISUALIZATION' comes from an index signature, so it must be accessed with ['ENABLE_TIMELINE_VISUALIZATION'].
+src/lib/feature-flags.ts(46,37): error TS4111: Property 'ENABLE_ENHANCEMENT_SLIDERS' comes from an index signature, so it must be accessed with ['ENABLE_ENHANCEMENT_SLIDERS'].
+src/lib/feature-flags.ts(47,36): error TS4111: Property 'ENABLE_WORKFLOW_INTERFACE' comes from an index signature, so it must be accessed with ['ENABLE_WORKFLOW_INTERFACE'].
+src/lib/feature-flags.ts(48,33): error TS4111: Property 'ENABLE_SFSL_PROCESSING' comes from an index signature, so it must be accessed with ['ENABLE_SFSL_PROCESSING'].
+src/lib/feature-flags.ts(49,32): error TS4111: Property 'ENABLE_STORY_ANALYSIS' comes from an index signature, so it must be accessed with ['ENABLE_STORY_ANALYSIS'].
+src/lib/feature-flags.ts(50,41): error TS4111: Property 'ENABLE_CHARACTER_VOICE_PATTERNS' comes from an index signature, so it must be accessed with ['ENABLE_CHARACTER_VOICE_PATTERNS'].
+src/lib/feature-flags.ts(51,39): error TS4111: Property 'ENABLE_STORY_BIBLE_COMPLIANCE' comes from an index signature, so it must be accessed with ['ENABLE_STORY_BIBLE_COMPLIANCE'].
+src/lib/feature-flags.ts(52,42): error TS4111: Property 'ENABLE_COMPRESSION_OPTIMIZATION' comes from an index signature, so it must be accessed with ['ENABLE_COMPRESSION_OPTIMIZATION'].
+src/lib/feature-flags.ts(55,36): error TS4111: Property 'ENABLE_ADVANCED_ANALYTICS' comes from an index signature, so it must be accessed with ['ENABLE_ADVANCED_ANALYTICS'].
+src/lib/feature-flags.ts(56,37): error TS4111: Property 'ENABLE_REAL_TIME_MONITORING' comes from an index signature, so it must be accessed with ['ENABLE_REAL_TIME_MONITORING'].
+src/lib/feature-flags.ts(57,38): error TS4111: Property 'ENABLE_PERFORMANCE_TRACKING' comes from an index signature, so it must be accessed with ['ENABLE_PERFORMANCE_TRACKING'].
+src/lib/feature-flags.ts(58,35): error TS4111: Property 'ENABLE_SERIES_MANAGEMENT' comes from an index signature, so it must be accessed with ['ENABLE_SERIES_MANAGEMENT'].
+src/lib/feature-flags.ts(59,30): error TS4111: Property 'ENABLE_ANALYTICS_V2' comes from an index signature, so it must be accessed with ['ENABLE_ANALYTICS_V2'].
+src/lib/feature-flags.ts(60,40): error TS4111: Property 'ENABLE_PERFORMANCE_MONITORING' comes from an index signature, so it must be accessed with ['ENABLE_PERFORMANCE_MONITORING'].
+src/lib/feature-flags.ts(61,34): error TS4111: Property 'ENABLE_ADVANCED_CACHING' comes from an index signature, so it must be accessed with ['ENABLE_ADVANCED_CACHING'].
+src/lib/providers/QueryProvider.tsx(18,14): error TS2322: Type '(failureCount: number, error: { status?: number; }) => boolean' is not assignable to type 'RetryValue<Error> | undefined'.
+  Type '(failureCount: number, error: { status?: number; }) => boolean' is not assignable to type 'ShouldRetryFunction<Error>'.
+    Types of parameters 'error' and 'error' are incompatible.
+      Type 'Error' has no properties in common with type '{ status?: number; }'.
+src/lib/providers/QueryProvider.tsx(20,13): error TS18048: 'error.status' is possibly 'undefined'.
+src/lib/providers/QueryProvider.tsx(20,37): error TS18048: 'error.status' is possibly 'undefined'.
+src/lib/providers/QueryProvider.tsx(52,14): error TS2322: Type '(failureCount: number, error: { status?: number; }) => boolean' is not assignable to type 'RetryValue<Error> | undefined'.
+  Type '(failureCount: number, error: { status?: number; }) => boolean' is not assignable to type 'ShouldRetryFunction<Error>'.
+    Types of parameters 'error' and 'error' are incompatible.
+      Type 'Error' has no properties in common with type '{ status?: number; }'.
+src/lib/providers/QueryProvider.tsx(53,13): error TS18048: 'error.status' is possibly 'undefined'.
+src/lib/providers/QueryProvider.tsx(53,37): error TS18048: 'error.status' is possibly 'undefined'.
+src/lib/providers/QueryProvider.tsx(76,42): error TS2345: Argument of type '(event: { type: string; mutation: { options: { mutationKey?: unknown; }; state: { status: string; error?: unknown; }; }; }) => void' is not assignable to parameter of type 'MutationCacheListener'.
+  Types of parameters 'event' and 'event' are incompatible.
+    Type 'MutationCacheNotifyEvent' is not assignable to type '{ type: string; mutation: { options: { mutationKey?: unknown; }; state: { status: string; error?: unknown; }; }; }'.
+      Type 'NotifyEventMutationObserverOptionsUpdated' is not assignable to type '{ type: string; mutation: { options: { mutationKey?: unknown; }; state: { status: string; error?: unknown; }; }; }'.
+        Property 'mutation' is optional in type 'NotifyEventMutationObserverOptionsUpdated' but required in type '{ type: string; mutation: { options: { mutationKey?: unknown; }; state: { status: string; error?: unknown; }; }; }'.
+src/lib/rateLimit.ts(23,21): error TS4111: Property 'REDIS_URL' comes from an index signature, so it must be accessed with ['REDIS_URL'].
+src/lib/request-tracking-init.ts(77,19): error TS2339: Property 'createBrowserClient' does not exist on type '{ default: typeof import("C:/Users/thoma/infinite-pages/extracted-project/infinite-pages-v3/node_modules/@supabase/auth-helpers-nextjs/dist/index"); SupabaseClient: typeof SupabaseClient; ... 9 more ...; createServerSupabaseClient: <Database = any, SchemaName extends string & keyof Database = "public" extends keyof ...'.
+src/lib/request-tracking-init.ts(79,25): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_URL'].
+src/lib/request-tracking-init.ts(80,25): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_ANON_KEY' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_ANON_KEY'].
+src/lib/request-tracking-init.ts(200,61): error TS2339: Property 'url' does not exist on type 'URL | Request'.
+  Property 'url' does not exist on type 'URL'.
+src/lib/request-tracking-init.ts(237,22): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/request-tracking-init.ts(269,23): error TS4111: Property 'NEXT_PUBLIC_ALERT_WEBHOOK_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_ALERT_WEBHOOK_URL'].
+src/lib/request-tracking-init.ts(270,33): error TS4111: Property 'NEXT_PUBLIC_ALERT_WEBHOOK_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_ALERT_WEBHOOK_URL'].
+src/lib/request-tracking.ts(122,20): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/request-tracking.ts(128,5): error TS2412: Type '"basic" | "premium" | undefined' is not assignable to type '"basic" | "premium"' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the type of the target.
+  Type 'undefined' is not assignable to type '"basic" | "premium"'.
+src/lib/request-tracking.ts(180,13): error TS2375: Type '{ requestId: string; sessionId: string; userId: string | undefined; frontendAction: string; frontendComponent: string; frontendPage: string; apiEndpoint: string; expectedEndpoint: string | undefined; ... 17 more ...; createdAt: string; }' is not assignable to type 'RequestLog' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/request-tracking.ts(221,13): error TS2375: Type '{ requestId: string; sessionId: string; userId: string | undefined; frontendAction: string; frontendComponent: string; frontendPage: string; apiEndpoint: string; expectedEndpoint: string | undefined; ... 17 more ...; createdAt: string; }' is not assignable to type 'RequestLog' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/request-tracking.ts(316,61): error TS2339: Property 'url' does not exist on type 'URL | Request'.
+  Property 'url' does not exist on type 'URL'.
+src/lib/request-tracking.ts(500,48): error TS2353: Object literal may only specify known properties, and 'requestId' does not exist in type 'RequestInit'.
+src/lib/security/content-sanitizer.ts(216,48): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/series-manager.ts(2,29): error TS2307: Cannot find module './claude/cache' or its corresponding type declarations.
+src/lib/series-manager.ts(120,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "series", never, "POST">', gave the following error.
+    Argument of type '{ name: string; planned_books: number; universe_id: string; description: string; genre: string; target_audience: string; themes: string[]; created_at: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "series", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'name' does not exist in type 'never[]'.
+src/lib/series-manager.ts(140,26): error TS2339: Property 'id' does not exist on type 'never'.
+src/lib/series-manager.ts(172,31): error TS2339: Property 'series_id' does not exist on type 'never'.
+src/lib/series-manager.ts(178,14): error TS2339: Property 'series_id' does not exist on type 'never'.
+src/lib/series-manager.ts(266,9): error TS2353: Object literal may only specify known properties, and 'context' does not exist in type '{ prompt: string; model?: string; maxTokens?: number; temperature?: number; systemPrompt?: string; retries?: number; useCache?: boolean; userId?: string; operation?: string; trackAnalytics?: boolean; }'.
+src/lib/series-manager.ts(288,9): error TS2353: Object literal may only specify known properties, and 'context' does not exist in type '{ prompt: string; model?: string; maxTokens?: number; temperature?: number; systemPrompt?: string; retries?: number; useCache?: boolean; userId?: string; operation?: string; trackAnalytics?: boolean; }'.
+src/lib/series-manager.ts(326,52): error TS2345: Argument of type 'SeriesFacts | null' is not assignable to parameter of type 'SeriesFacts'.
+  Type 'null' is not assignable to type 'SeriesFacts'.
+src/lib/series-manager.ts(328,9): error TS2353: Object literal may only specify known properties, and 'context' does not exist in type '{ prompt: string; model?: string; maxTokens?: number; temperature?: number; systemPrompt?: string; retries?: number; useCache?: boolean; userId?: string; operation?: string; trackAnalytics?: boolean; }'.
+src/lib/series-manager.ts(354,22): error TS2339: Property 'buildOverallContinuityPrompt' does not exist on type 'SeriesManager'.
+src/lib/series-manager.ts(356,9): error TS2353: Object literal may only specify known properties, and 'context' does not exist in type '{ prompt: string; model?: string; maxTokens?: number; temperature?: number; systemPrompt?: string; retries?: number; useCache?: boolean; userId?: string; operation?: string; trackAnalytics?: boolean; }'.
+src/lib/series-manager.ts(489,30): error TS2339: Property 'facts_data' does not exist on type 'never'.
+src/lib/series-manager.ts(500,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, never, never, null, "series_facts", never, "POST">', gave the following error.
+    Argument of type '{ series_id: string; facts_data: string; updated_at: string; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { onConflict?: string; ignoreDuplicates?: boolean; count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<{ PostgrestVersion: "12"; }, ... 5 more ..., "POST">', gave the following error.
+    Object literal may only specify known properties, and 'series_id' does not exist in type 'never[]'.
+src/lib/series/series-context-manager.ts(19,34): error TS2307: Cannot find module '../claude/context-optimizer' or its corresponding type declarations.
+src/lib/series/series-context-manager.ts(193,12): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<never, never, never, null, "character_arcs", never, "POST">', gave the following error.
+    Argument of type '{ series_id: string; character_name: string; current_book_development: { [bookNumber]: Partial<BookDevelopment>; }; last_appearance_book: number; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<never, never, never, null, "character_arcs", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'series_id' does not exist in type 'never[]'.
+src/lib/series/series-context-manager.ts(202,26): error TS2339: Property 'current_book_development' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(208,19): error TS2345: Argument of type '{ current_book_development: any; last_appearance_book: number; updated_at: string; }' is not assignable to parameter of type 'never'.
+src/lib/series/series-context-manager.ts(210,56): error TS2339: Property 'last_appearance_book' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(213,33): error TS2339: Property 'id' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(234,10): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(values: never, options?: { count?: "exact" | "planned" | "estimated"; } | undefined): PostgrestFilterBuilder<never, never, never, null, "world_state_changes", never, "POST">', gave the following error.
+    Argument of type '{ description: string; chapter_number?: number; change_type: "political" | "technological" | "social" | "geographic" | "magical" | "economic" | "cultural"; scope: "local" | "regional" | "global" | "cosmic"; ... 6 more ...; book_number: number; }' is not assignable to parameter of type 'never'.
+  Overload 2 of 2, '(values: never[], options?: { count?: "exact" | "planned" | "estimated"; defaultToNull?: boolean; } | undefined): PostgrestFilterBuilder<never, never, never, null, "world_state_changes", never, "POST">', gave the following error.
+    Object literal may only specify known properties, and 'series_id' does not exist in type 'never[]'.
+src/lib/series/series-context-manager.ts(359,28): error TS2339: Property 'book_number' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(360,22): error TS2339: Property 'title' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(391,36): error TS2531: Object is possibly 'null'.
+src/lib/series/series-context-manager.ts(433,23): error TS2339: Property 'genre' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(434,52): error TS2339: Property 'world_rules' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(436,72): error TS2339: Property 'total_planned_books' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(437,70): error TS2339: Property 'total_planned_books' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(448,56): error TS2339: Property 'world_rules' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(479,62): error TS2339: Property 'id' does not exist on type 'never'.
+src/lib/series/series-context-manager.ts(497,61): error TS2345: Argument of type 'Record<string, unknown> | undefined' is not assignable to parameter of type 'Record<string, unknown>'.
+  Type 'undefined' is not assignable to type 'Record<string, unknown>'.
+src/lib/series/series-context-manager.ts(501,7): error TS2322: Type '{ affects_future_books: boolean; description: string; }[]' is not assignable to type 'WorldStateChange[]'.
+  Type '{ affects_future_books: boolean; description: string; }' is missing the following properties from type 'WorldStateChange': id, series_id, book_number, change_type, and 5 more.
+src/lib/series/series-context-manager.ts(514,5): error TS2322: Type '{ id: string; name: string; type: "political" | "social" | "economic" | "personal" | "ideological"; parties_involved: string[]; stakes: string; escalation_level: number; introduced_book: number; tension_level: "critical" | ... 2 more ... | "high"; }[]' is not assignable to type 'UnresolvedConflict[]'.
+  Type '{ id: string; name: string; type: "political" | "social" | "economic" | "personal" | "ideological"; parties_involved: string[]; stakes: string; escalation_level: number; introduced_book: number; tension_level: "critical" | ... 2 more ... | "high"; }' is not assignable to type 'UnresolvedConflict'.
+    Types of property 'type' are incompatible.
+      Type '"political" | "social" | "economic" | "personal" | "ideological"' is not assignable to type '"political" | "cosmic" | "personal" | "interpersonal" | "societal"'.
+        Type '"social"' is not assignable to type '"political" | "cosmic" | "personal" | "interpersonal" | "societal"'. Did you mean '"societal"'?
+src/lib/series/series-context-manager.ts(533,5): error TS2322: Type '{ current_status: string; introduced_book: number; expected_resolution_book?: number; }[]' is not assignable to type 'PlotThread[]'.
+  Type '{ current_status: string; introduced_book: number; expected_resolution_book?: number; }' is missing the following properties from type 'PlotThread': id, name, description, priority, and 2 more.
+src/lib/series/series-context-manager.ts(653,61): error TS2345: Argument of type '{ series_uuid: string; }' is not assignable to parameter of type 'undefined'.
+src/lib/series/series-context-manager.ts(712,5): error TS2322: Type 'CharacterArc[]' is not assignable to type '{ character_name: string; current_goal: string; key_trait: string; current_emotion: string; series_arc_progress: number; }[]'.
+  Type 'CharacterArc' is missing the following properties from type '{ character_name: string; current_goal: string; key_trait: string; current_emotion: string; series_arc_progress: number; }': current_goal, key_trait, current_emotion, series_arc_progress
+src/lib/server-error-monitoring.ts(33,11): error TS2375: Type '{ message: string; stack: string | undefined; category: ErrorCategory; severity: ErrorSeverity; source: "server"; timestamp: string; url: string; apiEndpoint: string; ... 6 more ...; customData: Record<...> | undefined; }' is not assignable to type 'ServerErrorReport' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'stack' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/server-error-monitoring.ts(80,35): error TS2379: Argument of type '{ category: "ai_generation_error"; severity: "high"; apiEndpoint: string; operation: string; userId: string | undefined; responseTime: number | undefined; request: NextRequest | undefined; customData: { ...; }; }' is not assignable to parameter of type '{ category: ErrorCategory; severity: ErrorSeverity; apiEndpoint: string; operation?: string; userId?: string; statusCode?: number; responseTime?: number; customData?: Record<...>; request?: NextRequest; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/server-error-monitoring.ts(110,35): error TS2379: Argument of type '{ category: "database_error"; severity: "high"; apiEndpoint: string; operation: string; userId: string | undefined; responseTime: number | undefined; request: NextRequest | undefined; customData: { ...; }; }' is not assignable to parameter of type '{ category: ErrorCategory; severity: ErrorSeverity; apiEndpoint: string; operation?: string; userId?: string; statusCode?: number; responseTime?: number; customData?: Record<...>; request?: NextRequest; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/server-error-monitoring.ts(135,35): error TS2379: Argument of type '{ category: "authentication_error"; severity: "medium"; apiEndpoint: string; operation: string; userId: string | undefined; statusCode: number; request: NextRequest | undefined; }' is not assignable to parameter of type '{ category: ErrorCategory; severity: ErrorSeverity; apiEndpoint: string; operation?: string; userId?: string; statusCode?: number; responseTime?: number; customData?: Record<...>; request?: NextRequest; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/server-error-monitoring.ts(160,9): error TS2379: Argument of type '{ category: "performance_issue"; severity: "high" | "medium"; apiEndpoint: string; operation: string; userId: string | undefined; responseTime: number; request: NextRequest | undefined; }' is not assignable to parameter of type '{ category: ErrorCategory; severity: ErrorSeverity; apiEndpoint: string; operation?: string; userId?: string; statusCode?: number; responseTime?: number; customData?: Record<...>; request?: NextRequest; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/server-error-monitoring.ts(201,43): error TS2379: Argument of type '{ operation: string; responseTime: number; apiEndpoint: string; userId: string | undefined; request: NextRequest | undefined; }' is not assignable to parameter of type '{ operation: string; responseTime: number; threshold?: number; apiEndpoint: string; userId?: string; request?: NextRequest; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/server-error-monitoring.ts(233,48): error TS2379: Argument of type '{ category: "authentication_error" | "api_error" | "ai_generation_error" | "database_error" | "validation_error"; severity: "high" | "medium"; apiEndpoint: string; operation: string; userId: string | undefined; statusCode: number; responseTime: number; request: NextRequest | undefined; }' is not assignable to parameter of type '{ category: ErrorCategory; severity: ErrorSeverity; apiEndpoint: string; operation?: string; userId?: string; statusCode?: number; responseTime?: number; customData?: Record<...>; request?: NextRequest; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'userId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/lib/server-error-monitoring.ts(266,24): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_URL'].
+src/lib/server-error-monitoring.ts(266,65): error TS4111: Property 'SUPABASE_SERVICE_ROLE_KEY' comes from an index signature, so it must be accessed with ['SUPABASE_SERVICE_ROLE_KEY'].
+src/lib/server-error-monitoring.ts(272,21): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_URL'].
+src/lib/server-error-monitoring.ts(273,21): error TS4111: Property 'SUPABASE_SERVICE_ROLE_KEY' comes from an index signature, so it must be accessed with ['SUPABASE_SERVICE_ROLE_KEY'].
+src/lib/stripe-payouts.ts(5,39): error TS4111: Property 'STRIPE_SECRET_KEY' comes from an index signature, so it must be accessed with ['STRIPE_SECRET_KEY'].
+src/lib/stripe-payouts.ts(223,35): error TS4111: Property 'NEXT_PUBLIC_APP_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_APP_URL'].
+src/lib/stripe-payouts.ts(224,34): error TS4111: Property 'NEXT_PUBLIC_APP_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_APP_URL'].
+src/lib/stripe-payouts.ts(276,7): error TS2322: Type '{ id: string; type: Type; last4: string | undefined; brand: string | undefined; exp_month: number | undefined; exp_year: number | undefined; }[]' is not assignable to type '{ id: string; type: string; last4?: string; brand?: string; exp_month?: number; exp_year?: number; }[]'.
+  Type '{ id: string; type: Stripe.PaymentMethod.Type; last4: string | undefined; brand: string | undefined; exp_month: number | undefined; exp_year: number | undefined; }' is not assignable to type '{ id: string; type: string; last4?: string; brand?: string; exp_month?: number; exp_year?: number; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    Types of property 'last4' are incompatible.
+      Type 'string | undefined' is not assignable to type 'string'.
+        Type 'undefined' is not assignable to type 'string'.
+src/lib/stripe-payouts.ts(311,18): error TS2339: Property 'is_creator' does not exist on type 'never'.
+src/lib/stripe-payouts.ts(315,17): error TS2339: Property 'subscription_tier' does not exist on type 'never'.
+src/lib/stripe-payouts.ts(319,18): error TS2339: Property 'stripe_customer_id' does not exist on type 'never'.
+src/lib/stripe-payouts.ts(325,28): error TS2339: Property 'stripe_customer_id' does not exist on type 'never'.
+src/lib/stripe-payouts.ts(326,22): error TS2339: Property 'email' does not exist on type 'never'.
+src/lib/subscription-config.ts(22,42): error TS4111: Property 'STRIPE_BASIC_MONTHLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_BASIC_MONTHLY_PRICE_ID'].
+src/lib/subscription-config.ts(23,41): error TS4111: Property 'STRIPE_BASIC_YEARLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_BASIC_YEARLY_PRICE_ID'].
+src/lib/subscription-config.ts(45,42): error TS4111: Property 'STRIPE_PREMIUM_MONTHLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PREMIUM_MONTHLY_PRICE_ID'].
+src/lib/subscription-config.ts(46,41): error TS4111: Property 'STRIPE_PREMIUM_YEARLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PREMIUM_YEARLY_PRICE_ID'].
+src/lib/supabase/client.ts(4,33): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_URL'].
+src/lib/supabase/client.ts(5,37): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_ANON_KEY' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_ANON_KEY'].
+src/lib/supabase/middleware.ts(33,77): error TS4111: Property 'role' comes from an index signature, so it must be accessed with ['role'].
+src/lib/types/components.ts(10,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(11,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(12,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(13,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(14,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(19,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(20,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(25,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(26,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(27,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/components.ts(28,3): error TS1205: Re-exporting a type when 'isolatedModules' is enabled requires using 'export type'.
+src/lib/types/database.ts(280,18): error TS2304: Cannot find name 'DatabaseInsert'.
+src/lib/types/database.ts(280,38): error TS2304: Cannot find name 'DatabaseInsert'.
+src/lib/types/database.ts(281,18): error TS2304: Cannot find name 'DatabaseUpdate'.
+src/lib/types/database.ts(283,18): error TS2304: Cannot find name 'DatabaseInsert'.
+src/lib/types/database.ts(283,38): error TS2304: Cannot find name 'DatabaseInsert'.
+src/lib/types/index.ts(89,3): error TS2305: Module '"./components"' has no exported member 'SidebarItem'.
+src/lib/types/index.ts(90,3): error TS2305: Module '"./components"' has no exported member 'SidebarProps'.
+src/lib/types/index.ts(91,3): error TS2305: Module '"./components"' has no exported member 'FormFieldProps'.
+src/lib/types/index.ts(94,3): error TS2305: Module '"./components"' has no exported member 'ConfirmDialogProps'.
+src/lib/types/index.ts(95,3): error TS2305: Module '"./components"' has no exported member 'TableColumn'.
+src/lib/types/index.ts(96,3): error TS2305: Module '"./components"' has no exported member 'TableProps'.
+src/lib/types/index.ts(98,3): error TS2305: Module '"./components"' has no exported member 'EarningsChartProps'.
+src/lib/types/index.ts(99,3): error TS2305: Module '"./components"' has no exported member 'PayoutHistoryProps'.
+src/lib/types/index.ts(100,3): error TS2305: Module '"./components"' has no exported member 'PremiumUpgradeProps'.
+src/lib/types/index.ts(101,3): error TS2305: Module '"./components"' has no exported member 'ErrorBoundaryProps'.
+src/lib/types/index.ts(102,3): error TS2305: Module '"./components"' has no exported member 'LoadingProps'.
+src/lib/types/index.ts(103,3): error TS2305: Module '"./components"' has no exported member 'SkeletonProps'.
+src/lib/types/index.ts(104,3): error TS2305: Module '"./components"' has no exported member 'NotificationProps'.
+src/lib/types/index.ts(105,3): error TS2305: Module '"./components"' has no exported member 'SearchBarProps'.
+src/lib/types/index.ts(106,3): error TS2305: Module '"./components"' has no exported member 'FilterPanelProps'.
+src/lib/types/index.ts(107,3): error TS2305: Module '"./components"' has no exported member 'LayoutProps'.
+src/lib/types/index.ts(108,3): error TS2305: Module '"./components"' has no exported member 'HeaderProps'.
+src/lib/types/index.ts(109,3): error TS2305: Module '"./components"' has no exported member 'ComponentSize'.
+src/lib/types/index.ts(110,3): error TS2305: Module '"./components"' has no exported member 'ComponentVariant'.
+src/lib/types/index.ts(111,3): error TS2305: Module '"./components"' has no exported member 'ComponentState'.
+src/lib/types/index.ts(112,3): error TS2305: Module '"./components"' has no exported member 'ClickHandler'.
+src/lib/types/index.ts(113,3): error TS2305: Module '"./components"' has no exported member 'ChangeHandler'.
+src/lib/types/index.ts(114,3): error TS2305: Module '"./components"' has no exported member 'SubmitHandler'.
+src/lib/types/index.ts(115,3): error TS2305: Module '"./components"' has no exported member 'KeyPressHandler'.
+src/lib/types/index.ts(135,3): error TS2305: Module '"./ai"' has no exported member 'Choice'.
+src/lib/types/index.ts(137,3): error TS2305: Module '"./ai"' has no exported member 'CoverResponse'.
+src/lib/types/index.ts(138,3): error TS2305: Module '"./ai"' has no exported member 'ImprovementRequest'.
+src/lib/types/index.ts(139,3): error TS2305: Module '"./ai"' has no exported member 'ImprovementResponse'.
+src/lib/types/index.ts(140,3): error TS2305: Module '"./ai"' has no exported member 'ProcessingPipeline'.
+src/lib/types/index.ts(141,3): error TS2305: Module '"./ai"' has no exported member 'ProcessingStage'.
+src/lib/types/index.ts(142,3): error TS2305: Module '"./ai"' has no exported member 'RetryPolicy'.
+src/lib/types/index.ts(143,3): error TS2305: Module '"./ai"' has no exported member 'ValidationRule'.
+src/lib/types/index.ts(144,3): error TS2305: Module '"./ai"' has no exported member 'ContentValidation'.
+src/lib/types/index.ts(145,3): error TS2305: Module '"./ai"' has no exported member 'ValidationResult'.
+src/lib/types/index.ts(146,3): error TS2305: Module '"./ai"' has no exported member 'CacheEntry'.
+src/lib/types/index.ts(147,3): error TS2305: Module '"./ai"' has no exported member 'CacheConfig'.
+src/lib/types/index.ts(148,3): error TS2305: Module '"./ai"' has no exported member 'CacheMetrics'.
+src/lib/types/index.ts(149,3): error TS2305: Module '"./ai"' has no exported member 'PacingGuide'.
+src/lib/types/index.ts(150,3): error TS2305: Module '"./ai"' has no exported member 'StyleGuide'.
+src/lib/types/index.ts(151,3): error TS2305: Module '"./ai"' has no exported member 'Conflict'.
+src/lib/types/index.ts(152,3): error TS2305: Module '"./ai"' has no exported member 'AIServiceError'.
+src/lib/types/index.ts(153,3): error TS2305: Module '"./ai"' has no exported member 'ModelProvider'.
+src/lib/types/index.ts(154,3): error TS2305: Module '"./ai"' has no exported member 'GenerationType'.
+src/lib/types/index.ts(155,3): error TS2305: Module '"./ai"' has no exported member 'FinishReason'.
+src/lib/types/index.ts(156,3): error TS2305: Module '"./ai"' has no exported member 'AIServiceConfig'.
+src/lib/types/index.ts(181,3): error TS2724: '"./ai"' has no exported member named 'isStoryGenerationResponse'. Did you mean 'StoryGenerationResponse'?
+src/lib/types/index.ts(182,3): error TS2724: '"./ai"' has no exported member named 'isStreamingChunk'. Did you mean 'StreamingChunk'?
+src/lib/types/index.ts(183,3): error TS2305: Module '"./ai"' has no exported member 'isAIServiceError'.
+src/lib/utils/subscription-config.ts(22,42): error TS4111: Property 'STRIPE_BASIC_MONTHLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_BASIC_MONTHLY_PRICE_ID'].
+src/lib/utils/subscription-config.ts(23,41): error TS4111: Property 'STRIPE_BASIC_YEARLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_BASIC_YEARLY_PRICE_ID'].
+src/lib/utils/subscription-config.ts(45,42): error TS4111: Property 'STRIPE_PREMIUM_MONTHLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PREMIUM_MONTHLY_PRICE_ID'].
+src/lib/utils/subscription-config.ts(46,41): error TS4111: Property 'STRIPE_PREMIUM_YEARLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PREMIUM_YEARLY_PRICE_ID'].
+src/lib/v2-feature-config.ts(28,32): error TS4111: Property 'ENABLE_FACT_EXTRACTION' comes from an index signature, so it must be accessed with ['ENABLE_FACT_EXTRACTION'].
+src/lib/v2-feature-config.ts(29,35): error TS4111: Property 'ENABLE_HIERARCHICAL_CACHE' comes from an index signature, so it must be accessed with ['ENABLE_HIERARCHICAL_CACHE'].
+src/lib/v2-feature-config.ts(32,37): error TS4111: Property 'ENABLE_THREE_PHASE_WORKFLOW' comes from an index signature, so it must be accessed with ['ENABLE_THREE_PHASE_WORKFLOW'].
+src/lib/v2-feature-config.ts(35,37): error TS4111: Property 'ENABLE_CHARACTER_GENERATION' comes from an index signature, so it must be accessed with ['ENABLE_CHARACTER_GENERATION'].
+src/lib/v2-feature-config.ts(36,30): error TS4111: Property 'ENABLE_WORLD_BUILDER' comes from an index signature, so it must be accessed with ['ENABLE_WORLD_BUILDER'].
+src/lib/v2-feature-config.ts(39,39): error TS4111: Property 'ENABLE_TIMELINE_VISUALIZATION' comes from an index signature, so it must be accessed with ['ENABLE_TIMELINE_VISUALIZATION'].
+src/lib/v2-feature-config.ts(40,34): error TS4111: Property 'ENABLE_SERIES_MANAGEMENT' comes from an index signature, so it must be accessed with ['ENABLE_SERIES_MANAGEMENT'].
+src/lib/v2-feature-config.ts(43,29): error TS4111: Property 'ENABLE_ANALYTICS_V2' comes from an index signature, so it must be accessed with ['ENABLE_ANALYTICS_V2'].
+src/lib/v2-feature-config.ts(44,39): error TS4111: Property 'ENABLE_PERFORMANCE_MONITORING' comes from an index signature, so it must be accessed with ['ENABLE_PERFORMANCE_MONITORING'].
+src/lib/v2-feature-config.ts(47,33): error TS4111: Property 'ENABLE_ADVANCED_CACHING' comes from an index signature, so it must be accessed with ['ENABLE_ADVANCED_CACHING'].
+src/lib/v2-feature-config.ts(51,50): error TS4111: Property 'MAX_FACTS_PER_EXTRACTION' comes from an index signature, so it must be accessed with ['MAX_FACTS_PER_EXTRACTION'].
+src/lib/v2-feature-config.ts(52,43): error TS4111: Property 'MAX_CACHE_ENTRIES' comes from an index signature, so it must be accessed with ['MAX_CACHE_ENTRIES'].
+src/lib/v2-feature-config.ts(53,50): error TS4111: Property 'MAX_WORKFLOW_DURATION_MS' comes from an index signature, so it must be accessed with ['MAX_WORKFLOW_DURATION_MS'].
+src/lib/v2-feature-config.ts(54,50): error TS4111: Property 'MAX_CHARACTERS_PER_STORY' comes from an index signature, so it must be accessed with ['MAX_CHARACTERS_PER_STORY'].
+src/lib/v2-feature-config.ts(55,45): error TS4111: Property 'MAX_TIMELINE_EVENTS' comes from an index signature, so it must be accessed with ['MAX_TIMELINE_EVENTS'].
+src/types/environment.ts(58,29): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_URL'].
+src/types/environment.ts(58,69): error TS4111: Property 'SUPABASE_URL' comes from an index signature, so it must be accessed with ['SUPABASE_URL'].
+src/types/environment.ts(59,34): error TS4111: Property 'NEXT_PUBLIC_SUPABASE_ANON_KEY' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SUPABASE_ANON_KEY'].
+src/types/environment.ts(59,79): error TS4111: Property 'SUPABASE_ANON_KEY' comes from an index signature, so it must be accessed with ['SUPABASE_ANON_KEY'].
+src/types/environment.ts(60,42): error TS4111: Property 'SUPABASE_SERVICE_ROLE_KEY' comes from an index signature, so it must be accessed with ['SUPABASE_SERVICE_ROLE_KEY'].
+src/types/environment.ts(63,34): error TS4111: Property 'STRIPE_SECRET_KEY' comes from an index signature, so it must be accessed with ['STRIPE_SECRET_KEY'].
+src/types/environment.ts(64,32): error TS4111: Property 'STRIPE_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PRICE_ID'].
+src/types/environment.ts(65,38): error TS4111: Property 'STRIPE_WEBHOOK_SECRET' comes from an index signature, so it must be accessed with ['STRIPE_WEBHOOK_SECRET'].
+src/types/environment.ts(66,41): error TS4111: Property 'STRIPE_CONNECT_CLIENT_ID' comes from an index signature, so it must be accessed with ['STRIPE_CONNECT_CLIENT_ID'].
+src/types/environment.ts(67,46): error TS4111: Property 'STRIPE_BASIC_MONTHLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_BASIC_MONTHLY_PRICE_ID'].
+src/types/environment.ts(67,91): error TS4111: Property 'STRIPE_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PRICE_ID'].
+src/types/environment.ts(68,48): error TS4111: Property 'STRIPE_PREMIUM_MONTHLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PREMIUM_MONTHLY_PRICE_ID'].
+src/types/environment.ts(68,95): error TS4111: Property 'STRIPE_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PRICE_ID'].
+src/types/environment.ts(69,45): error TS4111: Property 'STRIPE_BASIC_YEARLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_BASIC_YEARLY_PRICE_ID'].
+src/types/environment.ts(69,89): error TS4111: Property 'STRIPE_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PRICE_ID'].
+src/types/environment.ts(70,47): error TS4111: Property 'STRIPE_PREMIUM_YEARLY_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PREMIUM_YEARLY_PRICE_ID'].
+src/types/environment.ts(70,93): error TS4111: Property 'STRIPE_PRICE_ID' comes from an index signature, so it must be accessed with ['STRIPE_PRICE_ID'].
+src/types/environment.ts(73,34): error TS4111: Property 'ANTHROPIC_API_KEY' comes from an index signature, so it must be accessed with ['ANTHROPIC_API_KEY'].
+src/types/environment.ts(76,25): error TS4111: Property 'NEXT_PUBLIC_SITE_URL' comes from an index signature, so it must be accessed with ['NEXT_PUBLIC_SITE_URL'].

@@ -1,0 +1,85 @@
+{
+  "name": "claude-debugger-infinite-pages",
+  "version": "2.0.0",
+  "description": "Self-monitoring website debugger for Infinite Pages with automatic safety shutdown - prevents memory overload and system crashes",
+  "main": "server.js",
+  "bin": {
+    "claude-debug": "./cli.js"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js --watch . --ext js",
+    "scan": "node cli.js https://www.infinite-pages.com --json",
+    "scan-fixes": "node cli.js https://www.infinite-pages.com --fix-plan --json",
+    "test-site": "node cli.js https://www.infinite-pages.com",
+    "test": "node cli.js https://www.infinite-pages.com --endpoints",
+    "test-local": "node cli.js http://localhost:3000",
+    "test-story": "node cli.js https://www.infinite-pages.com --story-creation --fix-plan",
+    "test-json": "node cli.js https://www.infinite-pages.com --json",
+    "status": "node cli.js --status",
+    "stop": "node cli.js --stop",
+    "monitor": "node -e \"setInterval(() => { require('child_process').exec('node cli.js --status', (e,stdout) => console.log(new Date().toISOString(), stdout?.split('\\n')[2] || 'Not running')); }, 30000);\"",
+    "setup": "npx playwright install chromium",
+    "emergency-stop": "pkill -f \"node.*debugger\" || echo 'No debugger processes found'",
+    "clean": "rm -f .debugger.pid monitor.log || echo 'Cleaned up'",
+    "logs": "tail -f monitor.log 2>/dev/null || echo 'No log file found'",
+    "health": "curl -s http://localhost:3001/health || echo 'Server not running'",
+    "force-stop": "pkill -9 -f \"node.*debugger\" && rm -f .debugger.pid || echo 'Cleanup complete'"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "playwright": "^1.40.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "infinite-pages",
+    "claude-code",
+    "website-debugging",
+    "memory-monitoring",
+    "automatic-shutdown",
+    "safety-limits",
+    "process-monitoring",
+    "playwright-automation",
+    "story-creation",
+    "api-testing",
+    "next.js",
+    "supabase",
+    "self-monitoring"
+  ],
+  "author": "Claude Code Assistant",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "local"
+  },
+  "bugs": {
+    "url": "local"
+  },
+  "homepage": "README.md",
+  "preferGlobal": false,
+  "config": {
+    "safety": {
+      "maxMemoryMB": 400,
+      "maxBrowserMemoryMB": 300,
+      "maxSystemMemoryPercent": 80,
+      "maxScanTimeoutMs": 120000,
+      "monitorIntervalMs": 10000
+    }
+  },
+  "cpu": ["x64", "arm64"],
+  "os": ["win32", "linux", "darwin"],
+  "files": [
+    "server.js",
+    "cli.js",
+    "process-monitor.js",
+    "autofix-rules.js",
+    "README.md",
+    "package.json"
+  ]
+}
