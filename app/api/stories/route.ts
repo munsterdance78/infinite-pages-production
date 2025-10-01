@@ -17,6 +17,8 @@ import { SUBSCRIPTION_TIERS, type SubscriptionTier } from '@/lib/utils/subscript
 import { subscriptionAwareRateLimit, logRateLimitViolation } from '@/lib/middleware/rate-limit'
 import { infinitePagesCache } from '@/lib/claude/infinitePagesCache'
 import { claudeService } from '@/lib/claude/service'
+import { createClient } from '@supabase/supabase-js'
+import type { Database } from '@/lib/supabase/types'
 
 // Using the centralized Claude service instead of direct Anthropic client
 
@@ -237,6 +239,9 @@ export async function POST(request: NextRequest) {
       return rateLimitResult
     }
 
+    // Store rate limit headers for later (null check)
+    const rateLimitHeaders = rateLimitResult?.headers || {}
+
     // Parse and validate request body
     let requestBody
     try {
@@ -345,11 +350,18 @@ export async function POST(request: NextRequest) {
     let foundation
     try {
       if (typeof claudeResponse === 'object' && claudeResponse.content) {
-        foundation = typeof claudeResponse.content === 'string'
-          ? JSON.parse(claudeResponse.content)
-          : claudeResponse.content
+        let contentToParse = claudeResponse.content
+        // Strip markdown code blocks if present (```json ... ```)
+        if (typeof contentToParse === 'string') {
+          contentToParse = contentToParse.replace(/^```json\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim()
+        }
+        foundation = typeof contentToParse === 'string'
+          ? JSON.parse(contentToParse)
+          : contentToParse
       } else if (typeof content === 'string') {
-        foundation = JSON.parse(content)
+        // Strip markdown code blocks if present
+        let contentToParse = content.replace(/^```json\s*\n?/i, '').replace(/\n?```\s*$/i, '').trim()
+        foundation = JSON.parse(contentToParse)
       } else {
         foundation = claudeResponse // Already parsed from cache
       }
@@ -411,20 +423,30 @@ export async function POST(request: NextRequest) {
       // Note: Story was created but profile update failed - this should be logged for manual review
     }
 
-    // Log generation for analytics using constants
-    const { error: logError } = await supabase
-      .from('generation_logs')
-      .insert({
-        user_id: user.id,
-        story_id: story.id,
-        operation_type: GENERATION_TYPES.FOUNDATION,
-        tokens_input: inputTokens,
-        tokens_output: outputTokens,
-        cost_usd: costUSD
-      })
+    // Log generation for analytics using service role client to bypass RLS
+    try {
+      const supabaseAdmin = createClient<Database>(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      )
 
-    if (logError) {
-      console.error('Failed to log generation:', logError)
+      const { error: logError } = await supabaseAdmin
+        .from('generation_logs')
+        .insert({
+          user_id: user.id,
+          story_id: story.id,
+          operation_type: GENERATION_TYPES.FOUNDATION,
+          tokens_input: inputTokens,
+          tokens_output: outputTokens,
+          cost_usd: costUSD
+        })
+
+      if (logError) {
+        console.error('Failed to log generation:', logError)
+        // Non-critical error, continue
+      }
+    } catch (logException) {
+      console.error('Exception while logging generation:', logException)
       // Non-critical error, continue
     }
 
@@ -441,10 +463,12 @@ export async function POST(request: NextRequest) {
         : SUCCESS_MESSAGES.STORY_CREATED
     }, { headers: { 'Content-Type': 'application/json' } })
 
-    // Add rate limit headers
-    Object.entries(rateLimitResult.headers).forEach(([key, value]) => {
-      response.headers.set(key, String(value))
-    })
+    // Add rate limit headers if available
+    if (rateLimitHeaders) {
+      Object.entries(rateLimitHeaders).forEach(([key, value]) => {
+        response.headers.set(key, String(value))
+      })
+    }
 
     return response
 

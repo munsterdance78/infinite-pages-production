@@ -1,471 +1,277 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { createClient } from '@/lib/database/supabase'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import {
-  BookOpen,
-  Sparkles,
-  Zap,
-  Star,
-  Check,
-  ArrowRight,
-  Crown,
-  FileText,
-  BarChart,
-  Download,
-  Rocket,
-  Brain,
-  Wand2
-} from 'lucide-react'
+import React, { useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { BookOpen, Sparkles, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Label } from '@/components/ui/label'
 
-export default function LandingPage() {
-  const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(false)
+export default function HomePage() {
   const router = useRouter()
-  const supabase = createClient()
+  const [showModal, setShowModal] = useState(false)
+  const [creating, setCreating] = useState(false)
+  const [formData, setFormData] = useState({
+    title: '',
+    genre: '',
+    premise: '',
+    targetLength: 20
+  })
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
-    }
-    getUser()
-  }, [])
+  const handleCreateStory = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setCreating(true)
 
-  const handleSignIn = async () => {
-    setLoading(true)
     try {
-      const redirectUrl = `${process.env['NEXT_PUBLIC_SITE_URL'] || window.location.origin}/api/auth/callback`
-
-      await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: redirectUrl
-        }
+      const response = await fetch('/api/stories', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-development-bypass': 'true'
+        },
+        body: JSON.stringify(formData)
       })
-    } catch (error) {
-      console.error('Sign in error:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
-  if (user) {
-    router.push('/dashboard')
-    return null
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to create story')
+      }
+
+      const data = await response.json()
+
+      // Navigate to the new story's detail page
+      router.push(`/stories/${data.story.id}`)
+    } catch (error) {
+      console.error('Error creating story:', error)
+      alert(error instanceof Error ? error.message : 'Failed to create story')
+    } finally {
+      setCreating(false)
+    }
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <BookOpen className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-bold text-gray-900">
-                Infinite-Pages
-              </span>
-            </div>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url("/victorian-street-scene.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
 
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                className="hidden sm:inline-flex"
-                onClick={() => {
-                  const pricingSection = document.getElementById('pricing-section')
-                  pricingSection?.scrollIntoView({ behavior: 'smooth' })
-                }}
-              >
-                Pricing
-              </Button>
-              <Button
-                variant="ghost"
-                className="hidden sm:inline-flex"
-                onClick={() => {
-                  const featuresSection = document.getElementById('features-section')
-                  featuresSection?.scrollIntoView({ behavior: 'smooth' })
-                }}
-              >
-                Features
-              </Button>
-              <Button
-                onClick={handleSignIn}
-                disabled={loading}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-              >
-                {loading ? 'Signing in...' : 'Get Started Free'}
-              </Button>
-            </div>
+      {/* Dark Overlay for Readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80 z-10" />
+
+      {/* Content */}
+      <div className="relative z-20 min-h-screen flex flex-col">
+        {/* Navigation */}
+        <nav className="px-6 py-4 flex justify-between items-center border-b border-white/10">
+          <div className="flex items-center gap-2">
+            <BookOpen className="w-8 h-8 text-amber-400" />
+            <h1 className="text-2xl font-bold text-white">Infinite Pages</h1>
           </div>
-        </div>
-      </header>
+          <div className="flex gap-4">
+            <Link href="/auth/signin">
+              <Button variant="ghost" className="text-white hover:text-amber-400 hover:bg-white/10">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/auth/signup">
+              <Button className="bg-amber-600 hover:bg-amber-700 text-white">
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+        </nav>
 
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 mt-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <Badge className="mb-6 bg-purple-100 text-purple-800 border-purple-200" variant="outline">
-              <Sparkles className="w-3 h-3 mr-1" />
-              AI-Powered Story Generation Platform
-            </Badge>
-
-            <h1 className="text-4xl sm:text-6xl font-bold mb-6">
-              Create{' '}
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Unlimited Stories
-              </span>
+        {/* Hero Section */}
+        <div className="flex-1 flex items-center justify-center px-6">
+          <div className="max-w-4xl mx-auto text-center space-y-8">
+            <h2 className="text-5xl md:text-6xl font-bold text-white leading-tight">
+              Create Unlimited Stories
               <br />
-              with AI Assistance
-            </h1>
+              <span className="text-amber-400">with AI Assistance</span>
+            </h2>
 
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Transform your ideas into complete stories with our advanced AI. Generate foundations,
-              write chapters, and bring your imagination to life with cost-effective structured prompting.
+            <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
+              Transform your storytelling with AI-powered continuity tracking,
+              character development, and world-building at your fingertips
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
               <Button
                 size="lg"
-                onClick={handleSignIn}
-                disabled={loading}
-                className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                onClick={() => setShowModal(true)}
+                className="bg-amber-600 hover:bg-amber-700 text-white text-lg px-8 py-6 gap-2"
               >
-                <Rocket className="w-5 h-5 mr-2" />
-                Get Started Free
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-4"
-                onClick={() => {
-                  const featuresSection = document.getElementById('features-section')
-                  featuresSection?.scrollIntoView({ behavior: 'smooth' })
-                }}
-              >
-                <BookOpen className="w-5 h-5 mr-2" />
-                View Features
+                <Sparkles className="w-5 h-5" />
+                Start Writing Now
               </Button>
             </div>
 
-            <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-600" />
-                <span>7-Day Free Trial</span>
+            {/* Feature Highlights */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12">
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <h3 className="text-amber-400 font-semibold text-lg mb-2">AI-Powered Generation</h3>
+                <p className="text-white/80 text-sm">
+                  Generate engaging chapters with advanced Claude AI that understands your story's context
+                </p>
               </div>
-              <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-600" />
-                <span>No Setup Fees</span>
+
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <h3 className="text-amber-400 font-semibold text-lg mb-2">Smart Continuity</h3>
+                <p className="text-white/80 text-sm">
+                  Automatic fact tracking keeps your characters, locations, and plot points consistent
+                </p>
               </div>
-              <div className="flex items-center gap-2">
-                <Check className="w-4 h-4 text-green-600" />
-                <span>Cancel Anytime</span>
+
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                <h3 className="text-amber-400 font-semibold text-lg mb-2">Genre Expertise</h3>
+                <p className="text-white/80 text-sm">
+                  Specialized support for Fantasy, Romance, Mystery, Sci-Fi, and more
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Features Section */}
-      <section id="features-section" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Everything you need to write amazing stories</h2>
-            <p className="text-xl text-gray-600">Powered by Claude AI with cost-optimized structured prompting</p>
-          </div>
+        {/* Footer */}
+        <footer className="py-6 text-center text-white/60 text-sm border-t border-white/10">
+          <p>&copy; 2024 Infinite Pages. Powered by Claude AI.</p>
+        </footer>
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <Card className="hover:shadow-lg transition-shadow duration-200">
-              <CardHeader>
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <Brain className="w-6 h-6 text-blue-600" />
-                </div>
-                <CardTitle>AI Story Foundation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Generate complete story bibles with characters, world-building, and plot outlines in seconds.
-                </p>
-              </CardContent>
-            </Card>
+      {/* Story Creator Modal */}
+      <Dialog open={showModal} onOpenChange={setShowModal}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl flex items-center gap-2">
+              <BookOpen className="w-6 h-6 text-amber-600" />
+              Create Your Story
+            </DialogTitle>
+            <DialogDescription>
+              Fill in the details below to begin your AI-assisted writing journey
+            </DialogDescription>
+          </DialogHeader>
 
-            <Card className="hover:shadow-lg transition-shadow duration-200">
-              <CardHeader>
-                <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-                  <FileText className="w-6 h-6 text-green-600" />
-                </div>
-                <CardTitle>Chapter Generation</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Write engaging chapters that maintain consistency with your story's world and characters.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow duration-200">
-              <CardHeader>
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-                  <Wand2 className="w-6 h-6 text-purple-600" />
-                </div>
-                <CardTitle>Smart Improvements</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Refine your content with AI-powered suggestions while maintaining your story's voice.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow duration-200">
-              <CardHeader>
-                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
-                  <Download className="w-6 h-6 text-orange-600" />
-                </div>
-                <CardTitle>Export Anywhere</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Download your stories in PDF, EPUB, DOCX, or TXT format for publishing or sharing.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow duration-200">
-              <CardHeader>
-                <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
-                  <BarChart className="w-6 h-6 text-red-600" />
-                </div>
-                <CardTitle>Writing Analytics</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Track your progress, efficiency, and writing patterns to optimize your creative process.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="hover:shadow-lg transition-shadow duration-200">
-              <CardHeader>
-                <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
-                  <Zap className="w-6 h-6 text-yellow-600" />
-                </div>
-                <CardTitle>Cost Efficient</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Structured prompting system maximizes quality while minimizing AI costs.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing-section" className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Simple, transparent pricing</h2>
-            <p className="text-xl text-gray-600">Choose the plan that fits your writing goals</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Basic Plan */}
-            <Card className="relative">
-              <CardHeader className="text-center pb-8">
-                <CardTitle className="text-2xl">Basic</CardTitle>
-                <div className="text-4xl font-bold">$7.99</div>
-                <p className="text-gray-600">Perfect for getting started</p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">1,332 Credits per month</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">5 stories per month</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Foundation, character & chapter generation</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">2 cover generations</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Community support</span>
-                  </div>
-                </div>
-                <Button
-                  className="w-full mt-6"
-                  variant="outline"
-                  onClick={handleSignIn}
-                  disabled={loading}
-                >
-                  Start Basic Plan
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Premium Plan */}
-            <Card className="relative border-purple-200 shadow-lg">
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-purple-600 text-white px-4 py-1">
-                  <Star className="w-3 h-3 mr-1" />
-                  Most Popular
-                </Badge>
-              </div>
-              <CardHeader className="text-center pb-8">
-                <CardTitle className="text-2xl">Premium</CardTitle>
-                <div className="text-4xl font-bold">$14.99</div>
-                <p className="text-gray-600">For serious writers</p>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">2,497 Credits per month</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Unlimited stories</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">All export formats (PDF, EPUB, DOCX)</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Advanced AI operations & improvements</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-green-600" />
-                    <span className="text-sm">Priority support & analytics dashboard</span>
-                  </div>
-                </div>
-                <Button
-                  className="w-full mt-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
-                  onClick={handleSignIn}
-                  disabled={loading}
-                >
-                  <Crown className="w-4 h-4 mr-2" />
-                  Start Premium Trial
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="text-center mt-8">
-            <p className="text-sm text-gray-600">
-              30-day money-back guarantee • Cancel anytime • No setup fees
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <div className="text-3xl font-bold text-blue-600 mb-2">1M+</div>
-              <div className="text-gray-600">Words Generated</div>
+          <form onSubmit={handleCreateStory} className="space-y-6 pt-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Story Title</Label>
+              <Input
+                id="title"
+                placeholder="Enter your story title..."
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                required
+              />
             </div>
-            <div>
-              <div className="text-3xl font-bold text-green-600 mb-2">500+</div>
-              <div className="text-gray-600">Stories Created</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-purple-600 mb-2">98%</div>
-              <div className="text-gray-600">User Satisfaction</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Ready to bring your stories to life?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Join thousands of writers creating amazing stories with AI assistance
-          </p>
-          <Button
-            size="lg"
-            onClick={handleSignIn}
-            disabled={loading}
-            className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-4"
-          >
-            <Sparkles className="w-5 h-5 mr-2" />
-            Create Account - Free Trial
-          </Button>
-        </div>
-      </section>
+            <div className="space-y-2">
+              <Label htmlFor="genre">Genre</Label>
+              <Select
+                value={formData.genre}
+                onValueChange={(value) => setFormData({ ...formData, genre: value })}
+                required
+              >
+                <SelectTrigger id="genre">
+                  <SelectValue placeholder="Select a genre..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Fantasy">Fantasy</SelectItem>
+                  <SelectItem value="Romance">Romance</SelectItem>
+                  <SelectItem value="Mystery">Mystery</SelectItem>
+                  <SelectItem value="Thriller">Thriller</SelectItem>
+                  <SelectItem value="Science Fiction">Science Fiction</SelectItem>
+                  <SelectItem value="Historical Fiction">Historical Fiction</SelectItem>
+                  <SelectItem value="Horror">Horror</SelectItem>
+                  <SelectItem value="Literary Fiction">Literary Fiction</SelectItem>
+                  <SelectItem value="Young Adult">Young Adult</SelectItem>
+                  <SelectItem value="Adventure">Adventure</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-xl font-bold">Infinite-Pages</span>
-              </div>
-              <p className="text-gray-400">
-                AI-powered story generation platform for writers of all levels.
+            <div className="space-y-2">
+              <Label htmlFor="premise">Story Premise</Label>
+              <Textarea
+                id="premise"
+                placeholder="Describe your story idea, main characters, setting, and key themes..."
+                value={formData.premise}
+                onChange={(e) => setFormData({ ...formData, premise: e.target.value })}
+                rows={5}
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Include any important details about your world, characters, or plot direction
               </p>
             </div>
 
-            <div>
-              <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>Features</li>
-                <li>Pricing</li>
-                <li>Examples</li>
-                <li>API</li>
-              </ul>
+            <div className="space-y-2">
+              <Label htmlFor="targetLength">Target Chapters</Label>
+              <Input
+                id="targetLength"
+                type="number"
+                min="1"
+                max="100"
+                value={formData.targetLength}
+                onChange={(e) => setFormData({ ...formData, targetLength: parseInt(e.target.value) })}
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                How many chapters do you plan to write? (You can change this later)
+              </p>
             </div>
 
-            <div>
-              <h3 className="font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>Help Center</li>
-                <li>Contact</li>
-                <li>Status</li>
-                <li>Community</li>
-              </ul>
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowModal(false)}
+                disabled={creating}
+                className="flex-1"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={creating}
+                className="flex-1 bg-amber-600 hover:bg-amber-700"
+              >
+                {creating ? (
+                  <>
+                    <Sparkles className="w-4 h-4 mr-2 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  <>
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Create Story
+                  </>
+                )}
+              </Button>
             </div>
-
-            <div>
-              <h3 className="font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li>Privacy Policy</li>
-                <li>Terms of Service</li>
-                <li>Cookie Policy</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Infinite-Pages. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
