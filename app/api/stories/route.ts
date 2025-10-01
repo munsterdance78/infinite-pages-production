@@ -248,6 +248,7 @@ export async function POST(request: NextRequest) {
     // Validate input
     const validation = validateInput(requestBody, createStorySchema)
     if (!validation.isValid) {
+      console.error('[Story Creation] Validation failed:', validation.errors)
       return NextResponse.json({
         error: ERROR_MESSAGES.INVALID_INPUT,
         details: validation.errors

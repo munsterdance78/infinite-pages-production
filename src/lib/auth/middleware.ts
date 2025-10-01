@@ -1,8 +1,10 @@
-import { createClient } from '@/lib/database/supabase'
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { ERROR_MESSAGES } from '@/lib/utils/constants'
 import type { AuthResult, AuthenticatedRequest } from './types'
+import type { Database } from '@/lib/supabase/types'
 
 /**
  * Consolidated authentication middleware for API routes
@@ -13,7 +15,30 @@ import type { AuthResult, AuthenticatedRequest } from './types'
  */
 export async function requireAuth(request: NextRequest): Promise<AuthResult> {
   try {
-    const supabase = createClient()
+    // Extract Bearer token from Authorization header if present
+    const authHeader = request.headers.get('authorization')
+    let supabase
+
+    if (authHeader?.startsWith('Bearer ')) {
+      // Header-based auth (for API tests and external requests)
+      const token = authHeader.substring(7)
+
+      // Create a client that uses the provided token
+      const { createClient } = await import('@supabase/supabase-js')
+      const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
+      const supabaseAnonKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!
+
+      supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+        global: {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      })
+    } else {
+      // Cookie-based auth (for browser requests)
+      supabase = createRouteHandlerClient<Database>({ cookies })
+    }
 
     const { data: { user }, error } = await supabase.auth.getUser()
 

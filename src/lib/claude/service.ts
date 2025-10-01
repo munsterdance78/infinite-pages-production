@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import {
   CLAUDE_PRICING,
   calculateCost,
@@ -876,6 +877,337 @@ Check for:
 5. Relationship/motivation conflicts
 
 Return detailed analysis with specific issues and suggestions.`
+  }
+
+  /**
+   * Extract structured facts from chapter content
+   */
+  async extractChapterFacts({
+    chapterContent,
+    storyId,
+    chapterId,
+    userId
+  }: {
+    chapterContent: string
+    storyId: string
+    chapterId: string
+    userId?: string
+  }) {
+    const systemPrompt = FACT_EXTRACTION_SYSTEM_PROMPT
+
+    const prompt = `Extract structured facts from this chapter content for story consistency tracking.
+
+CHAPTER CONTENT:
+${chapterContent}
+
+Return a JSON object with the following structure:
+{
+  "characters": [
+    {
+      "name": "Character full name",
+      "traits": ["personality trait 1", "personality trait 2"],
+      "description": "Physical appearance and key characteristics",
+      "relationships": ["relationship to other character"],
+      "goals": "What this character wants",
+      "voicePattern": "How this character speaks (formal/casual/etc)"
+    }
+  ],
+  "locations": [
+    {
+      "name": "Location name",
+      "description": "Detailed description of the place",
+      "atmosphere": "Mood and feeling of the location",
+      "features": ["key feature 1", "key feature 2"]
+    }
+  ],
+  "plotEvents": [
+    {
+      "event": "What happened",
+      "significance": "Why this matters to the story",
+      "consequences": "What this leads to",
+      "involvedCharacters": ["character 1", "character 2"]
+    }
+  ],
+  "worldRules": [
+    {
+      "rule": "A specific rule or limitation in this world",
+      "category": "magic/technology/social/physical",
+      "implications": "How this affects the story"
+    }
+  ]
+}
+
+Extract only facts that are explicitly stated or clearly implied. Be precise and concise.`
+
+    let response
+    try {
+      response = await this.generateContent({
+        prompt,
+        systemPrompt,
+        maxTokens: 3000,
+        operation: 'fact_extraction',
+        userId,
+        trackAnalytics: true
+      })
+    } catch (error) {
+      console.error('Claude API error during fact extraction:', error)
+      throw new Error('Failed to extract facts from chapter content')
+    }
+
+    // Parse JSON response with error handling
+    let parsedData: {
+      characters?: Array<{
+        name: string
+        traits?: string[]
+        description?: string
+        relationships?: string[]
+        goals?: string
+        voicePattern?: string
+      }>
+      locations?: Array<{
+        name: string
+        description?: string
+        atmosphere?: string
+        features?: string[]
+      }>
+      plotEvents?: Array<{
+        event: string
+        significance?: string
+        consequences?: string
+        involvedCharacters?: string[]
+      }>
+      worldRules?: Array<{
+        rule: string
+        category?: string
+        implications?: string
+      }>
+    }
+
+    try {
+      parsedData = JSON.parse(response.content)
+    } catch (parseError) {
+      console.warn('Failed to parse fact extraction response as JSON, attempting fallback parsing')
+
+      // Fallback: try to extract JSON from response if it's wrapped in text
+      const jsonMatch = response.content.match(/\{[\s\S]*\}/)
+      if (jsonMatch) {
+        try {
+          parsedData = JSON.parse(jsonMatch[0])
+        } catch (e) {
+          console.error('Fallback JSON parsing also failed')
+          throw new Error('Could not parse fact extraction response')
+        }
+      } else {
+        throw new Error('No valid JSON found in fact extraction response')
+      }
+    }
+
+    // Transform parsed data into flat array of fact objects
+    const facts: Array<{
+      story_id: string
+      chapter_id: string
+      fact_type: 'character' | 'location' | 'plot_event' | 'world_rule'
+      entity_name: string
+      fact_data: Record<string, unknown>
+      source_text: string
+      confidence: number
+      extraction_model: string
+      extraction_cost_usd: number
+    }> = []
+
+    // Process characters
+    if (parsedData.characters && Array.isArray(parsedData.characters)) {
+      for (const char of parsedData.characters) {
+        if (char.name) {
+          facts.push({
+            story_id: storyId,
+            chapter_id: chapterId,
+            fact_type: 'character',
+            entity_name: char.name,
+            fact_data: {
+              traits: char.traits || [],
+              description: char.description || '',
+              relationships: char.relationships || [],
+              goals: char.goals || '',
+              voicePattern: char.voicePattern || ''
+            },
+            source_text: chapterContent.substring(0, 500),
+            confidence: 0.9,
+            extraction_model: response.model || this.defaultModel,
+            extraction_cost_usd: response.cost || 0
+          })
+        }
+      }
+    }
+
+    // Process locations
+    if (parsedData.locations && Array.isArray(parsedData.locations)) {
+      for (const loc of parsedData.locations) {
+        if (loc.name) {
+          facts.push({
+            story_id: storyId,
+            chapter_id: chapterId,
+            fact_type: 'location',
+            entity_name: loc.name,
+            fact_data: {
+              description: loc.description || '',
+              atmosphere: loc.atmosphere || '',
+              features: loc.features || []
+            },
+            source_text: chapterContent.substring(0, 500),
+            confidence: 0.9,
+            extraction_model: response.model || this.defaultModel,
+            extraction_cost_usd: response.cost || 0
+          })
+        }
+      }
+    }
+
+    // Process plot events
+    if (parsedData.plotEvents && Array.isArray(parsedData.plotEvents)) {
+      for (const event of parsedData.plotEvents) {
+        if (event.event) {
+          facts.push({
+            story_id: storyId,
+            chapter_id: chapterId,
+            fact_type: 'plot_event',
+            entity_name: event.event.substring(0, 255),
+            fact_data: {
+              significance: event.significance || '',
+              consequences: event.consequences || '',
+              involvedCharacters: event.involvedCharacters || []
+            },
+            source_text: chapterContent.substring(0, 500),
+            confidence: 0.85,
+            extraction_model: response.model || this.defaultModel,
+            extraction_cost_usd: response.cost || 0
+          })
+        }
+      }
+    }
+
+    // Process world rules
+    if (parsedData.worldRules && Array.isArray(parsedData.worldRules)) {
+      for (const rule of parsedData.worldRules) {
+        if (rule.rule) {
+          facts.push({
+            story_id: storyId,
+            chapter_id: chapterId,
+            fact_type: 'world_rule',
+            entity_name: rule.rule.substring(0, 255),
+            fact_data: {
+              category: rule.category || 'general',
+              implications: rule.implications || ''
+            },
+            source_text: chapterContent.substring(0, 500),
+            confidence: 0.95,
+            extraction_model: response.model || this.defaultModel,
+            extraction_cost_usd: response.cost || 0
+          })
+        }
+      }
+    }
+
+    return {
+      facts,
+      extractionCost: response.cost || 0,
+      tokensUsed: response.usage?.totalTokens || 0,
+      model: response.model || this.defaultModel
+    }
+  }
+
+  /**
+   * Get stored facts for a story from database
+   */
+  async getStoredFactsForStory(
+    storyId: string,
+    supabase: SupabaseClient
+  ): Promise<Array<{
+    id: string
+    story_id: string
+    chapter_id: string | null
+    fact_type: string
+    entity_name: string | null
+    fact_data: Record<string, unknown>
+    confidence: number
+    extraction_model: string | null
+    extraction_cost_usd: number
+    extracted_at: string
+  }>> {
+    try {
+      const { data, error } = await supabase
+        .from('story_facts')
+        .select('*')
+        .eq('story_id', storyId)
+        .order('extracted_at', { ascending: false })
+
+      if (error) {
+        console.error('Database error fetching story facts:', error)
+        return []
+      }
+
+      return data || []
+    } catch (error) {
+      console.error('Unexpected error fetching story facts:', error)
+      return []
+    }
+  }
+
+  /**
+   * Save extracted facts to database
+   */
+  async saveExtractedFacts(
+    facts: Array<{
+      story_id: string
+      chapter_id: string
+      fact_type: 'character' | 'location' | 'plot_event' | 'world_rule'
+      entity_name: string
+      fact_data: Record<string, unknown>
+      source_text: string
+      confidence: number
+      extraction_model: string
+      extraction_cost_usd: number
+    }>,
+    supabase: SupabaseClient
+  ): Promise<{ saved: number; failed: number }> {
+    let saved = 0
+    let failed = 0
+
+    for (const fact of facts) {
+      try {
+        const { error } = await supabase
+          .from('story_facts')
+          .upsert(
+            {
+              story_id: fact.story_id,
+              chapter_id: fact.chapter_id,
+              fact_type: fact.fact_type,
+              entity_name: fact.entity_name,
+              fact_data: fact.fact_data,
+              source_text: fact.source_text,
+              confidence: fact.confidence,
+              extraction_model: fact.extraction_model,
+              extraction_cost_usd: fact.extraction_cost_usd
+            },
+            {
+              onConflict: 'story_id,fact_type,entity_name',
+              ignoreDuplicates: false
+            }
+          )
+
+        if (error) {
+          console.error('Error saving fact:', error, fact)
+          failed++
+        } else {
+          saved++
+        }
+      } catch (error) {
+        console.error('Unexpected error saving fact:', error, fact)
+        failed++
+      }
+    }
+
+    return { saved, failed }
   }
 
   private async getStoredFacts(storyId: string): Promise<Record<string, unknown>> {
