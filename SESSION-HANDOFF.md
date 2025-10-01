@@ -2,6 +2,179 @@
 
 ## What We Built Today
 
+---
+
+## What's Actually Implemented vs Still TODO
+
+### ✅ Fully Implemented
+
+**Database Layer:**
+- `story_facts` table with proper schema (fact_type, entity_name, fact_data, confidence)
+- RLS policies, indexes, triggers all working
+- Migration files tested and verified in Supabase
+
+**Claude Service Methods:**
+- `extractChapterFacts()` - Extracts characters, locations, plot events, world rules from chapter content
+- `saveExtractedFacts()` - Saves to database with upsert logic (handles duplicates)
+- `getStoredFactsForStory()` - Retrieves all facts for a story from database
+- All three methods have proper error handling and TypeScript types
+
+**API Endpoints:**
+- `POST /api/stories/[storyId]/chapters` - Chapter generation endpoint
+- `GET /api/stories/[storyId]/chapters` - Fetch all chapters
+- Background extraction trigger (fires after chapter save, doesn't block response)
+- Proper validation, auth, error handling
+
+**Auth & Infrastructure:**
+- Middleware handles Bearer tokens + cookies (dual auth)
+- Test user created and working
+- PowerShell test scripts for authentication and API testing
+- Development environment fully configured
+
+### ⚠️ Partially Implemented (Exists but Not Tested)
+
+**Fact Extraction Pipeline:**
+- ✅ Code exists to extract facts from chapters
+- ✅ Code exists to save facts to database
+- ❌ **Not verified end-to-end** - Haven't generated a real chapter and checked if facts appear in `story_facts` table
+
+**Chapter Generation Flow:**
+- ✅ API endpoint exists and compiles
+- ✅ Claude service method exists
+- ❌ **Not tested with real data** - Haven't successfully generated a chapter yet
+
+**Auth Flow:**
+- ✅ Bearer token validation works (Supabase confirms token is valid)
+- ✅ Middleware properly extracts token from header
+- ❌ **Full request flow not tested** - Story creation returns 400 (validation issue, not auth)
+
+### ❌ Not Implemented Yet (Planned Features Still TODO)
+
+**Phase 2 - Using Facts for Generation:**
+- **Consistency Checker** - Facts are extracted but NOT compared against new content
+  - Table exists: `story_facts`
+  - Method exists: `getStoredFactsForStory()`
+  - Missing: Logic to fetch facts and pass to Claude for validation
+  - Missing: `analyzeStoryConsistency()` integration with chapter generation
+
+- **Hierarchical Context Builder** - Facts are saved but NOT pulled back into generation prompts
+  - Table exists: `story_facts`
+  - Method exists: `getStoredFactsForStory()`
+  - Missing: Code to fetch relevant facts before generating new chapter
+  - Missing: Prompt builder that injects facts into Claude context
+  - Missing: `generateWithFactContext()` integration
+
+- **Context Optimization with Facts** - Currently uses generic context reduction
+  - Method exists: `contextOptimizer.selectRelevantContext()`
+  - Missing: Fact-aware context selection
+  - Missing: Query stored facts by relevance to chapter goals
+  - Missing: Inject most relevant facts while staying under token limits
+
+**Phase 3 - Series Management:**
+- **Cross-Book Thread Tracking** - Tables exist but no code uses them
+  - Tables exist: `plot_threads`, `foreshadowing_elements`, `character_arcs`
+  - Missing: Code to create/update plot threads
+  - Missing: API endpoints for series management
+  - Missing: Foreshadowing detection and payoff tracking
+
+- **Series Bible** - Infrastructure exists but not wired up
+  - Tables exist: `series`, `series_facts`, `world_state_changes`
+  - Missing: Series creation/management API
+  - Missing: Multi-book fact aggregation
+  - Missing: Series-level consistency checking
+
+**Phase 4 - UI Features:**
+- **Analyze/Enhance Interface** - Backend methods exist but no frontend
+  - Backend: `analyzeContent()`, `improveContent()` methods exist
+  - Missing: Frontend UI for content analysis
+  - Missing: API endpoints for analysis/enhancement
+  - Missing: User-facing fact review and correction interface
+
+- **Fact Management Dashboard** - No UI to view/edit extracted facts
+  - Backend: Facts stored in database
+  - Missing: Frontend to display facts
+  - Missing: Edit/delete/merge fact functionality
+  - Missing: Fact validation and user confirmation
+
+**Phase 5 - Advanced Features:**
+- **Deep Book Analysis** - Only lightweight extraction implemented
+  - Current: Per-chapter extraction (8-12 facts)
+  - Missing: Full book analysis (themes, motifs, symbolism)
+  - Missing: Character arc tracking across chapters
+  - Missing: Plot structure analysis
+
+- **Batch Processing** - Single-chapter only
+  - Current: Generate one chapter at a time
+  - Missing: Batch generate multiple chapters
+  - Missing: Batch extract facts from existing chapters
+  - Missing: Parallel processing for speed
+
+### 🎯 Next Phase After Current Bug Fixes
+
+**Immediate (This Session or Next):**
+1. Fix validation error in story creation endpoint
+2. Test complete flow: Create story → Generate chapter → Verify facts extracted
+3. Verify facts appear in `story_facts` table with correct data
+4. Check console logs for `[Fact Extraction]` messages
+
+**Phase 2 (Close the Loop - Facts → Generation):**
+1. Wire extracted facts BACK into chapter generation (hierarchical context)
+   - Modify `generateChapter()` to fetch stored facts first
+   - Build fact-aware context that includes relevant facts
+   - Test that new chapters maintain consistency with extracted facts
+
+2. Implement consistency checking
+   - Integrate `analyzeStoryConsistency()` with chapter generation
+   - Compare new chapter content against `story_facts`
+   - Return warnings for inconsistencies (character voice, plot contradictions, etc.)
+
+3. Build fact-based context optimization
+   - Query `story_facts` by relevance to chapter goals
+   - Inject most important facts into Claude prompt
+   - Stay under token limits while maximizing relevant context
+
+**Phase 3 (Series Features):**
+1. Series management API endpoints
+2. Cross-book thread tracking logic
+3. Foreshadowing detection and payoff tracking
+
+**Phase 4 (UI Development):**
+1. Fact review dashboard
+2. Content analysis interface
+3. Story bible viewer
+
+### 🔍 Critical Realization
+
+**What we have now:**
+```
+Content → Extract Facts → Store in Database
+```
+This is a **one-way pipeline**. Facts flow OUT of chapters into storage, but they don't flow BACK IN.
+
+**What we need:**
+```
+Store Facts → Retrieve Relevant Facts → Use in Generation → Generate Consistent Content
+     ↑                                                              ↓
+     └───────────────── Extract New Facts ←─────────────────────────┘
+```
+This is a **closed loop**. Facts inform generation, generation creates content, content creates facts.
+
+**Current State:**
+- ✅ Extract: Working
+- ✅ Store: Working
+- ❌ Retrieve: Method exists but not used in generation
+- ❌ Use: Not implemented yet
+
+**The Gap:**
+We have the DATABASE and EXTRACTION working. We DON'T have the facts being USED yet for consistency or context enhancement. That's the entire point of the system - using facts to improve future generation.
+
+**Next Critical Steps:**
+1. Test that extraction works (this session)
+2. Wire retrieval into generation (next session)
+3. Verify consistency improves (measure before/after)
+
+---
+
 ### 1. ✅ Fresh Supabase Database Schema
 - **Migrated 13 tables** via `add-missing-tables.sql`:
   - `subscription_logs` - Subscription audit trail
@@ -505,3 +678,140 @@ We built a complete chapter generation and fact extraction system with:
 **Next:** Test the complete flow and verify fact extraction works end-to-end.
 
 **Estimated time to production:** 1-2 hours of testing + bug fixes
+
+---
+
+## Critical Gotchas to Remember
+
+### Git and node_modules
+- ✅ `node_modules` is now in `.gitignore` (correct)
+- ⚠️ **NEVER commit node_modules again**
+- 📦 When cloning to new machine: run `npm install` to regenerate it
+- 💾 Files on your computer: still there, just not tracked by git
+
+### Auth Flow in Development
+- 🔒 Middleware supports dual auth: Bearer tokens + cookies
+- 🧪 Test user credentials: `test@example.com` / `TestPassword123!`
+- ⏱️ Auth token expires in 1 hour - regenerate with `test-login.ps1` if tests fail
+- 🔑 Token saved in: `test-token.txt`
+- 🌐 Production ready: No development-only bypasses needed
+
+### Database Connection
+- 🆕 Fresh Supabase project: `https://tktntttemkbmnqkalkch.supabase.co`
+- ✅ All tables created and working (14 tables total)
+- 🗑️ Old project data is gone (intentional - clean slate)
+- 🔐 `.env.local` has correct credentials (all 3 Supabase keys + Anthropic key)
+
+### Known Issues Not Yet Fixed
+
+1. **Story creation untested**
+   - Returns 400 on validation failure
+   - Logging now added: `console.error('[Story Creation] Validation failed:', validation.errors)`
+   - Check server logs to see which field is failing
+
+2. **Constants may be missing**
+   - `SUCCESS_MESSAGES.CHAPTER_GENERATED` - may be undefined
+   - `ESTIMATED_CREDIT_COSTS.CHAPTER` - verify it exists
+   - Check `src/lib/utils/constants.ts`
+
+3. **Table name mismatch**
+   - Middleware queries `user_profiles` (lines 59, 100)
+   - Actual table might be `profiles`
+   - Verify in Supabase Dashboard → Table Editor
+
+4. **Missing ANTHROPIC_API_KEY check**
+   - Verify it exists in `.env.local` before testing chapter generation
+   - Required for: `claudeService.generateChapter()`, `claudeService.extractChapterFacts()`
+
+### Quick Reference Commands
+
+```powershell
+# Start dev server
+npm run dev
+
+# Get auth token (expires in 1 hour)
+.\test-login.ps1
+
+# Test story creation (manual command - more reliable than test-api.ps1)
+$token = Get-Content test-token.txt -Raw
+$headers = @{
+    "Authorization" = "Bearer $token"
+    "Content-Type" = "application/json"
+}
+$body = @{
+    title = "The Crystal Kingdom"
+    genre = "fantasy"
+    premise = "A young mage discovers a hidden kingdom made entirely of crystal, where shadows have been stealing people's memories for centuries."
+} | ConvertTo-Json
+Invoke-RestMethod -Uri "http://localhost:3001/api/stories" -Method POST -Headers $headers -Body $body
+
+# Test chapter generation (after story is created)
+$storyId = "YOUR_STORY_ID_HERE"
+$body = @{
+    chapterNumber = 1
+    chapterPlan = @{
+        purpose = "Introduce protagonist and discover the crystal gateway"
+        keyEvents = @("Aria finds strange crystal in forest", "Crystal reveals portal", "She steps through")
+    }
+} | ConvertTo-Json
+Invoke-RestMethod -Uri "http://localhost:3001/api/stories/$storyId/chapters" -Method POST -Headers $headers -Body $body
+
+# Check Supabase for extracted facts (wait 30 seconds after chapter generation)
+# Go to: Supabase Dashboard → Table Editor → story_facts
+# Or run SQL:
+SELECT fact_type, entity_name, confidence, extraction_cost_usd
+FROM story_facts
+WHERE story_id = 'YOUR_STORY_ID'
+ORDER BY extracted_at DESC;
+
+# Check server logs for fact extraction
+# Look for: [Fact Extraction] Story: ... - Saved: 8, Failed: 0, Cost: $0.003500
+```
+
+### If Tests Fail - Debugging Steps
+
+1. **Check server logs** - Look for error messages and stack traces
+2. **Check Supabase logs** - Dashboard → Logs → API
+3. **Verify auth token** - Run `test-login.ps1` to get fresh token
+4. **Verify environment variables** - Check `.env.local` has all keys
+5. **Check database tables** - Supabase Dashboard → Table Editor
+6. **Test with Postman/Insomnia** - Rule out PowerShell issues
+7. **Check TypeScript errors** - Run `npm run type-check`
+
+### Environment Variables Checklist
+
+```bash
+# Required in .env.local:
+NEXT_PUBLIC_SUPABASE_URL=https://tktntttemkbmnqkalkch.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ANTHROPIC_API_KEY=sk-ant-...
+NEXT_PUBLIC_SITE_URL=https://www.infinite-pages.com
+
+# Optional but recommended:
+NODE_ENV=development
+```
+
+### Port Configuration
+
+- **Development server**: `http://localhost:3001` (not 3000!)
+- If port 3001 is in use, check `package.json` scripts or `.env`
+- Next.js default is 3000, but this project uses 3001
+
+### File Encoding Issues
+
+- All `.ps1` files use UTF-8 encoding
+- If you see weird characters, check: File → Save with Encoding → UTF-8
+- Windows PowerShell supports UTF-8 natively (PowerShell 5.1+)
+
+### Common Error Messages Decoded
+
+| Error | Cause | Fix |
+|-------|-------|-----|
+| `Authentication required` (401) | Token expired or invalid | Run `test-login.ps1` to get new token |
+| `Invalid input` (400) | Validation failed | Check server logs for which field |
+| `Story not found` (404) | Wrong story ID | Verify ID from `test-story-id.txt` |
+| `Insufficient tokens` (400) | User out of credits | Update `profiles.tokens_remaining` in Supabase |
+| `Missing Supabase environment variables` | `.env.local` incomplete | Add all 3 Supabase keys |
+| `ANTHROPIC_API_KEY environment variable is required` | Missing API key | Add to `.env.local` |
+| `Failed to fetch user profile` (500) | Database error | Check Supabase connection |

@@ -56,13 +56,13 @@ export const SUBSCRIPTION_LIMITS = {
 export const CLAUDE_PRICING = {
   INPUT_TOKEN_COST: 0.000003,  // $0.000003 per input token
   OUTPUT_TOKEN_COST: 0.000015, // $0.000015 per output token
-  MODEL: 'claude-3-sonnet-20240229'
+  MODEL: 'claude-sonnet-4-20250514'
 } as const
 
 // Available Claude models
 export const CLAUDE_MODELS = {
-  SONNET: 'claude-3-sonnet-20240229',
-  OPUS: 'claude-3-opus-20240229', 
+  SONNET: 'claude-sonnet-4-20250514',
+  OPUS: 'claude-3-opus-20240229',
   HAIKU: 'claude-3-haiku-20240307'
 } as const
 

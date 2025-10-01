@@ -22,6 +22,7 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
     if (authHeader?.startsWith('Bearer ')) {
       // Header-based auth (for API tests and external requests)
       const token = authHeader.substring(7)
+      console.log('[Auth] Token length:', token.length)
 
       // Create a client that uses the provided token
       const { createClient } = await import('@supabase/supabase-js')
@@ -41,6 +42,7 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
     }
 
     const { data: { user }, error } = await supabase.auth.getUser()
+    console.log('[Auth] User:', !!user, 'Error:', error?.message)
 
     if (!user || error) {
       return NextResponse.json(
@@ -81,12 +83,12 @@ export async function requireAdminAuth(request: NextRequest): Promise<AuthResult
   try {
     // Check if user has admin role
     const { data: profile } = await supabase
-      .from('user_profiles')
-      .select('is_admin, role')
+      .from('profiles')
+      .select('is_admin')
       .eq('id', user.id)
       .single()
 
-    if (!profile?.is_admin && profile?.role !== 'admin') {
+    if (!profile?.is_admin) {
       return NextResponse.json(
         { error: 'Admin access required' },
         { status: 403 }
@@ -122,7 +124,7 @@ export async function requireCreatorAuth(request: NextRequest): Promise<AuthResu
   try {
     // Check if user has creator permissions
     const { data: profile } = await supabase
-      .from('user_profiles')
+      .from('profiles')
       .select('is_creator, creator_tier')
       .eq('id', user.id)
       .single()

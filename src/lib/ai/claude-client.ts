@@ -13,7 +13,7 @@ export const anthropic = new Anthropic({
  * Claude model configuration
  */
 export const claudeConfig = {
-  model: 'claude-3-sonnet-20240229',
+  model: 'claude-sonnet-4-20250514',
   maxTokens: 4000,
   temperature: 0.7
 } as const
