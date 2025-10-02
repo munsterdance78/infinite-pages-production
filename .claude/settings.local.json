@@ -10,7 +10,8 @@
       "Bash(npm install)",
       "Bash(gh api:*)",
       "Bash(npm run test-site:*)",
-      "Bash(curl -s \"https://api.vercel.com/v6/deployments?projectId=prj_Vksqoqdt92u6ZvVBUkugIeZYyhxJ&limit=1\" -H \"Authorization: Bearer $VERCEL_TOKEN:-\")"
+      "Bash(curl -s \"https://api.vercel.com/v6/deployments?projectId=prj_Vksqoqdt92u6ZvVBUkugIeZYyhxJ&limit=1\" -H \"Authorization: Bearer $VERCEL_TOKEN:-\")",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []
