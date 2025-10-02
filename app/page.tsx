@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { BookOpen, Sparkles, X } from 'lucide-react'
@@ -24,6 +24,18 @@ import {
 import { Label } from '@/components/ui/label'
 
 export default function HomePage() {
+  useEffect(() => {
+    document.title = 'Infinite Pages - Create Unlimited AI-Powered Stories'
+    const metaDescription = document.querySelector('meta[name="description"]')
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Transform your storytelling with AI-powered continuity tracking, character development, and world-building. Create infinite stories with Claude AI assistance.')
+    } else {
+      const meta = document.createElement('meta')
+      meta.name = 'description'
+      meta.content = 'Transform your storytelling with AI-powered continuity tracking, character development, and world-building. Create infinite stories with Claude AI assistance.'
+      document.head.appendChild(meta)
+    }
+  }, [])
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [creating, setCreating] = useState(false)
@@ -106,11 +118,11 @@ export default function HomePage() {
         {/* Hero Section */}
         <div className="flex-1 flex items-center justify-center px-6">
           <div className="max-w-4xl mx-auto text-center space-y-8">
-            <h2 className="text-5xl md:text-6xl font-bold text-white leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight">
               Create Unlimited Stories
               <br />
               <span className="text-amber-400">with AI Assistance</span>
-            </h2>
+            </h1>
 
             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
               Transform your storytelling with AI-powered continuity tracking,

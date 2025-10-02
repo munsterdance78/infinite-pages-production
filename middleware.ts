@@ -32,11 +32,7 @@ const SECURITY_HEADERS = {
     'interest-cohort=()'
   ].join(', '),
   // Strict Transport Security (HTTPS only)
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-  // Cross-Origin policies
-  'Cross-Origin-Embedder-Policy': 'require-corp',
-  'Cross-Origin-Opener-Policy': 'same-origin',
-  'Cross-Origin-Resource-Policy': 'same-origin'
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload'
 }
 
 // Rate limit configurations for different route patterns

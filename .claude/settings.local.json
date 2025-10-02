@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npm run build:*)",
+      "Bash(git push:*)",
+      "Bash(curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_Vksqoqdt92u6ZvVBUkugIeZYyhxJ/eVchu1AZcW)",
+      "Bash(find:*)",
+      "Bash(npm install)",
+      "Bash(gh api:*)",
+      "Bash(npm run test-site:*)",
+      "Bash(curl -s \"https://api.vercel.com/v6/deployments?projectId=prj_Vksqoqdt92u6ZvVBUkugIeZYyhxJ&limit=1\" -H \"Authorization: Bearer $VERCEL_TOKEN:-\")"
     ],
     "deny": [],
     "ask": []

@@ -79,3 +79,142 @@ Call log:
 [2025-09-30T21:39:48.916Z] ✅ Scan completed safely in 5867ms
 [2025-09-30T21:39:48.918Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
 [2025-09-30T21:39:48.919Z] ✅ Graceful shutdown complete after 7s
+[2025-10-02T01:53:07.230Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-02T01:53:07.234Z]    Memory limit: 600MB
+[2025-10-02T01:53:07.236Z]    Browser limit: 400MB per process
+[2025-10-02T01:53:07.239Z]    System limit: 80%
+[2025-10-02T01:53:07.240Z]    Timeout: 120s
+[2025-10-02T01:53:07.242Z]    Monitor interval: 10s
+[2025-10-02T01:53:07.979Z] 🔍 Starting safe scan of https://www.infinite-pages.com
+[2025-10-02T01:53:13.238Z] ✅ Page loaded: https://www.infinite-pages.com
+[2025-10-02T01:53:13.239Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-02T01:53:13.239Z] 🔬 Testing 3/6 endpoint groups for memory safety
+[2025-10-02T01:54:05.898Z] ✅ Memory OK: 121MB process, 32% system, 59s runtime
+[2025-10-02T01:54:45.875Z] ✅ Memory OK: 226MB process, 35% system, 99s runtime
+[2025-10-02T01:55:00.220Z] ✅ Memory OK: 473MB process, 40% system, 113s runtime
+[2025-10-02T01:55:01.352Z] ✅ Memory OK: 350MB process, 37% system, 114s runtime
+[2025-10-02T01:55:02.035Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:02.036Z]    • Main process using 623MB > 600MB limit
+[2025-10-02T01:55:02.198Z] 🚨 EMERGENCY SHUTDOWN TRIGGERED:
+[2025-10-02T01:55:02.202Z]    • Main process using 776MB > 600MB limit
+[2025-10-02T01:55:06.287Z] ✅ Memory OK: 556MB process, 41% system, 119s runtime
+[2025-10-02T01:55:06.726Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:06.726Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:06.727Z]    • Main process using 740MB > 600MB limit
+[2025-10-02T01:55:06.727Z]    • Main process using 665MB > 600MB limit
+[2025-10-02T01:55:06.729Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 740MB > 600MB limit
+[2025-10-02T01:55:06.730Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 665MB > 600MB limit
+[2025-10-02T01:55:07.105Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:07.106Z]    • Main process using 849MB > 600MB limit
+[2025-10-02T01:55:07.109Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 849MB > 600MB limit
+[2025-10-02T01:55:07.478Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:07.479Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:07.479Z]    • Main process using 789MB > 600MB limit
+[2025-10-02T01:55:07.480Z]    • Main process using 1032MB > 600MB limit
+[2025-10-02T01:55:07.480Z]    • Scan running for 120s > 120s timeout
+[2025-10-02T01:55:07.480Z]    • Scan running for 120s > 120s timeout
+[2025-10-02T01:55:07.481Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 789MB > 600MB limit, Scan running for 120s > 120s timeout
+[2025-10-02T01:55:07.482Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 1032MB > 600MB limit, Scan running for 120s > 120s timeout
+[2025-10-02T01:55:07.641Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:07.641Z]    • Main process using 1024MB > 600MB limit
+[2025-10-02T01:55:07.642Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:07.642Z]    • Scan running for 120s > 120s timeout
+[2025-10-02T01:55:07.643Z]    • Main process using 926MB > 600MB limit
+[2025-10-02T01:55:07.644Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 1024MB > 600MB limit, Scan running for 120s > 120s timeout
+[2025-10-02T01:55:07.644Z]    • Scan running for 120s > 120s timeout
+[2025-10-02T01:55:07.645Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 926MB > 600MB limit, Scan running for 120s > 120s timeout
+[2025-10-02T01:55:07.776Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:07.778Z]    • Main process using 967MB > 600MB limit
+[2025-10-02T01:55:07.778Z]    • Scan running for 121s > 120s timeout
+[2025-10-02T01:55:07.780Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 967MB > 600MB limit, Scan running for 121s > 120s timeout
+[2025-10-02T01:55:08.164Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:08.165Z]    • Main process using 1032MB > 600MB limit
+[2025-10-02T01:55:08.167Z]    • Scan running for 121s > 120s timeout
+[2025-10-02T01:55:08.169Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 1032MB > 600MB limit, Scan running for 121s > 120s timeout
+[2025-10-02T01:55:08.520Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:08.521Z] 🚨 Scan aborted due to memory safety limits:
+[2025-10-02T01:55:08.521Z]    • Main process using 1032MB > 600MB limit
+[2025-10-02T01:55:08.522Z]    • Main process using 1032MB > 600MB limit
+[2025-10-02T01:55:08.523Z]    • Scan running for 121s > 120s timeout
+[2025-10-02T01:55:08.523Z]    • Scan running for 121s > 120s timeout
+[2025-10-02T01:55:08.525Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 1032MB > 600MB limit, Scan running for 121s > 120s timeout
+[2025-10-02T01:55:08.525Z] 💥 Unhandled rejection: Error: Scan terminated for safety: Main process using 1032MB > 600MB limit, Scan running for 121s > 120s timeout
+[2025-10-02T01:55:08.805Z] ⚠️  Memory warning after /api/stories/novel: 1033MB
+[2025-10-02T01:55:08.808Z] ✅ Endpoint tests completed: 32 tests
+[2025-10-02T01:55:08.810Z] ✅ Browser closed safely
+[2025-10-02T01:55:08.851Z] 🛑 Emergency shutdown complete - exiting for safety
+[2025-10-02T02:03:50.433Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-02T02:03:50.437Z]    Memory limit: 600MB
+[2025-10-02T02:03:50.439Z]    Browser limit: 400MB per process
+[2025-10-02T02:03:50.440Z]    System limit: 80%
+[2025-10-02T02:03:50.440Z]    Timeout: 120s
+[2025-10-02T02:03:50.441Z]    Monitor interval: 10s
+[2025-10-02T02:03:50.849Z] 🔍 Starting safe scan of https://infinite-pages-production.vercel.app
+[2025-10-02T02:03:54.482Z] ✅ Page loaded: https://infinite-pages-production.vercel.app
+[2025-10-02T02:03:54.483Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-02T02:03:54.484Z] 🔬 Testing 3/6 endpoint groups for memory safety
+[2025-10-02T02:03:57.663Z] ✅ Endpoint tests completed: 3 tests
+[2025-10-02T02:03:57.675Z] ✅ Page analysis completed: 6 accessibility issues found
+[2025-10-02T02:03:57.677Z] ✅ Page closed safely
+[2025-10-02T02:03:57.682Z] ✅ Context closed safely
+[2025-10-02T02:03:57.741Z] ✅ Browser closed safely
+[2025-10-02T02:03:58.141Z] ✅ Scan completed safely in 6892ms
+[2025-10-02T02:03:58.142Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-02T02:03:58.143Z] ✅ Graceful shutdown complete after 8s
+[2025-10-02T02:06:29.352Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-02T02:06:29.354Z]    Memory limit: 600MB
+[2025-10-02T02:06:29.356Z]    Browser limit: 400MB per process
+[2025-10-02T02:06:29.358Z]    System limit: 80%
+[2025-10-02T02:06:29.359Z]    Timeout: 120s
+[2025-10-02T02:06:29.359Z]    Monitor interval: 10s
+[2025-10-02T02:06:29.862Z] 🔍 Starting safe scan of https://www.infinite-pages.com
+[2025-10-02T02:06:31.148Z] ✅ Page loaded: https://www.infinite-pages.com
+[2025-10-02T02:06:31.149Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-02T02:06:31.150Z] 🔬 Testing 3/6 endpoint groups for memory safety
+[2025-10-02T02:06:34.718Z] ✅ Endpoint tests completed: 3 tests
+[2025-10-02T02:06:34.725Z] ✅ Page analysis completed: 0 accessibility issues found
+[2025-10-02T02:06:34.729Z] ✅ Page closed safely
+[2025-10-02T02:06:34.734Z] ✅ Context closed safely
+[2025-10-02T02:06:34.801Z] ✅ Browser closed safely
+[2025-10-02T02:06:35.229Z] ✅ Scan completed safely in 4940ms
+[2025-10-02T02:06:35.230Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-02T02:06:35.231Z] ✅ Graceful shutdown complete after 6s
+[2025-10-02T02:10:21.976Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-02T02:10:21.978Z]    Memory limit: 600MB
+[2025-10-02T02:10:21.981Z]    Browser limit: 400MB per process
+[2025-10-02T02:10:21.982Z]    System limit: 80%
+[2025-10-02T02:10:21.983Z]    Timeout: 120s
+[2025-10-02T02:10:21.984Z]    Monitor interval: 10s
+[2025-10-02T02:10:22.370Z] 🔍 Starting safe scan of https://www.infinite-pages.com
+[2025-10-02T02:10:24.224Z] ✅ Page loaded: https://www.infinite-pages.com
+[2025-10-02T02:10:24.225Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-02T02:10:24.226Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-02T02:10:25.348Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-02T02:10:25.353Z] ✅ Page analysis completed: 0 accessibility issues found
+[2025-10-02T02:10:25.356Z] ✅ Page closed safely
+[2025-10-02T02:10:25.360Z] ✅ Context closed safely
+[2025-10-02T02:10:25.416Z] ✅ Browser closed safely
+[2025-10-02T02:10:25.795Z] ✅ Scan completed safely in 3048ms
+[2025-10-02T02:10:25.796Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-02T02:10:25.797Z] ✅ Graceful shutdown complete after 4s
+[2025-10-02T02:15:36.564Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-02T02:15:36.567Z]    Memory limit: 600MB
+[2025-10-02T02:15:36.569Z]    Browser limit: 400MB per process
+[2025-10-02T02:15:36.569Z]    System limit: 80%
+[2025-10-02T02:15:36.570Z]    Timeout: 120s
+[2025-10-02T02:15:36.570Z]    Monitor interval: 10s
+[2025-10-02T02:15:36.964Z] 🔍 Starting safe scan of https://www.infinite-pages.com
+[2025-10-02T02:15:37.341Z] ⚠️  Navigation warning: page.goto: net::ERR_CONNECTION_CLOSED at https://www.infinite-pages.com/
+Call log:
+[2m  - navigating to "https://www.infinite-pages.com/", waiting until "networkidle"[22m
+
+[2025-10-02T02:15:37.342Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-02T02:15:37.343Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-02T02:15:38.499Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-02T02:15:38.506Z] ✅ Page analysis completed: 4 accessibility issues found
+[2025-10-02T02:15:38.508Z] ✅ Page closed safely
+[2025-10-02T02:15:38.513Z] ✅ Context closed safely
+[2025-10-02T02:15:38.562Z] ✅ Browser closed safely
+[2025-10-02T02:15:38.940Z] ✅ Scan completed safely in 1598ms
+[2025-10-02T02:15:38.941Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-02T02:15:38.942Z] ✅ Graceful shutdown complete after 2s
