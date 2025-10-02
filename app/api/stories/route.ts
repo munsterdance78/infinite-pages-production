@@ -142,11 +142,17 @@ function sanitizeString(input: string): string {
 }
 
 export async function GET(request: NextRequest) {
+  console.log('[GET /api/stories] Starting request')
+
   // Auth is handled by middleware.ts - just get user from headers
   const authResult = requireMiddlewareAuth(request)
-  if ('error' in authResult) return authResult.error
+  if ('error' in authResult) {
+    console.error('[GET /api/stories] Auth failed')
+    return authResult.error
+  }
 
   const { user, supabase } = authResult
+  console.log('[GET /api/stories] User authenticated:', user.id)
 
   // Apply rate limiting for general API requests
   const rateLimitResult = await subscriptionAwareRateLimit(
@@ -155,11 +161,13 @@ export async function GET(request: NextRequest) {
   )
 
   if (rateLimitResult) {
+    console.log('[GET /api/stories] Rate limit exceeded')
     logRateLimitViolation('API_GENERAL', 'free', user.id)
     return rateLimitResult
   }
 
   try {
+    console.log('[GET /api/stories] Fetching stories for user:', user.id)
     const { data: stories, error } = await supabase
       .from('stories')
       .select(`
@@ -173,16 +181,17 @@ export async function GET(request: NextRequest) {
       .order('updated_at', { ascending: false })
 
     if (error) {
-      console.error('Database error fetching stories:', error)
+      console.error('[GET /api/stories] Database error:', error)
       return NextResponse.json({ error: 'Failed to fetch stories' }, { status: 500 })
     }
 
+    console.log('[GET /api/stories] Successfully fetched', stories?.length || 0, 'stories')
     return NextResponse.json(
       { stories },
       { headers: { 'Content-Type': 'application/json' } }
     )
   } catch (error) {
-    console.error('Unexpected error in GET /api/stories:', error)
+    console.error('[GET /api/stories] Unexpected error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

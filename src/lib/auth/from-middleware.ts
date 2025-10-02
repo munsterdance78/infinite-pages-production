@@ -33,19 +33,31 @@ export function getUserFromMiddleware(request: NextRequest) {
  * Uses service role key for admin operations
  */
 export function createServiceClient() {
-  const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
-  const supabaseServiceKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!
+  const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
+  const supabaseServiceKey = process.env['SUPABASE_SERVICE_ROLE_KEY']
+
+  console.log('[Service Client] Creating with URL:', supabaseUrl ? 'present' : 'missing')
+  console.log('[Service Client] Service key:', supabaseServiceKey ? 'present' : 'missing')
 
   if (!supabaseUrl || !supabaseServiceKey) {
-    throw new Error('Missing Supabase environment variables')
+    const error = new Error('Missing Supabase environment variables')
+    console.error('[Service Client] Error:', error)
+    throw error
   }
 
-  return createClient<Database>(supabaseUrl, supabaseServiceKey, {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
-  })
+  try {
+    const client = createClient<Database>(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
+    console.log('[Service Client] Successfully created')
+    return client
+  } catch (error) {
+    console.error('[Service Client] Failed to create client:', error)
+    throw error
+  }
 }
 
 /**
