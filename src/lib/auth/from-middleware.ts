@@ -30,23 +30,38 @@ export function getUserFromMiddleware(request: NextRequest) {
 
 /**
  * Create a Supabase client for server-side API routes
- * Uses service role key for admin operations
+ * Uses service role key for admin operations (or anon key as fallback)
  */
 export function createServiceClient() {
   const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']
   const supabaseServiceKey = process.env['SUPABASE_SERVICE_ROLE_KEY']
+  const supabaseAnonKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
 
   console.log('[Service Client] Creating with URL:', supabaseUrl ? 'present' : 'missing')
   console.log('[Service Client] Service key:', supabaseServiceKey ? 'present' : 'missing')
+  console.log('[Service Client] Anon key:', supabaseAnonKey ? 'present' : 'missing')
 
-  if (!supabaseUrl || !supabaseServiceKey) {
-    const error = new Error('Missing Supabase environment variables')
+  if (!supabaseUrl) {
+    const error = new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
     console.error('[Service Client] Error:', error)
     throw error
   }
 
+  // Use service role key if available, otherwise fall back to anon key
+  const key = supabaseServiceKey || supabaseAnonKey
+
+  if (!key) {
+    const error = new Error('Missing both SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_ANON_KEY')
+    console.error('[Service Client] Error:', error)
+    throw error
+  }
+
+  if (!supabaseServiceKey) {
+    console.warn('[Service Client] WARNING: Using anon key instead of service role key. Row-level security will apply.')
+  }
+
   try {
-    const client = createClient<Database>(supabaseUrl, supabaseServiceKey, {
+    const client = createClient<Database>(supabaseUrl, key, {
       auth: {
         autoRefreshToken: false,
         persistSession: false
