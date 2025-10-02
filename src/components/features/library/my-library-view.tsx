@@ -243,6 +243,11 @@ export default function MyLibraryView() {
     console.log('[My Library] Dialog state set to true')
   }
 
+  // Debug: Log dialog state changes
+  useEffect(() => {
+    console.log('[My Library] Dialog state changed to:', isCreateDialogOpen)
+  }, [isCreateDialogOpen])
+
   const handleEditStory = (storyId: string) => {
     console.log('[My Library] Edit story clicked:', storyId)
     window.location.href = `/stories/${storyId}`
@@ -566,6 +571,7 @@ export default function MyLibraryView() {
       </Tabs>
 
       {/* Create Story Dialog */}
+      {console.log('[My Library] Rendering Dialog, open state:', isCreateDialogOpen)}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
