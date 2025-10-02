@@ -60,11 +60,13 @@ export async function POST(
     }
 
     // Fetch user profile for token validation
-    const { data: profile, error: profileError } = await supabase
+    const { data, error: profileError } = await supabase
       .from('profiles')
       .select('tokens_remaining, tokens_used_total, words_generated')
       .eq('id', user.id)
       .single()
+
+    const profile = data as { tokens_remaining: number; tokens_used_total: number; words_generated: number } | null
 
     if (profileError || !profile) {
       console.error('Database error fetching profile:', profileError)
@@ -75,7 +77,7 @@ export async function POST(
     }
 
     // Check token balance
-    const estimatedCredits = ESTIMATED_CREDIT_COSTS.CHAPTER
+    const estimatedCredits = ESTIMATED_CREDIT_COSTS.CHAPTER_GENERATION
     if (profile.tokens_remaining < estimatedCredits) {
       return NextResponse.json(
         {
@@ -90,11 +92,13 @@ export async function POST(
     }
 
     // Fetch story and validate ownership
-    const { data: story, error: storyError } = await supabase
+    const { data: storyData, error: storyError } = await supabase
       .from('stories')
       .select('*')
       .eq('id', storyId)
       .single()
+
+    const story = storyData as any
 
     if (storyError) {
       console.error('Database error fetching story:', storyError)
@@ -138,12 +142,14 @@ export async function POST(
     }
 
     // Fetch previous chapters for context
-    const { data: previousChapters, error: chaptersError } = await supabase
+    const { data: chaptersData, error: chaptersError } = await supabase
       .from('chapters')
       .select('chapter_number, content')
       .eq('story_id', storyId)
       .lt('chapter_number', chapterNumber)
       .order('chapter_number', { ascending: true })
+
+    const previousChapters = chaptersData as Array<{ chapter_number: number; content: string }> | null
 
     if (chaptersError) {
       console.error('Database error fetching chapters:', chaptersError)
