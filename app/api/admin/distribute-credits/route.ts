@@ -116,7 +116,7 @@ export async function POST(request: NextRequest) {
     const distributionResults = []
 
     // Process each subscriber
-    for (const subscriber of activeSubscribers) {
+    for (const subscriber of activeSubscribers as any[]) {
       const userActivity = userReadingStats.get(subscriber.id)
       const storiesReadThisMonth = userActivity?.storiesRead || 0
 
@@ -267,7 +267,7 @@ export async function GET(request: NextRequest) {
       totalCredits: number;
       totalUsers: number;
       byTier: Record<string, { users: number; credits: number }>;
-    }>, transaction) => {
+    }>, transaction: any) => {
       const month = transaction.metadata?.distribution_month || 'unknown'
       if (!acc[month]) {
         acc[month] = {
