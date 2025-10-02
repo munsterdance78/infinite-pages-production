@@ -234,11 +234,13 @@ export default function MyLibraryView() {
 
   const handleNewStory = () => {
     console.log('[My Library] New Story button clicked')
+    console.log('[My Library] Dialog state before:', isCreateDialogOpen)
     setFormTitle('')
     setFormGenre('')
     setFormPremise('')
     setFormError('')
     setIsCreateDialogOpen(true)
+    console.log('[My Library] Dialog state set to true')
   }
 
   const handleEditStory = (storyId: string) => {
