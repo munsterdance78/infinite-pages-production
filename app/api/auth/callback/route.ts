@@ -15,21 +15,35 @@ export async function GET(request: Request) {
       {
         cookies: {
           get(name: string) {
-            return cookieStore.get(name)?.value
+            const value = cookieStore.get(name)?.value
+            console.log('[Callback] Get cookie:', name, value ? 'exists' : 'missing')
+            return value
           },
           set(name: string, value: string, options: CookieOptions) {
+            console.log('[Callback] Set cookie:', name)
             cookieStore.set({ name, value, ...options })
           },
           remove(name: string, options: CookieOptions) {
+            console.log('[Callback] Remove cookie:', name)
             cookieStore.set({ name, value: '', ...options })
           },
         },
       }
     )
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+
+    console.log('[Callback] Exchange result:', {
+      hasSession: !!data?.session,
+      hasUser: !!data?.user,
+      error: error?.message
+    })
+
     if (!error) {
+      console.log('[Callback] Success, redirecting to:', next)
       return NextResponse.redirect(`${origin}${next}`)
     }
+
+    console.error('[Callback] Error:', error)
   }
 
   // Return to signin if error

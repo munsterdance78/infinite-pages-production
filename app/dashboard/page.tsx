@@ -254,7 +254,14 @@ export default function DashboardPage() {
       // Get current user
       const { data: { user }, error: authError } = await supabase.auth.getUser()
 
+      console.log('[Dashboard] Auth check:', {
+        hasUser: !!user,
+        error: authError?.message,
+        userId: user?.id
+      })
+
       if (authError || !user) {
+        console.log('[Dashboard] No user, redirecting to signin')
         router.push('/auth/signin')
         return
       }
