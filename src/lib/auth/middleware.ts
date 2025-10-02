@@ -94,26 +94,28 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
       )
     }
 
-    const { data: { user }, error } = await supabase.auth.getUser()
+    // Try to get session first (more reliable for SSR)
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
 
     // Debug logging
     console.log('[Auth Middleware] Request:', request.url)
-    console.log('[Auth Middleware] Has user:', !!user)
-    console.log('[Auth Middleware] User ID:', user?.id)
-    console.log('[Auth Middleware] Error:', error?.message)
+    console.log('[Auth Middleware] Has session:', !!session)
+    console.log('[Auth Middleware] Session error:', sessionError?.message)
 
-    if (error) {
-      console.error('[Auth Middleware] Auth error details:', error)
+    if (sessionError) {
+      console.error('[Auth Middleware] Session error details:', sessionError)
     }
 
-    if (!user || error) {
-      console.log('[Auth Middleware] Returning 401 - no valid user')
+    // If no session, return 401
+    if (!session || sessionError) {
+      console.log('[Auth Middleware] Returning 401 - no valid session')
       return NextResponse.json(
         { error: ERROR_MESSAGES?.UNAUTHORIZED || 'Authentication required' },
         { status: 401 }
       )
     }
 
+    const user = session.user
     console.log('[Auth Middleware] Authentication successful for user:', user.email)
 
     return {
