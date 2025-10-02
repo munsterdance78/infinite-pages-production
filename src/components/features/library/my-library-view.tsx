@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -232,25 +232,32 @@ export default function MyLibraryView() {
     totalEarnings: stories.reduce((sum, s) => sum + (s.earnings?.totalRevenue || 0), 0)
   }
 
-  const handleNewStory = () => {
-    console.log('[My Library] New Story button clicked')
-    console.log('[My Library] Dialog state before:', isCreateDialogOpen)
-    alert('Button clicked! Opening dialog...')
+  const handleNewStory = useCallback(() => {
+    console.log('[My Library] New Story button clicked, current state:', isCreateDialogOpen)
+    setIsCreateDialogOpen(prev => {
+      console.log('[My Library] Setting dialog state from', prev, 'to true')
+      return true
+    })
     setFormTitle('')
     setFormGenre('')
     setFormPremise('')
     setFormError('')
-    setIsCreateDialogOpen(true)
-    console.log('[My Library] Dialog state set to true')
-    setTimeout(() => {
-      console.log('[My Library] Dialog state after timeout:', isCreateDialogOpen)
-      alert('State should be true now. Check if dialog is visible.')
-    }, 100)
-  }
+  }, [isCreateDialogOpen])
 
   // Debug: Log dialog state changes
   useEffect(() => {
     console.log('[My Library] Dialog state changed to:', isCreateDialogOpen)
+    if (isCreateDialogOpen) {
+      console.log('[My Library] Dialog SHOULD be visible now')
+      // Check if dialog element exists in DOM
+      setTimeout(() => {
+        const dialogElement = document.querySelector('[role="dialog"]')
+        console.log('[My Library] Dialog element in DOM:', !!dialogElement)
+        if (dialogElement) {
+          console.log('[My Library] Dialog element styles:', window.getComputedStyle(dialogElement).display)
+        }
+      }, 100)
+    }
   }, [isCreateDialogOpen])
 
   const handleEditStory = (storyId: string) => {
