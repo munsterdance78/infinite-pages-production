@@ -45,7 +45,12 @@ export default function SignInPage() {
   const handleGoogleSignIn = async () => {
     setLoading(true)
     try {
-      const redirectUrl = `${process.env['NEXT_PUBLIC_SITE_URL'] || window.location.origin}/api/auth/callback`
+      // Use window.location.origin in production (Vercel)
+      const redirectUrl = `${window.location.origin}/api/auth/callback`
+
+      console.log('[Sign In] Redirect URL:', redirectUrl)
+      console.log('[Sign In] NEXT_PUBLIC_SITE_URL:', process.env['NEXT_PUBLIC_SITE_URL'])
+      console.log('[Sign In] window.location.origin:', window.location.origin)
 
       await supabase.auth.signInWithOAuth({
         provider: 'google',
