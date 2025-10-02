@@ -50,7 +50,9 @@ export async function GET(request: Request) {
       error: error?.message
     })
 
-    if (!error) {
+    if (!error && data?.session) {
+      console.log('[Callback] Session user:', data.user?.email)
+      console.log('[Callback] All cookies after exchange:', cookieStore.getAll().map(c => c.name))
       console.log('[Callback] Success, redirecting to:', next)
       return NextResponse.redirect(`${origin}${next}`)
     }
