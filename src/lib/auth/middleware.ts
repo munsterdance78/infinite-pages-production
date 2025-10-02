@@ -49,16 +49,29 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
             },
             set(name: string, value: string, options: CookieOptions) {
               try {
-                cookieStore.set({ name, value, ...options })
+                cookieStore.set({
+                  name,
+                  value,
+                  ...options,
+                  sameSite: 'lax',
+                  secure: process.env.NODE_ENV === 'production'
+                })
               } catch (error) {
-                // Handle cookie setting errors in middleware
+                // Cookie setting can fail in route handlers after response started
+                console.log('[Auth Middleware] Cookie set attempted after response:', name)
               }
             },
             remove(name: string, options: CookieOptions) {
               try {
-                cookieStore.set({ name, value: '', ...options })
+                cookieStore.set({
+                  name,
+                  value: '',
+                  ...options,
+                  maxAge: 0
+                })
               } catch (error) {
-                // Handle cookie removal errors in middleware
+                // Cookie removal can fail in route handlers after response started
+                console.log('[Auth Middleware] Cookie remove attempted after response:', name)
               }
             },
           },
@@ -67,14 +80,26 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
     }
 
     const { data: { user }, error } = await supabase.auth.getUser()
-    console.log('[Auth] User:', !!user, 'Error:', error?.message)
+
+    // Debug logging
+    console.log('[Auth Middleware] Request:', request.url)
+    console.log('[Auth Middleware] Has user:', !!user)
+    console.log('[Auth Middleware] User ID:', user?.id)
+    console.log('[Auth Middleware] Error:', error?.message)
+
+    if (error) {
+      console.error('[Auth Middleware] Auth error details:', error)
+    }
 
     if (!user || error) {
+      console.log('[Auth Middleware] Returning 401 - no valid user')
       return NextResponse.json(
         { error: ERROR_MESSAGES?.UNAUTHORIZED || 'Authentication required' },
         { status: 401 }
       )
     }
+
+    console.log('[Auth Middleware] Authentication successful for user:', user.email)
 
     return {
       user,

@@ -236,3 +236,39 @@ Call log:
 [2025-10-02T02:35:01.078Z] ✅ Scan completed safely in 5533ms
 [2025-10-02T02:35:01.079Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
 [2025-10-02T02:35:01.080Z] ✅ Graceful shutdown complete after 7s
+[2025-10-02T16:08:29.398Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-02T16:08:29.400Z]    Memory limit: 600MB
+[2025-10-02T16:08:29.403Z]    Browser limit: 400MB per process
+[2025-10-02T16:08:29.403Z]    System limit: 80%
+[2025-10-02T16:08:29.404Z]    Timeout: 120s
+[2025-10-02T16:08:29.405Z]    Monitor interval: 10s
+[2025-10-02T16:08:29.802Z] 🔍 Starting safe scan of https://infinite-pages-v3.vercel.app
+[2025-10-02T16:08:35.451Z] ✅ Page loaded: https://infinite-pages-v3.vercel.app
+[2025-10-02T16:08:35.452Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-02T16:08:35.453Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-02T16:08:36.633Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-02T16:08:36.639Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-02T16:08:36.641Z] ✅ Page closed safely
+[2025-10-02T16:08:36.645Z] ✅ Context closed safely
+[2025-10-02T16:08:36.679Z] ✅ Browser closed safely
+[2025-10-02T16:08:37.073Z] ✅ Scan completed safely in 6877ms
+[2025-10-02T16:08:37.074Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-02T16:08:37.075Z] ✅ Graceful shutdown complete after 8s
+[2025-10-02T16:10:49.878Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-02T16:10:49.879Z]    Memory limit: 600MB
+[2025-10-02T16:10:49.880Z]    Browser limit: 400MB per process
+[2025-10-02T16:10:49.882Z]    System limit: 80%
+[2025-10-02T16:10:49.883Z]    Timeout: 120s
+[2025-10-02T16:10:49.883Z]    Monitor interval: 10s
+[2025-10-02T16:10:50.315Z] 🔍 Starting safe scan of https://infinite-pages-v3.vercel.app
+[2025-10-02T16:10:51.802Z] ✅ Page loaded: https://infinite-pages-v3.vercel.app
+[2025-10-02T16:10:51.803Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-02T16:10:51.805Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-02T16:10:53.115Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-02T16:10:53.121Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-02T16:10:53.123Z] ✅ Page closed safely
+[2025-10-02T16:10:53.127Z] ✅ Context closed safely
+[2025-10-02T16:10:53.164Z] ✅ Browser closed safely
+[2025-10-02T16:10:53.570Z] ✅ Scan completed safely in 2850ms
+[2025-10-02T16:10:53.571Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-02T16:10:53.572Z] ✅ Graceful shutdown complete after 4s
