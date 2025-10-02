@@ -150,7 +150,12 @@ export default function MyLibraryView() {
     setLoading(true)
     try {
       console.log('[My Library] Fetching user stories...')
-      const response = await fetch('/api/stories')
+      const response = await fetch('/api/stories', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
 
       if (!response.ok) {
         console.error('[My Library] Failed to fetch stories:', response.status)
@@ -270,6 +275,7 @@ export default function MyLibraryView() {
 
       const response = await fetch('/api/stories', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: formTitle || undefined,
