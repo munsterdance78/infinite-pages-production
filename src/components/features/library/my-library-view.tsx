@@ -254,7 +254,27 @@ export default function MyLibraryView() {
         const dialogElement = document.querySelector('[role="dialog"]')
         console.log('[My Library] Dialog element in DOM:', !!dialogElement)
         if (dialogElement) {
-          console.log('[My Library] Dialog element styles:', window.getComputedStyle(dialogElement).display)
+          const styles = window.getComputedStyle(dialogElement)
+          console.log('[My Library] Dialog styles:', {
+            display: styles.display,
+            visibility: styles.visibility,
+            opacity: styles.opacity,
+            zIndex: styles.zIndex,
+            position: styles.position,
+            top: styles.top,
+            left: styles.left,
+            transform: styles.transform
+          })
+          const overlay = document.querySelector('[data-radix-dialog-overlay]')
+          console.log('[My Library] Overlay element:', !!overlay)
+          if (overlay) {
+            const overlayStyles = window.getComputedStyle(overlay)
+            console.log('[My Library] Overlay styles:', {
+              display: overlayStyles.display,
+              opacity: overlayStyles.opacity,
+              zIndex: overlayStyles.zIndex
+            })
+          }
         }
       }, 100)
     }
