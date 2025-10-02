@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
 
     // Calculate reading activity per user
     const userReadingStats = new Map()
-    readingActivity?.forEach(purchase => {
+    readingActivity?.forEach((purchase: any) => {
       const userId = purchase.reader_id
       const existing = userReadingStats.get(userId) || { storiesRead: 0, uniqueStories: new Set() }
       existing.uniqueStories.add(purchase.story_id)
