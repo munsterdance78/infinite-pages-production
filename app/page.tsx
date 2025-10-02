@@ -54,8 +54,7 @@ export default function HomePage() {
       const response = await fetch('/api/stories', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'x-development-bypass': 'true'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       })

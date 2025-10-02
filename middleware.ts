@@ -294,6 +294,21 @@ function logSecurityViolation(threat: SecurityThreat, request: NextRequest): voi
 // Simple rate limiting implementation (replace with Redis in production)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
 
+// Clean up expired rate limit entries every 5 minutes to prevent memory leak
+setInterval(() => {
+  const now = Date.now()
+  let cleanedCount = 0
+  for (const [key, value] of rateLimitMap.entries()) {
+    if (now > value.resetTime) {
+      rateLimitMap.delete(key)
+      cleanedCount++
+    }
+  }
+  if (cleanedCount > 0) {
+    console.log(`[Middleware] Cleaned ${cleanedCount} expired rate limit entries`)
+  }
+}, 5 * 60 * 1000)
+
 function rateLimit(request: NextRequest, operation: string, userId?: string): { success: boolean; response?: NextResponse; headers: Record<string, string> } {
   const identifier = userId || getClientIdentifier(request)
   const key = `${identifier}:${operation}`
@@ -364,19 +379,29 @@ async function getUserSubscriptionTier(userId: string): Promise<'basic' | 'premi
       return 'basic'
     }
 
-    // This would typically be cached in Redis/memory for performance
-    const response = await fetch(`${env.SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=subscription_tier`, {
-      headers: {
-        'Authorization': `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
-        'apikey': env.SUPABASE_SERVICE_ROLE_KEY,
-        'Content-Type': 'application/json'
+    // Use Supabase client for safe parameterized queries instead of URL construction
+    const { createClient } = await import('@supabase/supabase-js')
+    const supabase = createClient(
+      env.SUPABASE_URL,
+      env.SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
       }
-    })
+    )
 
-    if (response.ok) {
-      const data = await response.json()
-      return data[0]?.subscription_tier || 'basic'
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('subscription_tier')
+      .eq('id', userId)
+      .single()
+
+    if (!error && data) {
+      return data.subscription_tier || 'basic'
     }
+
   } catch (error) {
     console.error('Failed to fetch subscription tier:', error)
   }

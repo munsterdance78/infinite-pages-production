@@ -235,9 +235,10 @@ export async function POST(request: NextRequest) {
         console.error('[POST /api/stories] Failed to get user email:', authError)
       }
 
+      // Use upsert with onConflict to handle race conditions safely
       const { data: newProfile, error: createError } = await (adminClient
         .from('profiles') as any)
-        .insert({
+        .upsert({
           id: user.id,
           email: userEmail,
           subscription_tier: 'basic',
@@ -254,6 +255,9 @@ export async function POST(request: NextRequest) {
           is_creator: false,
           total_earnings_usd: 0,
           pending_payout_usd: 0
+        }, {
+          onConflict: 'id',
+          ignoreDuplicates: false
         })
         .select('tokens_remaining, subscription_tier, stories_created, tokens_used_total, words_generated')
         .single()

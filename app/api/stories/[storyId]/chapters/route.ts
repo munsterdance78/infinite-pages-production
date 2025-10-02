@@ -144,12 +144,12 @@ export async function POST(
     // Fetch previous chapters for context
     const { data: chaptersData, error: chaptersError } = await supabase
       .from('chapters')
-      .select('chapter_number, content')
+      .select('chapter_number, summary')
       .eq('story_id', storyId)
       .lt('chapter_number', chapterNumber)
       .order('chapter_number', { ascending: true })
 
-    const previousChapters = chaptersData as Array<{ chapter_number: number; content: string }> | null
+    const previousChapters = chaptersData as Array<{ chapter_number: number; summary: string | null }> | null
 
     if (chaptersError) {
       console.error('Database error fetching chapters:', chaptersError)
@@ -159,11 +159,10 @@ export async function POST(
       )
     }
 
-    // Prepare chapter context (summary column doesn't exist in DB yet)
+    // Use summaries instead of full content for context - dramatically reduces token usage
     const previousChapterContext = (previousChapters || []).map((ch) => ({
       number: ch.chapter_number,
-      content: ch.content || '',
-      summary: '' // Summary column not yet in database schema
+      summary: ch.summary || 'No summary available'
     }))
 
     // OUTLINE INTEGRATION: Check if outline exists for this chapter
@@ -528,15 +527,18 @@ export async function POST(
     console.log(`[Fact Extraction] 1/3 Starting background extraction for chapter ${newChapter.id}`)
     console.log(`[Fact Extraction] Content length: ${chapterData.content.length} characters`)
 
-    claudeService
-      .extractChapterFacts({
-        chapterContent: chapterData.content,
-        storyId,
-        chapterId: newChapter.id,
-        userId: user.id,
-        genre: story.genre || 'Fiction'
-      })
-      .then(async (factResult) => {
+    // Fire-and-forget fact extraction with proper error boundary
+    // Wrap in async context to handle unhandled rejections
+    ;(async () => {
+      try {
+        const factResult = await claudeService.extractChapterFacts({
+          chapterContent: chapterData.content,
+          storyId,
+          chapterId: newChapter.id,
+          userId: user.id,
+          genre: story.genre || 'Fiction'
+        })
+
         console.log(`[Fact Extraction] 2/3 Extraction complete. Results:`)
         console.log(`  - Characters: ${factResult.characters?.length || 0}`)
         console.log(`  - Locations: ${factResult.locations?.length || 0}`)
@@ -567,14 +569,19 @@ export async function POST(
             `  Total: ${saveResult.totalSaved}, Duplicates: ${saveResult.duplicatesSkipped}, ` +
             `Updated: ${saveResult.updatedWithNewDetails}, Cost: $${factResult.extractionCost.toFixed(6)}`
         )
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(
           `[Fact Extraction Error] FAILED - Story: ${storyId}, Chapter: ${newChapter.id}`,
           error
         )
-        console.error('[Fact Extraction Error] Stack trace:', error.stack)
-      })
+        if (error instanceof Error) {
+          console.error('[Fact Extraction Error] Stack trace:', error.stack)
+        }
+      }
+    })().catch((error) => {
+      // Final safety net for any unhandled promise rejections
+      console.error('[Fact Extraction] Unhandled promise rejection:', error)
+    })
 
     // Return successful response
     return NextResponse.json(
