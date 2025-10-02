@@ -1,39 +1,22 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { createClient } from '@/lib/database/supabase'
+import { createServiceRoleClient } from '@/lib/database/supabase'
 import { ESTIMATED_CREDIT_COSTS } from '@/lib/utils/constants'
+import type { Database } from '@/lib/supabase/types'
+import type { User } from '@supabase/supabase-js'
 
-// Type definitions for Supabase queries
-interface UserProfile {
-  id: string
-  subscription_tier: string
-  subscription_status: string
-  subscription_period_start: string
-  subscription_period_end: string
-  credits_balance?: number
-  credits_earned_total?: number
-}
+// Type definitions for admin auth
+type SupabaseClient = ReturnType<typeof createServiceRoleClient>
+type AdminAuthResult = NextResponse | { user: User; supabase: SupabaseClient }
+type AdminAuthSuccess = { user: User; supabase: SupabaseClient }
 
-interface StoryPurchase {
-  reader_id: string
-  story_id: string
-  created_at: string
-}
-
-interface CreditTransaction {
-  created_at: string
-  amount: number
-  metadata?: {
-    distribution_month?: string
-    subscription_tier?: string
-  }
-  user_profiles?: {
-    subscription_tier: string
-  }
+// Type guard for admin auth
+function isAdminAuthSuccess(result: AdminAuthResult): result is AdminAuthSuccess {
+  return !(result instanceof NextResponse)
 }
 
 // Admin authentication middleware - simplified version
-async function requireAdminAuth(request: NextRequest) {
-  const supabase = createClient()
+async function requireAdminAuth(request: NextRequest): Promise<AdminAuthResult> {
+  const supabase = createServiceRoleClient()
 
   try {
     const { data: { user }, error } = await supabase.auth.getUser()
@@ -91,8 +74,10 @@ function calculateProportionalCredits(
 export async function POST(request: NextRequest) {
   try {
     const authResult = await requireAdminAuth(request)
-    if (authResult instanceof NextResponse) return authResult
-    const { user, supabase } = authResult
+    if (!isAdminAuthSuccess(authResult)) return authResult
+
+    // Explicitly type the destructured variables
+    const { user, supabase }: { user: User; supabase: SupabaseClient } = authResult
 
     const body = await request.json()
     const { month, year, dryRun = false } = body
@@ -106,49 +91,54 @@ export async function POST(request: NextRequest) {
     console.log(`Processing credit distribution for ${distributionYear}-${distributionMonth + 1}`)
 
     // Get all active subscribers for the month
-    const { data: activeSubscribers } = await supabase
-      .from('user_profiles')
+    type UserProfile = Pick<Database['public']['Tables']['profiles']['Row'], 'id' | 'subscription_tier' | 'subscription_status' | 'credits_balance' | 'credits_earned_total'>
+    const { data } = await supabase
+      .from('profiles')
       .select(`
         id,
         subscription_tier,
         subscription_status,
-        subscription_period_start,
-        subscription_period_end
+        credits_balance,
+        credits_earned_total
       `)
       .in('subscription_status', ['active', 'trialing'])
       .not('subscription_tier', 'is', null)
+
+    const activeSubscribers = data as UserProfile[] | null
 
     if (!activeSubscribers || activeSubscribers.length === 0) {
       return NextResponse.json({ error: 'No active subscribers found' }, { status: 404 })
     }
 
-    const typedSubscribers = activeSubscribers as UserProfile[]
-    console.log(`Found ${typedSubscribers.length} active subscribers`)
+    console.log(`Found ${activeSubscribers.length} active subscribers`)
 
     // Get story reading activity for the month for all users
-    const { data: readingActivity } = await supabase
+    type StoryPurchase = Pick<Database['public']['Tables']['story_purchases']['Row'], 'user_id' | 'story_id' | 'created_at'>
+    const { data: readingData } = await supabase
       .from('story_purchases')
-      .select('reader_id, story_id, created_at')
+      .select('user_id, story_id, created_at')
       .gte('created_at', startOfMonth.toISOString())
       .lte('created_at', endOfMonth.toISOString())
 
-    const typedReadingActivity = (readingActivity || []) as StoryPurchase[]
+    const readingActivity = readingData as StoryPurchase[] | null
 
     // Calculate reading activity per user
     const userReadingStats = new Map<string, { storiesRead: number; uniqueStories: Set<string> }>()
-    typedReadingActivity.forEach((purchase) => {
-      const userId = purchase.reader_id
-      const existing = userReadingStats.get(userId) || { storiesRead: 0, uniqueStories: new Set<string>() }
-      existing.uniqueStories.add(purchase.story_id)
-      existing.storiesRead = existing.uniqueStories.size
-      userReadingStats.set(userId, existing)
-    })
+    if (readingActivity) {
+      for (const purchase of readingActivity) {
+        const userId = purchase.user_id
+        const existing = userReadingStats.get(userId) || { storiesRead: 0, uniqueStories: new Set<string>() }
+        existing.uniqueStories.add(purchase.story_id)
+        existing.storiesRead = existing.uniqueStories.size
+        userReadingStats.set(userId, existing)
+      }
+    }
 
-    const totalActiveUsers = typedSubscribers.length
+    const totalActiveUsers = activeSubscribers.length
     const distributionResults = []
 
     // Process each subscriber
-    for (const subscriber of typedSubscribers) {
+    for (const subscriber of activeSubscribers) {
       const userActivity = userReadingStats.get(subscriber.id)
       const storiesReadThisMonth = userActivity?.storiesRead || 0
 
@@ -158,16 +148,6 @@ export async function POST(request: NextRequest) {
         storiesReadThisMonth,
         totalActiveUsers
       )
-
-      // Check if user was active during the subscription period
-      const subscriptionStart = new Date(subscriber.subscription_period_start)
-      const subscriptionEnd = new Date(subscriber.subscription_period_end)
-      const wasActiveThisMonth = subscriptionStart <= endOfMonth && subscriptionEnd >= startOfMonth
-
-      if (!wasActiveThisMonth) {
-        console.log(`User ${subscriber.id} was not active during ${distributionYear}-${distributionMonth + 1}, skipping`)
-        continue
-      }
 
       const result = {
         userId: subscriber.id,
@@ -182,36 +162,23 @@ export async function POST(request: NextRequest) {
       distributionResults.push(result)
 
       if (!dryRun) {
-        // Get current balance first
-        const { data: currentProfile } = await supabase
-          .from('user_profiles')
-          .select('credits_balance, credits_earned_total')
-          .eq('id', subscriber.id)
-          .single()
+        // Add credits to user's balance
+        const updateData = {
+          credits_balance: (subscriber.credits_balance || 0) + creditsToDistribute,
+          credits_earned_total: (subscriber.credits_earned_total || 0) + creditsToDistribute
+        }
+        const { error: updateError } = await ((supabase as any)
+          .from('profiles')
+          .update(updateData)
+          .eq('id', subscriber.id))
 
-        const typedProfile = currentProfile as UserProfile | null
-
-        if (typedProfile) {
-          // Add credits to user's balance
-          const { error: updateError } = await supabase
-            .from('user_profiles')
-            .update({
-              credits_balance: (typedProfile.credits_balance || 0) + creditsToDistribute,
-              credits_earned_total: (typedProfile.credits_earned_total || 0) + creditsToDistribute
-            })
-            .eq('id', subscriber.id)
-
-          if (updateError) {
-            console.error(`Failed to update credits for user ${subscriber.id}:`, updateError)
-            continue
-          }
-        } else {
-          console.error(`Profile not found for user ${subscriber.id}`)
+        if (updateError) {
+          console.error(`Failed to update credits for user ${subscriber.id}:`, updateError)
           continue
         }
 
         // Record the credit transaction
-        const { error: transactionError } = await supabase
+        const { error: transactionError } = await ((supabase as any)
           .from('credit_transactions')
           .insert({
             user_id: subscriber.id,
@@ -225,7 +192,7 @@ export async function POST(request: NextRequest) {
               base_credits: result.baseCredits,
               bonus_credits: result.bonusCredits
             }
-          })
+          }))
 
         if (transactionError) {
           console.error(`Failed to record transaction for user ${subscriber.id}:`, transactionError)
@@ -280,31 +247,30 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const authResult = await requireAdminAuth(request)
-    if (authResult instanceof NextResponse) return authResult
-    const { user, supabase } = authResult
+    if (!isAdminAuthSuccess(authResult)) return authResult
+    const { user, supabase }: { user: User; supabase: SupabaseClient } = authResult
 
     // Get recent distribution transactions
-    const { data: distributions } = await supabase
+    const { data: distributions } = await ((supabase as any)
       .from('credit_transactions')
       .select(`
         created_at,
         amount,
-        metadata,
-        user_profiles!credit_transactions_user_id_fkey (subscription_tier)
+        metadata
       `)
       .eq('transaction_type', 'monthly_distribution')
       .order('created_at', { ascending: false })
-      .limit(1000)
-
-    const typedDistributions = (distributions || []) as CreditTransaction[]
+      .limit(1000))
 
     // Group by distribution month
-    const distributionHistory = typedDistributions.reduce((acc: Record<string, {
+    const distributionHistory = (distributions || []).reduce((acc: Record<string, {
       totalCredits: number;
       totalUsers: number;
       byTier: Record<string, { users: number; credits: number }>;
-    }>, transaction) => {
-      const month = transaction.metadata?.distribution_month || 'unknown'
+    }>, transaction: any) => {
+      const metadata = transaction.metadata as { distribution_month?: string; subscription_tier?: string } | null
+      const month = metadata?.distribution_month || 'unknown'
+
       if (!acc[month]) {
         acc[month] = {
           totalCredits: 0,
@@ -316,7 +282,7 @@ export async function GET(request: NextRequest) {
       acc[month].totalCredits += transaction.amount
       acc[month].totalUsers++
 
-      const tier = transaction.metadata?.subscription_tier || 'unknown'
+      const tier = metadata?.subscription_tier || 'unknown'
       if (!acc[month].byTier[tier]) {
         acc[month].byTier[tier] = { users: 0, credits: 0 }
       }
@@ -324,7 +290,7 @@ export async function GET(request: NextRequest) {
       acc[month].byTier[tier].credits += transaction.amount
 
       return acc
-    }, {}) || {}
+    }, {})
 
     return NextResponse.json({
       distributionHistory: Object.values(distributionHistory)
