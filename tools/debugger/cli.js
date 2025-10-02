@@ -183,56 +183,105 @@ async function testInfinitePagesSafely(targetUrl) {
   };
 
   const startTime = Date.now();
-  let browser, page;
+  let browser, page, context;
   let scanAborted = false;
+  let memoryCheckInterval = null;
 
-  // Set up memory monitoring during scan
-  const memoryCheckInterval = setInterval(async () => {
-    if (scanAborted) {
-      clearInterval(memoryCheckInterval);
-      return;
-    }
-
-    const check = await monitor.checkMemoryLimits();
-    if (!check.memoryOk) {
-      scanAborted = true;
-      clearInterval(memoryCheckInterval);
-      await monitor.logMessage(`🚨 Scan aborted due to memory safety limits:`);
-      for (const reason of check.reasons) {
-        await monitor.logMessage(`   • ${reason}`);
-      }
-
-      // Force browser shutdown
-      if (browser) {
-        try {
-          await browser.close();
-        } catch (e) {
-          // Browser already closed
+  // Set up memory monitoring during scan with proper cleanup
+  const startMemoryMonitoring = () => {
+    memoryCheckInterval = setInterval(async () => {
+      if (scanAborted) {
+        if (memoryCheckInterval) {
+          clearInterval(memoryCheckInterval);
+          memoryCheckInterval = null;
         }
+        return;
       }
 
-      throw new Error(`Scan terminated for safety: ${check.reasons.join(', ')}`);
+      const check = await monitor.checkMemoryLimits();
+      if (!check.memoryOk) {
+        scanAborted = true;
+        if (memoryCheckInterval) {
+          clearInterval(memoryCheckInterval);
+          memoryCheckInterval = null;
+        }
+        await monitor.logMessage(`🚨 Scan aborted due to memory safety limits:`);
+        for (const reason of check.reasons) {
+          await monitor.logMessage(`   • ${reason}`);
+        }
+
+        // Force browser shutdown
+        if (page) {
+          try {
+            await page.close();
+          } catch (e) {
+            // Page already closed
+          }
+        }
+        if (context) {
+          try {
+            await context.close();
+          } catch (e) {
+            // Context already closed
+          }
+        }
+        if (browser) {
+          try {
+            await browser.close();
+          } catch (e) {
+            // Browser already closed
+          }
+        }
+
+        throw new Error(`Scan terminated for safety: ${check.reasons.join(', ')}`);
+      }
+    }, 5000); // Check every 5 seconds during scan
+  };
+
+  const stopMemoryMonitoring = () => {
+    if (memoryCheckInterval) {
+      clearInterval(memoryCheckInterval);
+      memoryCheckInterval = null;
     }
-  }, 5000); // Check every 5 seconds during scan
+  };
 
   try {
     await monitor.logMessage(`🔍 Starting safe scan of ${targetUrl}`);
+
+    // Start memory monitoring
+    startMemoryMonitoring();
 
     browser = await chromium.launch({
       headless: true,
       args: [
         '--no-sandbox',
         '--disable-dev-shm-usage',
-        '--memory-pressure-off',
+        '--disable-background-networking',
         '--disable-background-timer-throttling',
         '--disable-backgrounding-occluded-windows',
-        '--disable-renderer-backgrounding'
+        '--disable-renderer-backgrounding',
+        '--disable-hang-monitor',
+        '--disable-ipc-flooding-protection',
+        '--disable-sync',
+        '--metrics-recording-only',
+        '--mute-audio',
+        '--no-first-run',
+        '--disable-default-apps'
       ]
     });
-    page = await browser.newPage();
 
-    // Capture console errors with Infinite Pages context
-    page.on('console', msg => {
+    // Use browser context for better isolation and cleanup
+    context = await browser.newContext({
+      ignoreHTTPSErrors: true,
+      javaScriptEnabled: true
+    });
+    page = await context.newPage();
+
+    // Set viewport to prevent unnecessary rendering
+    await page.setViewportSize({ width: 1280, height: 720 });
+
+    // Event listener references for cleanup
+    const consoleHandler = (msg) => {
       if (scanAborted) return;
 
       if (msg.type() === 'error') {
@@ -249,10 +298,9 @@ async function testInfinitePagesSafely(targetUrl) {
           message: msg.text()
         });
       }
-    });
+    };
 
-    // Monitor network requests for API endpoints
-    page.on('response', response => {
+    const responseHandler = (response) => {
       if (scanAborted) return;
 
       const responseUrl = response.url();
@@ -282,7 +330,11 @@ async function testInfinitePagesSafely(targetUrl) {
         const classification = classifyIssue(error);
         results.errors.push({ ...error, ...classification });
       }
-    });
+    };
+
+    // Attach event listeners
+    page.on('console', consoleHandler);
+    page.on('response', responseHandler);
 
     // Navigate to page with safety timeout
     try {
@@ -331,11 +383,23 @@ async function testInfinitePagesSafely(targetUrl) {
         for (const method of limitedMethods) {
           if (scanAborted) break;
 
-          // MEMORY FIX: Longer delay to allow garbage collection
-          await new Promise(resolve => setTimeout(resolve, 500));
-
+          // MEMORY FIX: Create isolated page context for each test
+          let testPage = null;
           try {
-            const testResult = await page.evaluate(async ({ endpoint, method: testMethod, description, baseUrl }) => {
+            testPage = await context.newPage();
+
+            // MEMORY FIX: Set resource blocking to reduce memory
+            await testPage.route('**/*', (route) => {
+              const resourceType = route.request().resourceType();
+              // Block images, stylesheets, fonts to save memory
+              if (['image', 'stylesheet', 'font', 'media'].includes(resourceType)) {
+                route.abort();
+              } else {
+                route.continue();
+              }
+            });
+
+            const testResult = await testPage.evaluate(async ({ endpoint, method: testMethod, description, baseUrl }) => {
               try {
                 // Construct full URL to prevent chrome-error:// URLs
                 const fullUrl = endpoint.startsWith('/') ? baseUrl + endpoint : endpoint;
@@ -388,12 +452,29 @@ async function testInfinitePagesSafely(targetUrl) {
               status: 'test_failed',
               error: error.message
             });
+          } finally {
+            // CRITICAL: Close test page immediately to free memory
+            if (testPage) {
+              try {
+                await testPage.close();
+              } catch (e) {
+                // Page already closed
+              }
+            }
           }
 
-          // MEMORY FIX: Force garbage collection after each test
+          // MEMORY FIX: Force garbage collection if available
           if (global.gc) {
             global.gc();
           }
+
+          // MEMORY FIX: Small delay to allow cleanup
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+
+        // MEMORY FIX: Force GC after endpoint group
+        if (global.gc) {
+          global.gc();
         }
 
         // MEMORY FIX: Check memory after each endpoint group
@@ -517,10 +598,10 @@ async function testInfinitePagesSafely(targetUrl) {
     }
 
     // Clear memory monitoring interval
-    clearInterval(memoryCheckInterval);
+    stopMemoryMonitoring();
 
   } catch (error) {
-    clearInterval(memoryCheckInterval);
+    stopMemoryMonitoring();
 
     if (scanAborted) {
       // Don't add duplicate error - already handled by memory check
@@ -535,6 +616,40 @@ async function testInfinitePagesSafely(targetUrl) {
       await monitor.logMessage(`❌ Test execution error: ${error.message}`);
     }
   } finally {
+    // CRITICAL: Proper cleanup order to prevent memory leaks
+    stopMemoryMonitoring();
+
+    // Remove event listeners
+    if (page) {
+      try {
+        page.removeListener('console', consoleHandler);
+        page.removeListener('response', responseHandler);
+      } catch (e) {
+        // Listeners already removed
+      }
+    }
+
+    // Close page first
+    if (page) {
+      try {
+        await page.close();
+        await monitor.logMessage(`✅ Page closed safely`);
+      } catch (e) {
+        await monitor.logMessage(`⚠️  Page cleanup warning: ${e.message}`);
+      }
+    }
+
+    // Close context second
+    if (context) {
+      try {
+        await context.close();
+        await monitor.logMessage(`✅ Context closed safely`);
+      } catch (e) {
+        await monitor.logMessage(`⚠️  Context cleanup warning: ${e.message}`);
+      }
+    }
+
+    // Close browser last
     if (browser) {
       try {
         await browser.close();
