@@ -465,55 +465,6 @@ if (!rateLimitResult.success) {
         GET: { authenticated: 200, unauthenticated: 401 },
         POST: { authenticated: 201, unauthenticated: 401 }
       }
-    },
-    {
-      endpoint: '/api/stories/novel',
-      methods: ['GET', 'POST'],
-      description: 'Novel creation with chapter planning',
-      expected_auth: true,
-      expected_responses: {
-        GET: { authenticated: 200, unauthenticated: 401 },
-        POST: { authenticated: 201, unauthenticated: 401 }
-      }
-    },
-    {
-      endpoint: '/api/stories/ai-assisted',
-      methods: ['GET', 'POST'],
-      description: 'AI-assisted collaborative story creation',
-      expected_auth: true,
-      expected_responses: {
-        GET: { authenticated: 200, unauthenticated: 401 },
-        POST: { authenticated: 201, unauthenticated: 401 }
-      }
-    },
-    {
-      endpoint: '/api/stories/guest',
-      methods: ['POST'],
-      description: 'Guest story creation (no auth required)',
-      expected_auth: false,
-      expected_responses: {
-        POST: { success: 201, rate_limited: 429 }
-      }
-    },
-    {
-      endpoint: '/api/demo/story',
-      methods: ['GET', 'POST'],
-      description: 'Demo story creation with rate limiting',
-      expected_auth: false,
-      expected_responses: {
-        GET: { success: 200 },
-        POST: { success: 201, rate_limited: 429, server_error: 500 }
-      }
-    },
-    {
-      endpoint: '/api/admin/request-flow/health',
-      methods: ['GET'],
-      description: 'Admin system health monitoring',
-      expected_auth: true,
-      expected_admin: true,
-      expected_responses: {
-        GET: { admin: 200, user: 403, unauthenticated: 401 }
-      }
     }
   ]
 };
