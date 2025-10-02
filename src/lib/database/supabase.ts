@@ -1,9 +1,9 @@
-import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { createBrowserClient } from '@supabase/ssr'
 import type { Database } from '@/lib/supabase/types'
 
 /**
  * Client-side Supabase client
- * Uses exact environment variables from Vercel
+ * Uses cookies for session storage (compatible with SSR auth callback)
  */
 export const createClient = () => {
   const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
@@ -13,20 +13,7 @@ export const createClient = () => {
     throw new Error('Missing Supabase environment variables')
   }
 
-  return createSupabaseClient<Database>(supabaseUrl, supabaseKey, {
-    auth: {
-      autoRefreshToken: true,
-      persistSession: true,
-      detectSessionInUrl: true,
-      flowType: 'pkce',
-      storageKey: 'infinite-pages-v3-auth'
-    },
-    global: {
-      headers: {
-        'X-Client-Info': 'infinite-pages-v3'
-      }
-    }
-  })
+  return createBrowserClient<Database>(supabaseUrl, supabaseKey)
 }
 
 /**
@@ -38,6 +25,7 @@ export const createServiceClient = () => {
 }
 
 export const createServiceRoleClient = () => {
+  const { createClient: createSupabaseClient } = require('@supabase/supabase-js')
   const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL']!
   const serviceRoleKey = process.env['SUPABASE_SERVICE_ROLE_KEY']!
 
@@ -45,7 +33,7 @@ export const createServiceRoleClient = () => {
     throw new Error('Missing Supabase service role credentials')
   }
 
-  return createSupabaseClient<Database>(supabaseUrl, serviceRoleKey, {
+  return createSupabaseClient(supabaseUrl, serviceRoleKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false
@@ -55,7 +43,7 @@ export const createServiceRoleClient = () => {
         'X-Client-Info': 'infinite-pages-v3-service'
       }
     }
-  })
+  }) as ReturnType<typeof createBrowserClient<Database>>
 }
 
 // Export default client for convenience
