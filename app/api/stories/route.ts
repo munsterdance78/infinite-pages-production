@@ -201,11 +201,13 @@ export async function POST(request: NextRequest) {
 
   try {
     // Get user profile first to determine subscription tier for rate limiting
-    const { data: profile, error: profileError } = await supabase
+    const { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('tokens_remaining, subscription_tier, stories_created, tokens_used_total, words_generated')
       .eq('id', user.id)
       .single()
+
+    const profile = profileData as { tokens_remaining: number; subscription_tier: string; stories_created: number; tokens_used_total: number; words_generated: number } | null
 
     if (profileError) {
       console.error('Database error fetching profile:', profileError)

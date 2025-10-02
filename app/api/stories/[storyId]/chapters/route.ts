@@ -167,12 +167,14 @@ export async function POST(
     }))
 
     // OUTLINE INTEGRATION: Check if outline exists for this chapter
-    let { data: chapterOutline } = await supabase
+    let { data: outlineData } = await supabase
       .from('story_outline')
       .select('*')
       .eq('story_id', storyId)
       .eq('chapter_number', chapterNumber)
       .single()
+
+    let chapterOutline = outlineData as any
 
     // If no outline exists, generate outlines for next 5 chapters
     if (!chapterOutline) {
@@ -237,7 +239,7 @@ export async function POST(
         // Save generated outlines to database
         if (outlineResult.outlines && outlineResult.outlines.length > 0) {
           for (const outline of outlineResult.outlines) {
-            await supabase.from('story_outline').upsert({
+            await (supabase as any).from('story_outline').upsert({
               story_id: storyId,
               chapter_number: outline.chapter_number,
               planned_purpose: outline.planned_purpose,
@@ -280,17 +282,18 @@ export async function POST(
 
     // PHASE 3: Fetch existing facts for consistency checking (only from last 3 chapters)
     // First, get IDs of last 3 chapters
-    const { data: recentChapterIds } = await supabase
+    const { data: recentChaptersData } = await supabase
       .from('chapters')
       .select('id')
       .eq('story_id', storyId)
       .order('chapter_number', { ascending: false })
       .limit(3)
 
+    const recentChapterIds = recentChaptersData as Array<{ id: string }> | null
     const chapterIdList = recentChapterIds?.map(ch => ch.id) || []
 
     // Fetch facts only from these recent chapters (if any chapters exist)
-    const { data: existingFacts } = chapterIdList.length > 0
+    const { data: factsData } = chapterIdList.length > 0
       ? await supabase
           .from('story_facts')
           .select('fact_type, entity_name, fact_data')
@@ -298,6 +301,8 @@ export async function POST(
           .in('chapter_id', chapterIdList)
           .order('extracted_at', { ascending: false })
       : { data: null }
+
+    const existingFacts = factsData as Array<{ fact_type: string; entity_name: string; fact_data: any }> | null
 
     // Build fact context grouped by type
     let factContext = ''
@@ -308,31 +313,31 @@ export async function POST(
         if (!factsByType[fact.fact_type]) {
           factsByType[fact.fact_type] = []
         }
-        factsByType[fact.fact_type].push(fact)
+        factsByType[fact.fact_type]!.push(fact)
       })
 
       const sections: string[] = []
 
-      if (factsByType.character && factsByType.character.length > 0) {
-        sections.push('**CHARACTERS:**\n' + factsByType.character.map(f =>
+      if (factsByType['character'] && factsByType['character'].length > 0) {
+        sections.push('**CHARACTERS:**\n' + factsByType['character'].map(f =>
           `- ${f.entity_name}: ${JSON.stringify(f.fact_data)}`
         ).join('\n'))
       }
 
-      if (factsByType.location && factsByType.location.length > 0) {
-        sections.push('**LOCATIONS:**\n' + factsByType.location.map(f =>
+      if (factsByType['location'] && factsByType['location'].length > 0) {
+        sections.push('**LOCATIONS:**\n' + factsByType['location'].map(f =>
           `- ${f.entity_name}: ${JSON.stringify(f.fact_data)}`
         ).join('\n'))
       }
 
-      if (factsByType.plot_event && factsByType.plot_event.length > 0) {
-        sections.push('**PLOT EVENTS:**\n' + factsByType.plot_event.map(f =>
+      if (factsByType['plot_event'] && factsByType['plot_event'].length > 0) {
+        sections.push('**PLOT EVENTS:**\n' + factsByType['plot_event'].map(f =>
           `- ${f.entity_name || 'Event'}: ${JSON.stringify(f.fact_data)}`
         ).join('\n'))
       }
 
-      if (factsByType.world_rule && factsByType.world_rule.length > 0) {
-        sections.push('**WORLD RULES:**\n' + factsByType.world_rule.map(f =>
+      if (factsByType['world_rule'] && factsByType['world_rule'].length > 0) {
+        sections.push('**WORLD RULES:**\n' + factsByType['world_rule'].map(f =>
           `- ${f.entity_name || 'Rule'}: ${JSON.stringify(f.fact_data)}`
         ).join('\n'))
       }
@@ -343,24 +348,31 @@ export async function POST(
     // Generate chapter using Claude service WITH outline + facts
     let claudeResponse
     try {
-      claudeResponse = await claudeService.generateChapter({
+      const generateParams: any = {
         storyContext: story.foundation || story,
         chapterNumber,
         previousChapters: previousChapterContext,
         targetWordCount: chapterOutline?.word_count_target || 2000,
-        chapterPlan: chapterPlan
-          ? {
-              purpose: chapterPlan.purpose || 'Advance the story',
-              keyEvents: Array.isArray(chapterPlan.keyEvents)
-                ? chapterPlan.keyEvents
-                : [],
-              ...chapterPlan
-            }
-          : undefined,
-        useOptimizedContext: true,
-        factContext: factContext || undefined,
-        chapterOutline: chapterOutline || undefined // Pass outline for structured generation
-      })
+        useOptimizedContext: true
+      }
+
+      if (chapterPlan) {
+        generateParams.chapterPlan = {
+          purpose: chapterPlan.purpose || 'Advance the story',
+          keyEvents: Array.isArray(chapterPlan.keyEvents) ? chapterPlan.keyEvents : [],
+          ...chapterPlan
+        }
+      }
+
+      if (factContext) {
+        generateParams.factContext = factContext
+      }
+
+      if (chapterOutline) {
+        generateParams.chapterOutline = chapterOutline
+      }
+
+      claudeResponse = await claudeService.generateChapter(generateParams)
     } catch (error: unknown) {
       console.error('Claude service error:', error)
       return NextResponse.json(
