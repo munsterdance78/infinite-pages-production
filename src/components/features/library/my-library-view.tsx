@@ -1,10 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -16,6 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import {
   BookOpen,
   Search,
@@ -121,6 +125,7 @@ const mockUserStories: UserStory[] = [
 ]
 
 export default function MyLibraryView() {
+  const router = useRouter()
   const [stories, setStories] = useState<UserStory[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -130,18 +135,41 @@ export default function MyLibraryView() {
   const [activeTab, setActiveTab] = useState('all')
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
 
+  // Form state
+  const [formTitle, setFormTitle] = useState('')
+  const [formGenre, setFormGenre] = useState('')
+  const [formPremise, setFormPremise] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formError, setFormError] = useState('')
+
   useEffect(() => {
-    // Simulate loading user stories
-    const loadStories = async () => {
-      setLoading(true)
-      // In production, this would fetch from API with user authentication
-      await new Promise(resolve => setTimeout(resolve, 800))
-      setStories(mockUserStories)
+    fetchStories()
+  }, [])
+
+  const fetchStories = async () => {
+    setLoading(true)
+    try {
+      console.log('[My Library] Fetching user stories...')
+      const response = await fetch('/api/stories')
+
+      if (!response.ok) {
+        console.error('[My Library] Failed to fetch stories:', response.status)
+        // Fall back to empty array on error
+        setStories([])
+        setLoading(false)
+        return
+      }
+
+      const data = await response.json()
+      console.log('[My Library] Fetched', data.stories?.length || 0, 'stories')
+      setStories(data.stories || [])
+      setLoading(false)
+    } catch (err) {
+      console.error('[My Library] Exception fetching stories:', err)
+      setStories([])
       setLoading(false)
     }
-
-    loadStories()
-  }, [])
+  }
 
   const filteredStories = stories.filter(story => {
     const matchesSearch = story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -201,13 +229,74 @@ export default function MyLibraryView() {
 
   const handleNewStory = () => {
     console.log('[My Library] New Story button clicked')
+    setFormTitle('')
+    setFormGenre('')
+    setFormPremise('')
+    setFormError('')
     setIsCreateDialogOpen(true)
   }
 
   const handleEditStory = (storyId: string) => {
     console.log('[My Library] Edit story clicked:', storyId)
-    // TODO: Navigate to story editor
     window.location.href = `/stories/${storyId}`
+  }
+
+  const handleCreateStory = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setFormError('')
+
+    // Validation
+    if (!formGenre) {
+      setFormError('Please select a genre')
+      setIsSubmitting(false)
+      return
+    }
+
+    if (!formPremise || formPremise.trim().length < 10) {
+      setFormError('Premise must be at least 10 characters')
+      setIsSubmitting(false)
+      return
+    }
+
+    if (formPremise.trim().length > 2000) {
+      setFormError('Premise must be 2000 characters or less')
+      setIsSubmitting(false)
+      return
+    }
+
+    try {
+      console.log('[My Library] Creating story...', { title: formTitle, genre: formGenre, premise: formPremise.substring(0, 50) })
+
+      const response = await fetch('/api/stories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formTitle || undefined,
+          genre: formGenre,
+          premise: formPremise.trim()
+        })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        console.error('[My Library] Create story error:', data)
+        setFormError(data.error || 'Failed to create story')
+        setIsSubmitting(false)
+        return
+      }
+
+      console.log('[My Library] Story created successfully:', data.story.id)
+      setIsCreateDialogOpen(false)
+
+      // Redirect to the new story
+      router.push(`/stories/${data.story.id}`)
+    } catch (err) {
+      console.error('[My Library] Create story exception:', err)
+      setFormError('An unexpected error occurred')
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -470,29 +559,77 @@ export default function MyLibraryView() {
 
       {/* Create Story Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Create New Story</DialogTitle>
             <DialogDescription>
-              Story creation wizard coming soon! This feature will allow you to create a new infinite story with AI assistance.
+              Define your story's foundation and let AI help you begin your creative journey
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <p className="text-sm text-muted-foreground">
-              The story creation feature is currently under development. Once complete, you'll be able to:
-            </p>
-            <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
-              <li>Choose your story genre and setting</li>
-              <li>Define main characters and plot</li>
-              <li>Set up AI writing parameters</li>
-              <li>Generate your first chapter instantly</li>
-            </ul>
-          </div>
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
-              Close
-            </Button>
-          </div>
+          <form onSubmit={handleCreateStory} className="space-y-4 py-4">
+            {formError && (
+              <Alert variant="destructive">
+                <AlertDescription>{formError}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="title">Title (Optional)</Label>
+              <Input
+                id="title"
+                placeholder="Enter a title or leave blank for 'Untitled Story'"
+                value={formTitle}
+                onChange={(e) => setFormTitle(e.target.value)}
+                disabled={isSubmitting}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="genre">Genre *</Label>
+              <Select value={formGenre} onValueChange={setFormGenre} disabled={isSubmitting}>
+                <SelectTrigger id="genre">
+                  <SelectValue placeholder="Select a genre" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ALLOWED_GENRES.map(genre => (
+                    <SelectItem key={genre} value={genre}>
+                      {genre}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="premise">Story Premise *</Label>
+              <Textarea
+                id="premise"
+                placeholder="Describe your story's concept, setting, main characters, or initial plot. The more detail you provide, the better AI can help craft your narrative."
+                rows={6}
+                value={formPremise}
+                onChange={(e) => setFormPremise(e.target.value)}
+                disabled={isSubmitting}
+                className="resize-none"
+              />
+              <p className="text-xs text-muted-foreground">
+                {formPremise.length}/2000 characters (minimum 10 characters)
+              </p>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsCreateDialogOpen(false)}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Creating Story...' : 'Create Story'}
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>
