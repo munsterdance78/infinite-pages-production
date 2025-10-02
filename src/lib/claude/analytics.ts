@@ -165,7 +165,7 @@ export class ClaudeAnalyticsService {
     // Store in database if available
     if (this.supabase) {
       try {
-        await this.supabase
+        await (this.supabase as any)
           .from('claude_analytics')
           .insert({
             id: analyticsEvent.id,
@@ -1377,25 +1377,28 @@ export class V2PerformanceMonitor {
     const sortedByRatio = [...metrics].sort((a, b) => a.ratio - b.ratio)
 
     // Transform metrics to match expected format
-    const transformMetric = (m: typeof metrics[0]) => ({
-      timestamp: m.timestamp,
-      original: m.original,
-      compressed: m.compressed,
-      ratio: m.ratio,
-      compressionSavings: m.compressionSavings || 0,
-      compressionPercentage: ((m.original - m.compressed) / m.original) * 100,
-      storyId: 'unknown',
-      factType: 'general',
-      algorithm: 'sfsl'
-    })
+    const transformMetric = (m: typeof metrics[0] | undefined) => {
+      if (!m) return undefined
+      return {
+        timestamp: m.timestamp,
+        original: m.original,
+        compressed: m.compressed,
+        ratio: m.ratio,
+        compressionSavings: m.compressionSavings || 0,
+        compressionPercentage: ((m.original - m.compressed) / m.original) * 100,
+        storyId: 'unknown',
+        factType: 'general',
+        algorithm: 'sfsl'
+      }
+    }
 
     return {
       averageCompressionRatio: averageRatio,
       totalCompressionSavings: totalSavings,
       compressionCount: metrics.length,
-      bestCompression: transformMetric(sortedByRatio[0]), // Lowest ratio (best compression)
-      worstCompression: transformMetric(sortedByRatio[sortedByRatio.length - 1]),
-      recentMetrics: metrics.slice(-10).map(transformMetric) // Last 10 compressions
+      bestCompression: sortedByRatio[0] ? transformMetric(sortedByRatio[0])! : null, // Lowest ratio (best compression)
+      worstCompression: sortedByRatio[sortedByRatio.length - 1] ? transformMetric(sortedByRatio[sortedByRatio.length - 1])! : null,
+      recentMetrics: metrics.slice(-10).map(transformMetric).filter((m): m is NonNullable<typeof m> => m !== undefined) // Last 10 compressions
     }
   }
 

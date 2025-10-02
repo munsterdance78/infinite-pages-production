@@ -15,11 +15,13 @@ export async function GET(
 
   try {
     // Fetch story with ownership validation
-    const { data: story, error: storyError } = await supabase
+    const { data: storyData, error: storyError } = await supabase
       .from('stories')
       .select('*')
       .eq('id', storyId)
       .single()
+
+    const story = storyData as any
 
     if (storyError) {
       console.error('Database error fetching story:', storyError)

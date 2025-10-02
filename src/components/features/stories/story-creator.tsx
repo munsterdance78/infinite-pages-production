@@ -170,7 +170,7 @@ export default function UnifiedStoryCreator({
     characters: '',
     setting: '',
     target_length: 50000,
-    choice_complexity: 'moderate' as const,
+    choice_complexity: 'moderate' as 'simple' | 'moderate' | 'complex',
     target_ending_count: 5,
     estimated_length: 10000,
     main_themes: [] as string[],
@@ -209,11 +209,13 @@ export default function UnifiedStoryCreator({
 
   const loadStoryForEditing = async (id: string) => {
     try {
-      const { data, error } = await supabase
+      const { data: storyData, error } = await supabase
         .from('stories')
         .select('*')
         .eq('id', id)
         .single()
+
+      const data = storyData as any
 
       if (error) throw error
       if (data) {

@@ -493,7 +493,7 @@ class InfinitePagesCache {
 
     // Cache the result for future use
     const prompt = `${genre} story: ${premise}`
-    await this.cacheStoryFoundation(prompt, genre, premise, result, userId, title, templateVariables)
+    await this.cacheStoryFoundation(prompt, genre, premise, result as any, userId, title, templateVariables)
 
     return {
       result,

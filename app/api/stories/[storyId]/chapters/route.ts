@@ -448,7 +448,7 @@ export async function POST(
     const wordCount = chapterData.wordCount || 0
 
     // Save chapter to database with metadata columns (added in migration 008)
-    const { data: newChapter, error: createError } = await supabase
+    const { data: newChapterData, error: createError } = await (supabase as any)
       .from('chapters')
       .insert({
         story_id: storyId,
@@ -461,6 +461,8 @@ export async function POST(
       .select()
       .single()
 
+    const newChapter = newChapterData as any
+
     if (createError) {
       console.error('Database error creating chapter:', createError)
       return NextResponse.json(
@@ -470,7 +472,7 @@ export async function POST(
     }
 
     // Update story statistics
-    const { error: updateStoryError } = await supabase
+    const { error: updateStoryError } = await (supabase as any)
       .from('stories')
       .update({
         word_count: (story.word_count || 0) + wordCount,
@@ -489,7 +491,7 @@ export async function POST(
     // Update user credits and statistics
     const actualCreditsUsed = CREDIT_SYSTEM.convertCostToCredits(costUSD)
 
-    const { error: updateProfileError } = await supabase
+    const { error: updateProfileError } = await (supabase as any)
       .from('profiles')
       .update({
         tokens_remaining: profile.tokens_remaining - actualCreditsUsed,
@@ -505,7 +507,7 @@ export async function POST(
     }
 
     // Log generation for analytics
-    const { error: logError } = await supabase
+    const { error: logError } = await (supabase as any)
       .from('generation_logs')
       .insert({
         user_id: user.id,
@@ -608,11 +610,13 @@ export async function GET(
 
   try {
     // Verify user owns the story
-    const { data: story, error: storyError } = await supabase
+    const { data: storyData, error: storyError } = await supabase
       .from('stories')
       .select('user_id')
       .eq('id', storyId)
       .single()
+
+    const story = storyData as { user_id: string } | null
 
     if (storyError || !story) {
       return NextResponse.json(

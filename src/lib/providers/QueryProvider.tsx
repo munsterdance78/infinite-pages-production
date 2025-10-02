@@ -73,16 +73,7 @@ queryClient.getQueryCache().subscribe((event) => {
   }
 })
 
-queryClient.getMutationCache().subscribe((event: {
-  type: string
-  mutation: {
-    options: { mutationKey?: unknown }
-    state: {
-      status: string
-      error?: unknown
-    }
-  }
-}) => {
+queryClient.getMutationCache().subscribe((event: any) => {
   if (event.type === 'added') {
     // Mutation Cache: Mutation started - production logging system would handle this
   }

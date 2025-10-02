@@ -177,16 +177,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch stories' }, { status: 500 })
     }
 
-    // Add rate limit headers to successful response
-    const response = NextResponse.json(
+    return NextResponse.json(
       { stories },
       { headers: { 'Content-Type': 'application/json' } }
     )
-    Object.entries(rateLimitResult.headers).forEach(([key, value]) => {
-      response.headers.set(key, String(value))
-    })
-
-    return response
   } catch (error) {
     console.error('Unexpected error in GET /api/stories:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
@@ -240,9 +234,6 @@ export async function POST(request: NextRequest) {
       logRateLimitViolation('STORY_CREATION', 'free', user.id)
       return rateLimitResult
     }
-
-    // Store rate limit headers for later (null check)
-    const rateLimitHeaders = rateLimitResult?.headers || {}
 
     // Parse and validate request body
     let requestBody
@@ -385,7 +376,7 @@ export async function POST(request: NextRequest) {
     const wordCount = content.split(/\s+/).length
 
     // Create story in database with transaction-like behavior
-    const { data: story, error: createError } = await supabase
+    const { data: story, error: createError } = await (supabase as any)
       .from('stories')
       .insert({
         user_id: user.id,
@@ -410,7 +401,7 @@ export async function POST(request: NextRequest) {
     // Update user credits based on actual AI cost (no additional markup)
     const actualCreditsUsed = CREDIT_SYSTEM.convertCostToCredits(costUSD)
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from('profiles')
       .update({
         tokens_remaining: profile.tokens_remaining - actualCreditsUsed,
@@ -428,11 +419,11 @@ export async function POST(request: NextRequest) {
     // Log generation for analytics using service role client to bypass RLS
     try {
       const supabaseAdmin = createClient<Database>(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
+        process.env['NEXT_PUBLIC_SUPABASE_URL']!,
+        process.env['SUPABASE_SERVICE_ROLE_KEY']!
       )
 
-      const { error: logError } = await supabaseAdmin
+      const { error: logError } = await (supabaseAdmin as any)
         .from('generation_logs')
         .insert({
           user_id: user.id,
@@ -453,7 +444,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create successful response with rate limit headers and cache info
-    const response = NextResponse.json({
+    return NextResponse.json({
       story,
       tokensUsed: actualCreditsUsed,
       tokensSaved: tokensSaved,
@@ -464,15 +455,6 @@ export async function POST(request: NextRequest) {
         ? `${SUCCESS_MESSAGES.STORY_CREATED} (${tokensSaved} tokens saved from cache)`
         : SUCCESS_MESSAGES.STORY_CREATED
     }, { headers: { 'Content-Type': 'application/json' } })
-
-    // Add rate limit headers if available
-    if (rateLimitHeaders) {
-      Object.entries(rateLimitHeaders).forEach(([key, value]) => {
-        response.headers.set(key, String(value))
-      })
-    }
-
-    return response
 
   } catch (error) {
     console.error('Unexpected error in POST /api/stories:', error)

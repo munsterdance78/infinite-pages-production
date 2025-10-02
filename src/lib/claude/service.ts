@@ -729,7 +729,7 @@ Provide honest, constructive feedback that will help improve the writing quality
     
     const operations = prompts.map(prompt => ({
       id: prompt.id,
-      type: (prompt.operation || 'general') as 'story_foundation' | 'chapter_generation' | 'content_improvement' | 'content_analysis' | 'general',
+      type: (prompt.operation === 'chapter_generation' ? 'chapter' : (prompt.operation || 'general')) as 'story_foundation' | 'chapter' | 'content_improvement' | 'content_analysis' | 'general',
       params: {
         prompt: prompt.prompt,
         model: prompt.model,
@@ -739,7 +739,7 @@ Provide honest, constructive feedback that will help improve the writing quality
       userId: prompt.userId
     }))
 
-    batchProcessor.addOperations(operations)
+    batchProcessor.addOperations(operations as any)
     return await batchProcessor.processBatch()
   }
 
@@ -842,7 +842,7 @@ Provide honest, constructive feedback that will help improve the writing quality
     // Process using new SFSL system
     const sfslProcessor = new SFSLProcessor()
     const facts = this.parseExtractedFacts(response.content)
-    const compressed = sfslProcessor.compressFacts(facts)
+    const compressed = sfslProcessor.compressFacts(facts as any)
 
     return {
       facts,
@@ -874,7 +874,7 @@ Provide honest, constructive feedback that will help improve the writing quality
         keyEvents: chapterGoals['keyEvents'],
         plotAdvancement: chapterGoals['plotAdvancement']
       } as Parameters<typeof contextOptimizer.selectRelevantFactContext>[0],
-      factHierarchy
+      factHierarchy as any
     )
 
     return this.generateChapter({

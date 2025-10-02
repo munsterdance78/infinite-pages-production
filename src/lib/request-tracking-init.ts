@@ -80,11 +80,13 @@ class RequestTrackingManager {
           const { data: { user } } = await supabase.auth.getUser()
           if (user) {
             // Get user profile for tier info
-            const { data: profile } = await supabase
+            const { data: profileData } = await supabase
               .from('profiles')
               .select('subscription_tier')
               .eq('id', user.id)
               .single()
+
+            const profile = profileData as { subscription_tier: string } | null
 
             requestTracker.setUser(
               user.id,

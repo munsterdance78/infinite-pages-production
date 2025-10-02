@@ -213,7 +213,7 @@ export class ContentSanitizer {
       "'": '&#39;'
     }
 
-    return text.replace(/[&<>"']/g, (match) => htmlEscapes[match])
+    return text.replace(/[&<>"']/g, (match) => htmlEscapes[match] || match)
   }
 }
 

@@ -82,11 +82,13 @@ export async function requireAdminAuth(request: NextRequest): Promise<AuthResult
 
   try {
     // Check if user has admin role
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
       .select('is_admin')
       .eq('id', user.id)
       .single()
+
+    const profile = profileData as { is_admin: boolean } | null
 
     if (!profile?.is_admin) {
       return NextResponse.json(
@@ -123,11 +125,13 @@ export async function requireCreatorAuth(request: NextRequest): Promise<AuthResu
 
   try {
     // Check if user has creator permissions
-    const { data: profile } = await supabase
+    const { data: profileData } = await supabase
       .from('profiles')
       .select('is_creator, creator_tier')
       .eq('id', user.id)
       .single()
+
+    const profile = profileData as { is_creator: boolean; creator_tier: string } | null
 
     if (!profile?.is_creator) {
       return NextResponse.json(

@@ -188,7 +188,7 @@ export class SeriesContextManager {
 
       if (!existingArc) {
         // Create new character arc
-        await this.supabase
+        await (this.supabase as any)
           .from('character_arcs')
           .insert({
             series_id: seriesId,
@@ -203,7 +203,7 @@ export class SeriesContextManager {
           [bookNumber]: development
         }
 
-        await this.supabase
+        await (this.supabase as any)
           .from('character_arcs')
           .update({
             current_book_development: updatedDevelopment,
@@ -229,7 +229,7 @@ export class SeriesContextManager {
     if (!this.supabase) return
 
     try {
-      await this.supabase
+      await (this.supabase as any)
         .from('world_state_changes')
         .insert({
           series_id: seriesId,
@@ -446,7 +446,7 @@ export class SeriesContextManager {
     return {
       series_core: {
         genre: series.genre,
-        world_type: this.determineWorldType(series.world_rules),
+        world_type: this.determineWorldType(series.world_rules as any),
         central_series_conflict: this.extractCentralConflict(series as { description?: string }),
         current_book_focus: this.determineBookFocus(bookNumber, series.total_planned_books),
         book_position: this.determineBookPosition(bookNumber, series.total_planned_books)
@@ -460,7 +460,7 @@ export class SeriesContextManager {
       world_context: {
         current_state: this.getCurrentWorldState(fullContext.world_state),
         recent_changes: recentChanges,
-        rules_reminders: this.getImportantRules(series.world_rules),
+        rules_reminders: this.getImportantRules(series.world_rules as any),
         threat_level: this.assessCurrentThreatLevel(fullContext)
       },
       series_history: {
@@ -509,7 +509,7 @@ export class SeriesContextManager {
 
     return {
       current_political_situation: this.extractPoliticalSituation(latestChanges),
-      current_technology_level: this.extractTechnologyLevel(series.world_rules),
+      current_technology_level: this.extractTechnologyLevel(series.world_rules as any),
       current_social_climate: this.extractSocialClimate(latestChanges),
       current_threats: this.extractCurrentThreats(latestChanges),
       current_opportunities: this.extractCurrentOpportunities(latestChanges),
@@ -665,7 +665,7 @@ export class SeriesContextManager {
 
     try {
       // This would call the calculate_series_analytics function
-      await this.supabase.rpc('calculate_series_analytics', {
+      await (this.supabase as any).rpc('calculate_series_analytics', {
         series_uuid: seriesId
       })
     } catch (error) {

@@ -36,7 +36,7 @@ export async function allocateCreatorEarnings(
     const usdEquivalent = creatorEarnings * CREDITS_TO_USD_RATE
 
     // Start transaction
-    const { data, error } = await supabaseClient.rpc('allocate_creator_earnings', {
+    const { data, error } = await (supabaseClient as any).rpc('allocate_creator_earnings', {
       p_creator_id: creatorId,
       p_story_id: storyId,
       p_reader_id: readerUserId,
@@ -86,7 +86,7 @@ export async function initializeCreatorEarnings(
   supabaseClient: ReturnType<typeof createClient>
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const { error } = await supabaseClient
+    const { error } = await (supabaseClient as any)
       .from('creator_earnings_accumulation')
       .upsert({
         creator_id: creatorId,

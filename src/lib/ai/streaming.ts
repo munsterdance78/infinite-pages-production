@@ -90,14 +90,19 @@ export class ClaudeStreamingService {
     let outputTokens = 0
 
     try {
-      const stream = await anthropic.messages.create({
+      const createParams: any = {
         model,
         max_tokens: maxTokens,
         temperature,
-        system: systemPrompt,
         messages: [{ role: 'user', content: prompt }],
         stream: true
-      })
+      }
+
+      if (systemPrompt) {
+        createParams.system = systemPrompt
+      }
+
+      const stream: any = await anthropic.messages.create(createParams)
 
       for await (const chunk of stream) {
         if (chunk.type === 'message_start') {
@@ -114,7 +119,7 @@ export class ClaudeStreamingService {
           outputTokens = chunk.usage.output_tokens
         } else if (chunk.type === 'message_stop') {
           const totalTokens = inputTokens + outputTokens
-          const cost = calculateCost(totalTokens, model)
+          const cost = calculateCost(inputTokens, outputTokens)
 
           yield {
             content: accumulatedContent,

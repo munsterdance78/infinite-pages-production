@@ -575,8 +575,8 @@ export class ChoiceBookAnalytics {
     if (sessionsWithTime.length === 0) return 0
 
     const totalTime = sessionsWithTime.reduce((sum, p) => {
-      const start = new Date(p.session_start).getTime()
-      const end = new Date(p.session_end).getTime()
+      const start = new Date(p.session_start!).getTime()
+      const end = new Date(p.session_end!).getTime()
       return sum + (end - start)
     }, 0)
 

@@ -115,7 +115,7 @@ export class SeriesManager {
   async createSeries(options: SeriesCreationOptions): Promise<SeriesFacts> {
     try {
       // Create series record in database
-      const { data: series, error: seriesError } = await this.supabase
+      const { data: series, error: seriesError } = await (this.supabase as any)
         .from('series')
         .insert({
           name: options.name,
@@ -143,7 +143,7 @@ export class SeriesManager {
       // Cache with series-level TTL
       await claudeCache.cacheHierarchicalFacts(
         options.universeId,
-        seriesFacts,
+        seriesFacts as any,
         'series'
       )
 
@@ -324,7 +324,7 @@ export class SeriesManager {
 
       // Analyze continuity using Claude
       const analysis = await claudeService.generateContent({
-        prompt: this.buildContinuityAnalysisPrompt(seriesFacts, previousBooks, characterArcs),
+        prompt: this.buildContinuityAnalysisPrompt(seriesFacts!, previousBooks, characterArcs),
         operation: 'series_continuity_analysis',
         context: { seriesId, bookId, characterArcs }
       })
@@ -352,7 +352,7 @@ export class SeriesManager {
 
       // Generate overall analysis
       const overallAnalysis = await claudeService.generateContent({
-        prompt: this.buildOverallContinuityPrompt(seriesFacts, books, bookAnalyses),
+        prompt: this.buildOverallContinuityPrompt(seriesFacts!, books, bookAnalyses),
         operation: 'overall_series_continuity',
         context: { seriesId, books, bookAnalyses }
       })
@@ -537,7 +537,7 @@ ${analysis ? JSON.stringify(analysis, null, 2) : 'No analysis available'}
 
   private async storeSeriesFacts(seriesId: string, facts: SeriesFacts): Promise<void> {
     try {
-      const { error } = await this.supabase
+      const { error } = await (this.supabase as any)
         .from('series_facts')
         .upsert({
           series_id: seriesId,

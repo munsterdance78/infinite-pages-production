@@ -208,23 +208,23 @@ export class ClaudeBatchProcessor {
   private async executeOperation(operation: BatchOperation) {
     switch (operation.type) {
       case 'story_foundation':
-        return await claudeService.generateStoryFoundation(operation.params)
-      
+        return await claudeService.generateStoryFoundation(operation.params as any)
+
       case 'chapter':
-        return await claudeService.generateChapter(operation.params)
-      
+        return await claudeService.generateChapter(operation.params as any)
+
       case 'content_improvement':
-        return await claudeService.improveContent(operation.params)
+        return await claudeService.improveContent(operation.params as any)
       
       case 'content_analysis':
         if (!operation.params.content) {
           throw new Error('Content is required for content analysis')
         }
-        return await claudeService.analyzeContent(operation.params.content)
-      
+        return await claudeService.analyzeContent(operation.params.content as string)
+
       case 'general':
       default:
-        return await claudeService.generateContent(operation.params)
+        return await claudeService.generateContent(operation.params as any)
     }
   }
 

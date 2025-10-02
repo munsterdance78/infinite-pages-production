@@ -160,7 +160,7 @@ export class ContextOptimizer {
 
     return recentChapters.map(chapter => {
       // Extract key event (first significant action/conflict in chapter)
-      const keyEvent = this.extractKeyEvent(chapter.content || chapter.summary)
+      const keyEvent = this.extractKeyEvent((chapter.content || chapter.summary) || '')
 
       // Extract character development (who changed how)
       const characterDevelopment = this.extractCharacterDevelopment(chapter)

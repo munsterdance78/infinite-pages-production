@@ -211,15 +211,15 @@ ${storedPattern.dialogueExamples.map(ex => `"${ex}"`).join('\n')}
     `.trim()
   }
 
-  private async storeVoicePattern(character: { name?: string; storyId?: string; voicePattern?: VoicePattern; characterName?: string; [key: string]: unknown }): Promise<void> {
+  private async storeVoicePattern(character: { name?: string; storyId?: string; voicePattern?: VoicePattern; characterName?: string; [key: string]: unknown } | VoicePattern): Promise<void> {
     try {
-      const voicePattern = character.voicePattern || character
+      const voicePattern = ('voicePattern' in character && character.voicePattern) ? character.voicePattern : character as any
 
-      const { error } = await this.supabase
+      const { error } = await (this.supabase as any)
         .from('character_voice_patterns')
         .upsert({
-          character_name: character.name || voicePattern.characterName,
-          story_id: character.storyId || 'default',
+          character_name: ('name' in character ? character.name : null) || voicePattern.characterName,
+          story_id: ('storyId' in character ? character.storyId : null) || 'default',
           speech_patterns: voicePattern.speechPatterns || [],
           vocabulary_style: voicePattern.vocabularyStyle || '',
           tonal_characteristics: voicePattern.tonalCharacteristics || '',

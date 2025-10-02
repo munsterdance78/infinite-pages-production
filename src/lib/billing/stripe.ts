@@ -55,8 +55,7 @@ export async function createCheckoutSession({
   cancelUrl?: string
   metadata?: Record<string, string>
 }) {
-  return await stripe.checkout.sessions.create({
-    customer: customerId,
+  const sessionParams: any = {
     payment_method_types: ['card'],
     line_items: [
       {
@@ -68,7 +67,13 @@ export async function createCheckoutSession({
     success_url: successUrl,
     cancel_url: cancelUrl,
     metadata
-  })
+  }
+
+  if (customerId) {
+    sessionParams.customer = customerId
+  }
+
+  return await stripe.checkout.sessions.create(sessionParams)
 }
 
 /**
