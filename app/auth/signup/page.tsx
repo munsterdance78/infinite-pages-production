@@ -74,25 +74,6 @@ export default function SignUpPage() {
     }
   }
 
-  const handleGoogleSignUp = async () => {
-    setLoading(true)
-    try {
-      const redirectUrl = `${process.env['NEXT_PUBLIC_SITE_URL'] || window.location.origin}/api/auth/callback`
-
-      await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: redirectUrl
-        }
-      })
-    } catch (error) {
-      console.error('Google sign up error:', error)
-      setError('Failed to sign up with Google')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   const handleSignIn = () => {
     router.push('/auth/signin')
   }
