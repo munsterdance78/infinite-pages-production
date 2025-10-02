@@ -235,12 +235,17 @@ export default function MyLibraryView() {
   const handleNewStory = () => {
     console.log('[My Library] New Story button clicked')
     console.log('[My Library] Dialog state before:', isCreateDialogOpen)
+    alert('Button clicked! Opening dialog...')
     setFormTitle('')
     setFormGenre('')
     setFormPremise('')
     setFormError('')
     setIsCreateDialogOpen(true)
     console.log('[My Library] Dialog state set to true')
+    setTimeout(() => {
+      console.log('[My Library] Dialog state after timeout:', isCreateDialogOpen)
+      alert('State should be true now. Check if dialog is visible.')
+    }, 100)
   }
 
   // Debug: Log dialog state changes
