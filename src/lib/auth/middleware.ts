@@ -1,4 +1,4 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
@@ -38,7 +38,32 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
       })
     } else {
       // Cookie-based auth (for browser requests)
-      supabase = createRouteHandlerClient<Database>({ cookies })
+      const cookieStore = cookies()
+      supabase = createServerClient<Database>(
+        process.env['NEXT_PUBLIC_SUPABASE_URL']!,
+        process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
+        {
+          cookies: {
+            get(name: string) {
+              return cookieStore.get(name)?.value
+            },
+            set(name: string, value: string, options: CookieOptions) {
+              try {
+                cookieStore.set({ name, value, ...options })
+              } catch (error) {
+                // Handle cookie setting errors in middleware
+              }
+            },
+            remove(name: string, options: CookieOptions) {
+              try {
+                cookieStore.set({ name, value: '', ...options })
+              } catch (error) {
+                // Handle cookie removal errors in middleware
+              }
+            },
+          },
+        }
+      )
     }
 
     const { data: { user }, error } = await supabase.auth.getUser()
