@@ -38,11 +38,16 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
       })
     } else {
       // Cookie-based auth (for browser requests)
+      // Try to parse cookies from request headers as fallback
+      const cookieHeader = request.headers.get('cookie')
+      console.log('[Auth Middleware] Cookie header present:', !!cookieHeader)
+      console.log('[Auth Middleware] Cookie header length:', cookieHeader?.length || 0)
+
       const cookieStore = cookies()
 
       // Debug: Log all cookies
       const allCookies = cookieStore.getAll()
-      console.log('[Auth Middleware] Total cookies:', allCookies.length)
+      console.log('[Auth Middleware] Total cookies from store:', allCookies.length)
       console.log('[Auth Middleware] Cookie names:', allCookies.map(c => c.name).join(', '))
 
       supabase = createServerClient<Database>(
