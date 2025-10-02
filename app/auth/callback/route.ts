@@ -26,8 +26,27 @@ export async function GET(request: Request) {
       {
         cookies: {
           get(name: string) {
-            const value = cookieStore.get(name)?.value
-            console.log('[Auth Callback] Get cookie:', name, value ? 'exists' : 'missing')
+            const cookie = cookieStore.get(name)
+            if (!cookie) {
+              console.log('[Auth Callback] Get cookie:', name, 'missing')
+              return undefined
+            }
+
+            let value = cookie.value
+
+            // Handle base64-prefixed cookies from SSR
+            if (value && value.startsWith('base64-')) {
+              try {
+                value = Buffer.from(value.substring(7), 'base64').toString('utf-8')
+                console.log('[Auth Callback] Decoded base64 cookie:', name)
+              } catch (e) {
+                console.error('[Auth Callback] Failed to decode base64 cookie:', name, e)
+                return undefined
+              }
+            } else {
+              console.log('[Auth Callback] Get cookie:', name, 'exists')
+            }
+
             return value
           },
           set(name: string, value: string, options: CookieOptions) {

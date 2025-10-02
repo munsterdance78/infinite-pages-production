@@ -45,7 +45,22 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
         {
           cookies: {
             get(name: string) {
-              return cookieStore.get(name)?.value
+              const cookie = cookieStore.get(name)
+              if (!cookie) return undefined
+
+              let value = cookie.value
+
+              // Handle base64-prefixed cookies from SSR
+              if (value && value.startsWith('base64-')) {
+                try {
+                  value = Buffer.from(value.substring(7), 'base64').toString('utf-8')
+                } catch (e) {
+                  console.error('[Auth Middleware] Failed to decode base64 cookie:', name, e)
+                  return undefined
+                }
+              }
+
+              return value
             },
             set(name: string, value: string, options: CookieOptions) {
               try {
