@@ -205,11 +205,67 @@ export async function POST(request: NextRequest) {
 
   try {
     // Get user profile first to determine subscription tier for rate limiting
-    const { data: profileData, error: profileError } = await supabase
+    let { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('tokens_remaining, subscription_tier, stories_created, tokens_used_total, words_generated')
       .eq('id', user.id)
       .single()
+
+    // If profile doesn't exist, create a default one
+    if (profileError && profileError.code === 'PGRST116') {
+      console.log('[POST /api/stories] Profile not found, creating default profile for user:', user.id)
+
+      // Create admin client with service role for profile creation
+      const adminClient = createClient<Database>(
+        process.env['NEXT_PUBLIC_SUPABASE_URL']!,
+        process.env['SUPABASE_SERVICE_ROLE_KEY']!,
+        {
+          auth: {
+            autoRefreshToken: false,
+            persistSession: false
+          }
+        }
+      )
+
+      // Get user email from auth.users table
+      const { data: authUser, error: authError } = await adminClient.auth.admin.getUserById(user.id)
+      const userEmail = authUser?.user?.email || ''
+
+      if (authError) {
+        console.error('[POST /api/stories] Failed to get user email:', authError)
+      }
+
+      const { data: newProfile, error: createError } = await (adminClient
+        .from('profiles') as any)
+        .insert({
+          id: user.id,
+          email: userEmail,
+          subscription_tier: 'basic',
+          subscription_status: 'active',
+          tokens_remaining: 50000,
+          stories_created: 0,
+          tokens_used_total: 0,
+          words_generated: 0,
+          credits_balance: 0,
+          credits_earned_total: 0,
+          credits_spent_total: 0,
+          cache_hits: 0,
+          cache_discount_earned: 0,
+          is_creator: false,
+          total_earnings_usd: 0,
+          pending_payout_usd: 0
+        })
+        .select('tokens_remaining, subscription_tier, stories_created, tokens_used_total, words_generated')
+        .single()
+
+      if (createError) {
+        console.error('[POST /api/stories] Failed to create profile:', createError)
+        return NextResponse.json({ error: 'Failed to create user profile' }, { status: 500 })
+      }
+
+      profileData = newProfile
+      profileError = null
+    }
 
     const profile = profileData as { tokens_remaining: number; subscription_tier: string; stories_created: number; tokens_used_total: number; words_generated: number } | null
 
