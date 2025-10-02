@@ -13,33 +13,39 @@ export const createClient = () => {
     throw new Error('Missing Supabase environment variables')
   }
 
-  return createBrowserClient<Database>(supabaseUrl, supabaseKey, {
-    cookies: {
-      get(name: string) {
-        const value = document.cookie
-          .split('; ')
-          .find(row => row.startsWith(name + '='))
-          ?.split('=')[1]
+  // Only use custom cookie handlers in browser
+  if (typeof window !== 'undefined') {
+    return createBrowserClient<Database>(supabaseUrl, supabaseKey, {
+      cookies: {
+        get(name: string) {
+          const value = document.cookie
+            .split('; ')
+            .find(row => row.startsWith(name + '='))
+            ?.split('=')[1]
 
-        if (value && value.startsWith('base64-')) {
-          // Handle base64 encoded cookies from SSR
-          try {
-            return atob(value.substring(7))
-          } catch (e) {
-            console.error('[Client] Failed to decode base64 cookie:', name)
-            return value
+          if (value && value.startsWith('base64-')) {
+            // Handle base64 encoded cookies from SSR
+            try {
+              return atob(value.substring(7))
+            } catch (e) {
+              console.error('[Client] Failed to decode base64 cookie:', name)
+              return value
+            }
           }
+          return value
+        },
+        set(name: string, value: string, options: any) {
+          document.cookie = `${name}=${value}; path=/; max-age=${options.maxAge || 604800}; SameSite=Lax${options.secure ? '; Secure' : ''}`
+        },
+        remove(name: string) {
+          document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
         }
-        return value
-      },
-      set(name: string, value: string, options: any) {
-        document.cookie = `${name}=${value}; path=/; max-age=${options.maxAge || 604800}; SameSite=Lax${options.secure ? '; Secure' : ''}`
-      },
-      remove(name: string) {
-        document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
       }
-    }
-  })
+    })
+  }
+
+  // Server-side: use default behavior
+  return createBrowserClient<Database>(supabaseUrl, supabaseKey)
 }
 
 /**
