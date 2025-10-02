@@ -37,9 +37,11 @@ export function createServiceClient() {
   const supabaseServiceKey = process.env['SUPABASE_SERVICE_ROLE_KEY']
   const supabaseAnonKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']
 
-  console.log('[Service Client] Creating with URL:', supabaseUrl ? 'present' : 'missing')
-  console.log('[Service Client] Service key:', supabaseServiceKey ? 'present' : 'missing')
-  console.log('[Service Client] Anon key:', supabaseAnonKey ? 'present' : 'missing')
+  console.log('[Service Client] URL:', supabaseUrl)
+  console.log('[Service Client] Service key present:', !!supabaseServiceKey)
+  console.log('[Service Client] Service key first 20 chars:', supabaseServiceKey?.substring(0, 20))
+  console.log('[Service Client] Anon key present:', !!supabaseAnonKey)
+  console.log('[Service Client] Anon key first 20 chars:', supabaseAnonKey?.substring(0, 20))
 
   if (!supabaseUrl) {
     const error = new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable')
@@ -47,30 +49,25 @@ export function createServiceClient() {
     throw error
   }
 
-  // Use service role key if available, otherwise fall back to anon key
-  const key = supabaseServiceKey || supabaseAnonKey
-
-  if (!key) {
-    const error = new Error('Missing both SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_ANON_KEY')
+  if (!supabaseServiceKey) {
+    const error = new Error('SUPABASE_SERVICE_ROLE_KEY is not set in environment variables')
     console.error('[Service Client] Error:', error)
     throw error
   }
 
-  if (!supabaseServiceKey) {
-    console.warn('[Service Client] WARNING: Using anon key instead of service role key. Row-level security will apply.')
-  }
-
   try {
-    const client = createClient<Database>(supabaseUrl, key, {
+    console.log('[Service Client] Creating client with service role key...')
+    const client = createClient<Database>(supabaseUrl, supabaseServiceKey, {
       auth: {
         autoRefreshToken: false,
         persistSession: false
       }
     })
-    console.log('[Service Client] Successfully created')
+    console.log('[Service Client] Successfully created with service role')
     return client
   } catch (error) {
     console.error('[Service Client] Failed to create client:', error)
+    console.error('[Service Client] Error details:', JSON.stringify(error, null, 2))
     throw error
   }
 }
