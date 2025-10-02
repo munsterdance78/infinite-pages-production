@@ -265,16 +265,15 @@ export default function MyLibraryView() {
             left: styles.left,
             transform: styles.transform
           })
+          // Check for overlay with different selectors
           const overlay = document.querySelector('[data-radix-dialog-overlay]')
+          const overlayAlt = document.querySelector('[data-state="open"]')
+          const allPortals = document.querySelectorAll('[data-radix-portal]')
           console.log('[My Library] Overlay element:', !!overlay)
-          if (overlay) {
-            const overlayStyles = window.getComputedStyle(overlay)
-            console.log('[My Library] Overlay styles:', {
-              display: overlayStyles.display,
-              opacity: overlayStyles.opacity,
-              zIndex: overlayStyles.zIndex
-            })
-          }
+          console.log('[My Library] Open state elements:', overlayAlt)
+          console.log('[My Library] Portal elements:', allPortals.length)
+          console.log('[My Library] Dialog parent:', dialogElement.parentElement?.tagName)
+          console.log('[My Library] Full dialog HTML:', dialogElement.outerHTML.substring(0, 200))
         }
       }, 100)
     }
