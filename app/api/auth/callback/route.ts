@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
 
   console.log('[Auth Callback] Received request with code:', code ? 'YES' : 'NO')
   console.log('[Auth Callback] Origin:', requestUrl.origin)
+  console.log('[Auth Callback] All cookies:', request.cookies.getAll().map(c => c.name))
 
   if (!code) {
     console.error('[Auth Callback] No code provided, redirecting to signin')
@@ -18,14 +19,41 @@ export async function GET(request: NextRequest) {
 
   console.log('[Auth Callback] Supabase URL:', supabaseUrl)
 
+  // Create response first so we can use it for cookie storage
+  const response = NextResponse.redirect(`${requestUrl.origin}/dashboard`)
+
   try {
-    // Exchange code for session using Supabase SDK
+    // Create Supabase client with cookie storage that reads from request and writes to response
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
         flowType: 'pkce',
-        autoRefreshToken: false,
-        persistSession: false,
-        detectSessionInUrl: false
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: false,
+        storageKey: 'infinite-pages-v3-auth',
+        storage: {
+          getItem: async (key: string) => {
+            const cookie = request.cookies.get(key)
+            console.log('[Auth Callback] Getting cookie:', key, cookie ? 'found' : 'not found')
+            return cookie?.value ?? null
+          },
+          setItem: async (key: string, value: string) => {
+            console.log('[Auth Callback] Setting cookie:', key)
+            response.cookies.set({
+              name: key,
+              value: value,
+              path: '/',
+              sameSite: 'lax',
+              secure: process.env.NODE_ENV === 'production',
+              httpOnly: false,
+              maxAge: 60 * 60 * 24 * 7 // 7 days
+            })
+          },
+          removeItem: async (key: string) => {
+            console.log('[Auth Callback] Removing cookie:', key)
+            response.cookies.delete(key)
+          }
+        }
       }
     })
 
@@ -50,30 +78,8 @@ export async function GET(request: NextRequest) {
 
     console.log('[Auth Callback] Session established successfully')
     console.log('[Auth Callback] User:', data.user?.email)
+    console.log('[Auth Callback] Cookies should now be set via storage handlers')
 
-    // Set the session cookies manually with the exact format Supabase client expects
-    const response = NextResponse.redirect(`${requestUrl.origin}/dashboard`)
-
-    // Construct the session token that matches what the client SDK expects
-    const sessionToken = {
-      access_token: data.session.access_token,
-      refresh_token: data.session.refresh_token,
-      expires_in: data.session.expires_in,
-      expires_at: data.session.expires_at,
-      token_type: 'bearer',
-      user: data.user
-    }
-
-    // Set the cookie with the storage key that matches client config
-    response.cookies.set('sb-tktntttemkbmnqkalkch-auth-token', JSON.stringify(sessionToken), {
-      path: '/',
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      httpOnly: false,
-      maxAge: data.session.expires_in || 60 * 60 * 24 * 7
-    })
-
-    console.log('[Auth Callback] Cookies set, redirecting to dashboard')
     return response
 
   } catch (err) {
