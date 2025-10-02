@@ -1,4 +1,4 @@
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { env } from '@/types/environment'
 
@@ -15,14 +15,15 @@ const SECURITY_HEADERS = {
   // Content Security Policy
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://accounts.google.com https://www.gstatic.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https: blob:",
-    "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.stripe.com",
+    "connect-src 'self' https://*.supabase.co https://api.anthropic.com https://api.stripe.com https://accounts.google.com",
+    "frame-src https://accounts.google.com",
     "frame-ancestors 'none'",
     "base-uri 'self'",
-    "form-action 'self'"
+    "form-action 'self' https://accounts.google.com"
   ].join('; '),
   // Permissions Policy (formerly Feature Policy)
   'Permissions-Policy': [
@@ -424,7 +425,23 @@ export async function middleware(req: NextRequest) {
 
   // Handle authentication for protected routes
   if (pathname.startsWith('/dashboard')) {
-    const supabase = createMiddlewareClient({ req, res })
+    const supabase = createServerClient(
+      process.env['NEXT_PUBLIC_SUPABASE_URL']!,
+      process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
+      {
+        cookies: {
+          get(name: string) {
+            return req.cookies.get(name)?.value
+          },
+          set(name: string, value: string, options: CookieOptions) {
+            res.cookies.set({ name, value, ...options })
+          },
+          remove(name: string, options: CookieOptions) {
+            res.cookies.set({ name, value: '', ...options })
+          },
+        },
+      }
+    )
 
     const {
       data: { user }
@@ -453,7 +470,23 @@ export async function middleware(req: NextRequest) {
         console.log(`🚧 Development bypass enabled for ${pathname}`)
         // Skip authentication and rate limiting for development testing
       } else {
-        const supabase = createMiddlewareClient({ req, res })
+        const supabase = createServerClient(
+          process.env['NEXT_PUBLIC_SUPABASE_URL']!,
+          process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
+          {
+            cookies: {
+              get(name: string) {
+                return req.cookies.get(name)?.value
+              },
+              set(name: string, value: string, options: CookieOptions) {
+                res.cookies.set({ name, value, ...options })
+              },
+              remove(name: string, options: CookieOptions) {
+                res.cookies.set({ name, value: '', ...options })
+              },
+            },
+          }
+        )
         const { data: { user } } = await supabase.auth.getUser()
 
         if (!user) {

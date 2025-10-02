@@ -7,8 +7,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   // Optimized for Vercel deployment
   experimental: {
-    // Enable app directory
-    appDir: true,
     // Optimize server components
     serverComponentsExternalPackages: ['@anthropic-ai/sdk', 'stripe'],
   },
