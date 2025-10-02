@@ -218,3 +218,21 @@ Call log:
 [2025-10-02T02:15:38.940Z] ✅ Scan completed safely in 1598ms
 [2025-10-02T02:15:38.941Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
 [2025-10-02T02:15:38.942Z] ✅ Graceful shutdown complete after 2s
+[2025-10-02T02:34:53.627Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-02T02:34:53.629Z]    Memory limit: 600MB
+[2025-10-02T02:34:53.632Z]    Browser limit: 400MB per process
+[2025-10-02T02:34:53.633Z]    System limit: 80%
+[2025-10-02T02:34:53.633Z]    Timeout: 120s
+[2025-10-02T02:34:53.634Z]    Monitor interval: 10s
+[2025-10-02T02:34:54.060Z] 🔍 Starting safe scan of https://infinite-pages-v3.vercel.app
+[2025-10-02T02:34:58.299Z] ✅ Page loaded: https://infinite-pages-v3.vercel.app
+[2025-10-02T02:34:58.300Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-02T02:34:58.300Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-02T02:34:59.515Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-02T02:34:59.520Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-02T02:34:59.523Z] ✅ Page closed safely
+[2025-10-02T02:34:59.528Z] ✅ Context closed safely
+[2025-10-02T02:34:59.592Z] ✅ Browser closed safely
+[2025-10-02T02:35:01.078Z] ✅ Scan completed safely in 5533ms
+[2025-10-02T02:35:01.079Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-02T02:35:01.080Z] ✅ Graceful shutdown complete after 7s
