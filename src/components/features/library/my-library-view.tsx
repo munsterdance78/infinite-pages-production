@@ -571,7 +571,6 @@ export default function MyLibraryView() {
       </Tabs>
 
       {/* Create Story Dialog */}
-      {console.log('[My Library] Rendering Dialog, open state:', isCreateDialogOpen)}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
