@@ -9,6 +9,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
   BookOpen,
   Search,
   Filter,
@@ -120,6 +128,7 @@ export default function MyLibraryView() {
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [sortBy, setSortBy] = useState('updated')
   const [activeTab, setActiveTab] = useState('all')
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
 
   useEffect(() => {
     // Simulate loading user stories
@@ -190,6 +199,17 @@ export default function MyLibraryView() {
     totalEarnings: stories.reduce((sum, s) => sum + (s.earnings?.totalRevenue || 0), 0)
   }
 
+  const handleNewStory = () => {
+    console.log('[My Library] New Story button clicked')
+    setIsCreateDialogOpen(true)
+  }
+
+  const handleEditStory = (storyId: string) => {
+    console.log('[My Library] Edit story clicked:', storyId)
+    // TODO: Navigate to story editor
+    window.location.href = `/stories/${storyId}`
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -201,7 +221,7 @@ export default function MyLibraryView() {
           </h1>
           <p className="text-muted-foreground">Manage and track your personal story collection</p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={handleNewStory}>
           <Plus className="h-4 w-4" />
           New Story
         </Button>
@@ -359,7 +379,7 @@ export default function MyLibraryView() {
                     : 'No stories match your current filters.'
                   }
                 </p>
-                <Button className="gap-2">
+                <Button className="gap-2" onClick={handleNewStory}>
                   <Plus className="h-4 w-4" />
                   Create Your First Story
                 </Button>
@@ -428,7 +448,7 @@ export default function MyLibraryView() {
                       )}
 
                       <div className="flex gap-2">
-                        <Button size="sm" className="flex-1">
+                        <Button size="sm" className="flex-1" onClick={() => handleEditStory(story.id)}>
                           <Edit3 className="h-4 w-4 mr-2" />
                           Edit
                         </Button>
@@ -447,6 +467,34 @@ export default function MyLibraryView() {
           )}
         </TabsContent>
       </Tabs>
+
+      {/* Create Story Dialog */}
+      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Create New Story</DialogTitle>
+            <DialogDescription>
+              Story creation wizard coming soon! This feature will allow you to create a new infinite story with AI assistance.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <p className="text-sm text-muted-foreground">
+              The story creation feature is currently under development. Once complete, you'll be able to:
+            </p>
+            <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
+              <li>Choose your story genre and setting</li>
+              <li>Define main characters and plot</li>
+              <li>Set up AI writing parameters</li>
+              <li>Generate your first chapter instantly</li>
+            </ul>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
