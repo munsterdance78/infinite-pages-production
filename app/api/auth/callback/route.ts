@@ -20,12 +20,24 @@ export async function GET(request: Request) {
             return value
           },
           set(name: string, value: string, options: CookieOptions) {
-            console.log('[Callback] Set cookie:', name)
-            cookieStore.set({ name, value, ...options })
+            console.log('[Callback] Set cookie:', name, 'length:', value.length)
+            try {
+              cookieStore.set({
+                name,
+                value,
+                ...options,
+                path: '/',
+                sameSite: 'lax',
+                httpOnly: false,
+                secure: process.env.NODE_ENV === 'production'
+              })
+            } catch (err) {
+              console.error('[Callback] Failed to set cookie:', err)
+            }
           },
           remove(name: string, options: CookieOptions) {
             console.log('[Callback] Remove cookie:', name)
-            cookieStore.set({ name, value: '', ...options })
+            cookieStore.delete(name)
           },
         },
       }
