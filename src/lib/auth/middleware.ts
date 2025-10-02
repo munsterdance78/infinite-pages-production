@@ -39,6 +39,12 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
     } else {
       // Cookie-based auth (for browser requests)
       const cookieStore = cookies()
+
+      // Debug: Log all cookies
+      const allCookies = cookieStore.getAll()
+      console.log('[Auth Middleware] Total cookies:', allCookies.length)
+      console.log('[Auth Middleware] Cookie names:', allCookies.map(c => c.name).join(', '))
+
       supabase = createServerClient<Database>(
         process.env['NEXT_PUBLIC_SUPABASE_URL']!,
         process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
@@ -46,7 +52,10 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
           cookies: {
             get(name: string) {
               const cookie = cookieStore.get(name)
-              if (!cookie) return undefined
+              if (!cookie) {
+                console.log('[Auth Middleware] Cookie not found:', name)
+                return undefined
+              }
 
               let value = cookie.value
 
@@ -54,10 +63,13 @@ export async function requireAuth(request: NextRequest): Promise<AuthResult> {
               if (value && value.startsWith('base64-')) {
                 try {
                   value = Buffer.from(value.substring(7), 'base64').toString('utf-8')
+                  console.log('[Auth Middleware] Decoded base64 cookie:', name)
                 } catch (e) {
                   console.error('[Auth Middleware] Failed to decode base64 cookie:', name, e)
                   return undefined
                 }
+              } else {
+                console.log('[Auth Middleware] Found cookie:', name, '(length:', value?.length, ')')
               }
 
               return value
