@@ -55,9 +55,18 @@ export function createServiceClient() {
     throw error
   }
 
+  // Clean the key (remove whitespace/newlines)
+  const cleanedKey = supabaseServiceKey.trim()
+  console.log('[Service Client] Key length after trim:', cleanedKey.length)
+  console.log('[Service Client] Key starts with eyJ:', cleanedKey.startsWith('eyJ'))
+
+  if (cleanedKey !== supabaseServiceKey) {
+    console.warn('[Service Client] WARNING: Service key had whitespace/newlines that were trimmed')
+  }
+
   try {
     console.log('[Service Client] Creating client with service role key...')
-    const client = createClient<Database>(supabaseUrl, supabaseServiceKey, {
+    const client = createClient<Database>(supabaseUrl, cleanedKey, {
       auth: {
         autoRefreshToken: false,
         persistSession: false
