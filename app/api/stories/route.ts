@@ -1,6 +1,5 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { requireAuth } from '@/lib/auth/middleware'
-import { isAuthSuccess } from '@/lib/auth/utils'
+import { requireMiddlewareAuth } from '@/lib/auth/from-middleware'
 import {
   CREDIT_SYSTEM,
   ESTIMATED_CREDIT_COSTS,
@@ -143,8 +142,9 @@ function sanitizeString(input: string): string {
 }
 
 export async function GET(request: NextRequest) {
-  const authResult = await requireAuth(request)
-  if (!isAuthSuccess(authResult)) return authResult
+  // Auth is handled by middleware.ts - just get user from headers
+  const authResult = requireMiddlewareAuth(request)
+  if ('error' in authResult) return authResult.error
 
   const { user, supabase } = authResult
 
@@ -188,8 +188,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const authResult = await requireAuth(request)
-  if (!isAuthSuccess(authResult)) return authResult
+  // Auth is handled by middleware.ts - just get user from headers
+  const authResult = requireMiddlewareAuth(request)
+  if ('error' in authResult) return authResult.error
 
   const { user, supabase } = authResult
 
