@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
 export async function POST(
   request: NextRequest,
@@ -95,7 +96,7 @@ export async function POST(
     const platformEarnings = 125 // 50% of 250
 
     // Use admin client for transaction
-    const adminClient = createClientAdmin(
+    const adminClient = createSupabaseClient(
       process.env['NEXT_PUBLIC_SUPABASE_URL']!,
       process.env['SUPABASE_SERVICE_ROLE_KEY']!
     )
