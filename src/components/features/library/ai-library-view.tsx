@@ -164,7 +164,7 @@ export default function AILibraryView() {
               <div>
                 <p className="text-sm text-muted-foreground">Total Views</p>
                 <p className="text-lg font-semibold">
-                  {stories.reduce((sum, story) => sum + story.views, 0).toLocaleString()}
+                  {stories.reduce((sum, story) => sum + (story as any).views || 0, 0).toLocaleString()}
                 </p>
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function AILibraryView() {
                 <p className="text-sm text-muted-foreground">Avg Rating</p>
                 <p className="text-lg font-semibold">
                   {stories.length > 0
-                    ? (stories.reduce((sum, story) => sum + story.rating, 0) / stories.length).toFixed(1)
+                    ? (stories.reduce((sum, story) => sum + ((story as any).rating || 0), 0) / stories.length).toFixed(1)
                     : '0.0'
                   }
                 </p>
