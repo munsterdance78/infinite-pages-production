@@ -272,3 +272,147 @@ Call log:
 [2025-10-02T16:10:53.570Z] ✅ Scan completed safely in 2850ms
 [2025-10-02T16:10:53.571Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
 [2025-10-02T16:10:53.572Z] ✅ Graceful shutdown complete after 4s
+[2025-10-03T22:31:05.237Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-03T22:31:05.240Z]    Memory limit: 600MB
+[2025-10-03T22:31:05.241Z]    Browser limit: 400MB per process
+[2025-10-03T22:31:05.241Z]    System limit: 80%
+[2025-10-03T22:31:05.242Z]    Timeout: 120s
+[2025-10-03T22:31:05.243Z]    Monitor interval: 10s
+[2025-10-03T22:31:05.657Z] 🔍 Starting safe scan of http://localhost:3000
+[2025-10-03T22:31:09.194Z] ✅ Page loaded: http://localhost:3000
+[2025-10-03T22:31:09.195Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-03T22:31:09.196Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-03T22:31:10.269Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-03T22:31:10.276Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-03T22:31:10.280Z] ✅ Page closed safely
+[2025-10-03T22:31:10.284Z] ✅ Context closed safely
+[2025-10-03T22:31:10.363Z] ✅ Browser closed safely
+[2025-10-03T22:31:10.783Z] ✅ Scan completed safely in 4707ms
+[2025-10-03T22:31:10.784Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-03T22:31:10.785Z] ✅ Graceful shutdown complete after 6s
+[2025-10-03T22:31:17.459Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-03T22:31:17.463Z]    Memory limit: 600MB
+[2025-10-03T22:31:17.465Z]    Browser limit: 400MB per process
+[2025-10-03T22:31:17.465Z]    System limit: 80%
+[2025-10-03T22:31:17.466Z]    Timeout: 120s
+[2025-10-03T22:31:17.466Z]    Monitor interval: 10s
+[2025-10-03T22:31:17.880Z] 🔍 Starting safe scan of https://www.infinite-pages.com
+[2025-10-03T22:31:22.450Z] ✅ Page loaded: https://www.infinite-pages.com
+[2025-10-03T22:31:22.451Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-03T22:31:22.452Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-03T22:31:23.689Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-03T22:31:23.695Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-03T22:31:23.697Z] ✅ Page closed safely
+[2025-10-03T22:31:23.701Z] ✅ Context closed safely
+[2025-10-03T22:31:23.745Z] ✅ Browser closed safely
+[2025-10-03T22:31:24.216Z] ✅ Scan completed safely in 5865ms
+[2025-10-03T22:31:24.218Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-03T22:31:24.218Z] ✅ Graceful shutdown complete after 7s
+[2025-10-03T22:31:29.271Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-03T22:31:29.273Z]    Memory limit: 600MB
+[2025-10-03T22:31:29.273Z]    Browser limit: 400MB per process
+[2025-10-03T22:31:29.275Z]    System limit: 80%
+[2025-10-03T22:31:29.277Z]    Timeout: 120s
+[2025-10-03T22:31:29.278Z]    Monitor interval: 10s
+[2025-10-03T22:31:29.867Z] 🔍 Starting safe scan of http://localhost:3000
+[2025-10-03T22:31:30.890Z] ✅ Page loaded: http://localhost:3000
+[2025-10-03T22:31:30.891Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-03T22:31:30.892Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-03T22:31:31.910Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-03T22:31:31.915Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-03T22:31:31.918Z] ✅ Page closed safely
+[2025-10-03T22:31:31.923Z] ✅ Context closed safely
+[2025-10-03T22:31:31.967Z] ✅ Browser closed safely
+[2025-10-03T22:31:32.372Z] ✅ Scan completed safely in 2100ms
+[2025-10-03T22:31:32.373Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-03T22:31:32.374Z] ✅ Graceful shutdown complete after 3s
+[2025-10-03T22:31:39.758Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-03T22:31:39.760Z]    Memory limit: 600MB
+[2025-10-03T22:31:39.760Z]    Browser limit: 400MB per process
+[2025-10-03T22:31:39.763Z]    System limit: 80%
+[2025-10-03T22:31:39.765Z]    Timeout: 120s
+[2025-10-03T22:31:39.765Z]    Monitor interval: 10s
+[2025-10-03T22:31:40.260Z] 🔍 Starting safe scan of http://localhost:3000
+[2025-10-03T22:31:41.237Z] ✅ Page loaded: http://localhost:3000
+[2025-10-03T22:31:41.238Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-03T22:31:41.239Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-03T22:31:42.408Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-03T22:31:42.418Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-03T22:31:42.421Z] ✅ Page closed safely
+[2025-10-03T22:31:42.427Z] ✅ Context closed safely
+[2025-10-03T22:31:42.503Z] ✅ Browser closed safely
+[2025-10-03T22:31:43.265Z] ✅ Scan completed safely in 2243ms
+[2025-10-03T22:31:43.266Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-03T22:31:43.267Z] ✅ Graceful shutdown complete after 4s
+[2025-10-03T22:32:37.671Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-03T22:32:37.675Z]    Memory limit: 600MB
+[2025-10-03T22:32:37.676Z]    Browser limit: 400MB per process
+[2025-10-03T22:32:37.677Z]    System limit: 80%
+[2025-10-03T22:32:37.678Z]    Timeout: 120s
+[2025-10-03T22:32:37.678Z]    Monitor interval: 10s
+[2025-10-03T22:32:38.106Z] 🔍 Starting safe scan of http://localhost:3000
+[2025-10-03T22:32:39.020Z] ✅ Page loaded: http://localhost:3000
+[2025-10-03T22:32:39.021Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-03T22:32:39.021Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-03T22:32:40.004Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-03T22:32:40.010Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-03T22:32:40.013Z] ✅ Page closed safely
+[2025-10-03T22:32:40.020Z] ✅ Context closed safely
+[2025-10-03T22:32:40.068Z] ✅ Browser closed safely
+[2025-10-03T22:32:40.436Z] ✅ Scan completed safely in 1962ms
+[2025-10-03T22:32:40.439Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-03T22:32:40.440Z] ✅ Graceful shutdown complete after 3s
+[2025-10-03T22:33:08.176Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-03T22:33:08.178Z]    Memory limit: 600MB
+[2025-10-03T22:33:08.179Z]    Browser limit: 400MB per process
+[2025-10-03T22:33:08.181Z]    System limit: 80%
+[2025-10-03T22:33:08.182Z]    Timeout: 120s
+[2025-10-03T22:33:08.182Z]    Monitor interval: 10s
+[2025-10-03T22:33:08.607Z] 🔍 Starting safe scan of http://localhost:3000
+[2025-10-03T22:33:09.563Z] ✅ Page loaded: http://localhost:3000
+[2025-10-03T22:33:09.564Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-03T22:33:09.565Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-03T22:33:10.599Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-03T22:33:10.604Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-03T22:33:10.607Z] ✅ Page closed safely
+[2025-10-03T22:33:10.611Z] ✅ Context closed safely
+[2025-10-03T22:33:10.658Z] ✅ Browser closed safely
+[2025-10-03T22:33:11.152Z] ✅ Scan completed safely in 2052ms
+[2025-10-03T22:33:11.153Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-03T22:33:11.154Z] ✅ Graceful shutdown complete after 3s
+[2025-10-03T22:33:16.118Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-03T22:33:16.120Z]    Memory limit: 600MB
+[2025-10-03T22:33:16.122Z]    Browser limit: 400MB per process
+[2025-10-03T22:33:16.124Z]    System limit: 80%
+[2025-10-03T22:33:16.125Z]    Timeout: 120s
+[2025-10-03T22:33:16.125Z]    Monitor interval: 10s
+[2025-10-03T22:33:16.523Z] 🔍 Starting safe scan of http://localhost:3000
+[2025-10-03T22:33:17.520Z] ✅ Page loaded: http://localhost:3000
+[2025-10-03T22:33:17.521Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-03T22:33:17.522Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-03T22:33:18.558Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-03T22:33:18.564Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-03T22:33:18.566Z] ✅ Page closed safely
+[2025-10-03T22:33:18.570Z] ✅ Context closed safely
+[2025-10-03T22:33:18.614Z] ✅ Browser closed safely
+[2025-10-03T22:33:19.042Z] ✅ Scan completed safely in 2091ms
+[2025-10-03T22:33:19.043Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-03T22:33:19.044Z] ✅ Graceful shutdown complete after 3s
+[2025-10-03T22:36:35.664Z] 🔥 Starting Infinite Pages debugger with safety monitoring
+[2025-10-03T22:36:35.665Z]    Memory limit: 600MB
+[2025-10-03T22:36:35.666Z]    Browser limit: 400MB per process
+[2025-10-03T22:36:35.669Z]    System limit: 80%
+[2025-10-03T22:36:35.669Z]    Timeout: 120s
+[2025-10-03T22:36:35.670Z]    Monitor interval: 10s
+[2025-10-03T22:36:36.124Z] 🔍 Starting safe scan of http://localhost:3000
+[2025-10-03T22:36:37.132Z] ✅ Page loaded: http://localhost:3000
+[2025-10-03T22:36:37.133Z] 🧪 Testing Infinite Pages API endpoints...
+[2025-10-03T22:36:37.134Z] 🔬 Testing 1/1 endpoint groups for memory safety
+[2025-10-03T22:36:39.034Z] ✅ Endpoint tests completed: 1 tests
+[2025-10-03T22:36:39.039Z] ✅ Page analysis completed: 2 accessibility issues found
+[2025-10-03T22:36:39.042Z] ✅ Page closed safely
+[2025-10-03T22:36:39.046Z] ✅ Context closed safely
+[2025-10-03T22:36:39.081Z] ✅ Browser closed safely
+[2025-10-03T22:36:39.549Z] ✅ Scan completed safely in 2958ms
+[2025-10-03T22:36:39.550Z] 📱 Received NORMAL_COMPLETION - shutting down gracefully
+[2025-10-03T22:36:39.551Z] ✅ Graceful shutdown complete after 4s
