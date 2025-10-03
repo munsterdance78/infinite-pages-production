@@ -152,6 +152,8 @@ export interface Database {
           target_length: number;
           target_chapters: number;
           target_chapter_length: number;
+          is_published: boolean;
+          published_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -196,6 +198,8 @@ export interface Database {
           target_length?: number;
           target_chapters?: number;
           target_chapter_length?: number;
+          is_published?: boolean;
+          published_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -240,6 +244,8 @@ export interface Database {
           target_length?: number;
           target_chapters?: number;
           target_chapter_length?: number;
+          is_published?: boolean;
+          published_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
