@@ -21,7 +21,6 @@ import {
   Plus,
   Wand2,
   Edit,
-  Download,
   DollarSign,
   Sparkles,
   FileText,

@@ -29,7 +29,6 @@ import {
   Clock,
   Edit3,
   Trash2,
-  Download,
   Share,
   Plus,
   Archive,
@@ -587,9 +586,6 @@ export default function MyLibraryView() {
                         </Button>
                         <Button size="sm" variant="outline">
                           <Share className="h-4 w-4" />
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <Download className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>

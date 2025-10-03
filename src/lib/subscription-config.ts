@@ -11,7 +11,6 @@ export const SUBSCRIPTION_TIERS = {
     features: {
       stories_limit: 5,
       cover_generations: 2,
-      download_access: false,
       ai_operations: ['foundation', 'character', 'chapter'],
       cover_styles: ['minimalist', 'artistic'],
       priority_support: false,
@@ -103,12 +102,13 @@ export function canUserAccessFeature(
   tier: SubscriptionTier,
   feature: keyof typeof SUBSCRIPTION_TIERS.basic.features
 ): boolean {
-  return !!SUBSCRIPTION_TIERS[tier].features[feature]
+  const tierFeatures = SUBSCRIPTION_TIERS[tier].features
+  return feature in tierFeatures && !!tierFeatures[feature as keyof typeof tierFeatures]
 }
 
 export function getSubscriptionUpgradeMessage(currentTier: SubscriptionTier): string {
   if (currentTier === 'basic') {
-    return 'Upgrade to Premium for unlimited stories, premium covers, and download access!'
+    return 'Upgrade to Premium for unlimited stories, premium covers, and advanced features!'
   }
   return 'You have full Premium access to all features!'
 }

@@ -211,7 +211,6 @@ export const SUCCESS_MESSAGES = {
   STORY_CREATED: 'Story foundation created successfully',
   CHAPTER_GENERATED: 'Chapter generated successfully',
   CHAPTER_IMPROVED: 'Chapter improved successfully',
-  EXPORT_READY: 'Export file is ready for download',
   SUBSCRIPTION_UPDATED: 'Subscription updated successfully'
 } as const
 

@@ -18,7 +18,7 @@ import {
   RefreshCw,
   Eye,
   EyeOff,
-  Download,
+  DollarSign,
   AlertCircle,
   Crown,
   Wallet,
@@ -225,7 +225,7 @@ export default function CreatorEarningsHub({
                 </p>
               </div>
               <Button onClick={onPayoutRequest} className="gap-2">
-                <Download className="h-4 w-4" />
+                <DollarSign className="h-4 w-4" />
                 Request Payout
               </Button>
             </div>
