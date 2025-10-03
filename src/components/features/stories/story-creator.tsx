@@ -196,7 +196,7 @@ export default function UnifiedStoryCreator({
       const { data, error } = await supabase
         .from('stories')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id' as any, user.id)
         .order('updated_at', { ascending: false })
 
       if (error) throw error
@@ -213,7 +213,7 @@ export default function UnifiedStoryCreator({
       const { data: storyData, error } = await supabase
         .from('stories')
         .select('*')
-        .eq('id', id)
+        .eq('id' as any, id)
         .single()
 
       const data = storyData as any
