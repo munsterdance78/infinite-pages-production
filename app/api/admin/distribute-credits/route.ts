@@ -212,6 +212,7 @@ export async function POST(request: NextRequest) {
       breakdown: {
         byTier: distributionResults.reduce((acc, r) => {
           const tier = r.subscriptionTier
+          if (!tier) return acc; // Skip users with no subscription tier
           if (!acc[tier]) {
             acc[tier] = { users: 0, credits: 0, bonusCredits: 0 }
           }
