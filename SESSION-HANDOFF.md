@@ -399,7 +399,7 @@ ANTHROPIC_API_KEY=sk-ant-...
 ## Environment Setup
 
 ### Supabase Configuration
-- **URL**: `https://tktntttemkbmnqkalkch.supabase.co`
+- **URL**: `https://pjgnjfcvtrrhxmqdstre.supabase.co`
 - **Anon Key**: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrdG50dHRlbWtibW5xa2Fsa2NoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkyNjczNTAsImV4cCI6MjA3NDg0MzM1MH0.kbfMla_CIz6Ywzp_IGL-KdT6zpH2coqDGpJDTOENHMQ`
 - **Service Role Key**: Available in `.env.local`
 
@@ -645,10 +645,10 @@ series (multi-book)
 - `src/lib/supabase/migrations/002-story-facts.sql` - Fact extraction table (79 lines)
 
 ### Supabase Dashboard URLs
-- **Tables**: https://supabase.com/dashboard/project/tktntttemkbmnqkalkch/editor
-- **Auth**: https://supabase.com/dashboard/project/tktntttemkbmnqkalkch/auth/users
-- **SQL Editor**: https://supabase.com/dashboard/project/tktntttemkbmnqkalkch/sql
-- **Logs**: https://supabase.com/dashboard/project/tktntttemkbmnqkalkch/logs/explorer
+- **Tables**: https://supabase.com/dashboard/project/pjgnjfcvtrrhxmqdstre/editor
+- **Auth**: https://supabase.com/dashboard/project/pjgnjfcvtrrhxmqdstre/auth/users
+- **SQL Editor**: https://supabase.com/dashboard/project/pjgnjfcvtrrhxmqdstre/sql
+- **Logs**: https://supabase.com/dashboard/project/pjgnjfcvtrrhxmqdstre/logs/explorer
 
 ---
 
@@ -697,7 +697,7 @@ We built a complete chapter generation and fact extraction system with:
 - 🌐 Production ready: No development-only bypasses needed
 
 ### Database Connection
-- 🆕 Fresh Supabase project: `https://tktntttemkbmnqkalkch.supabase.co`
+- 🆕 Fresh Supabase project: `https://pjgnjfcvtrrhxmqdstre.supabase.co`
 - ✅ All tables created and working (14 tables total)
 - 🗑️ Old project data is gone (intentional - clean slate)
 - 🔐 `.env.local` has correct credentials (all 3 Supabase keys + Anthropic key)
@@ -782,7 +782,7 @@ ORDER BY extracted_at DESC;
 
 ```bash
 # Required in .env.local:
-NEXT_PUBLIC_SUPABASE_URL=https://tktntttemkbmnqkalkch.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://pjgnjfcvtrrhxmqdstre.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ANTHROPIC_API_KEY=sk-ant-...

@@ -486,60 +486,51 @@ export async function middleware(req: NextRequest) {
 
     // Check authentication for protected API routes
     if (routeConfig?.requiresAuth && !pathname.startsWith('/api/auth/') && !pathname.includes('/webhook')) {
-      // In development mode, allow bypass with special header for testing
-      const isDevelopment = env.NODE_ENV === 'development'
-      const bypassHeader = req.headers.get('x-development-bypass')
-
-      if (isDevelopment && bypassHeader === 'true') {
-        // Log the bypass for security awareness
-        console.log(`🚧 Development bypass enabled for ${pathname}`)
-        // Skip authentication and rate limiting for development testing
-      } else {
-        const supabase = createServerClient(
-          process.env['NEXT_PUBLIC_SUPABASE_URL']!,
-          process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
-          {
-            cookies: {
-              get(name: string) {
-                return req.cookies.get(name)?.value
-              },
-              set(name: string, value: string, options: CookieOptions) {
-                res.cookies.set({ name, value, ...options })
-              },
-              remove(name: string, options: CookieOptions) {
-                res.cookies.set({ name, value: '', ...options })
-              },
+      const supabase = createServerClient(
+        process.env['NEXT_PUBLIC_SUPABASE_URL']!,
+        process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!,
+        {
+          cookies: {
+            get(name: string) {
+              return req.cookies.get(name)?.value
             },
-          }
-        )
-        const { data: { user } } = await supabase.auth.getUser()
-
-        if (!user) {
-          return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+            set(name: string, value: string, options: CookieOptions) {
+              res.cookies.set({ name, value, ...options })
+            },
+            remove(name: string, options: CookieOptions) {
+              res.cookies.set({ name, value: '', ...options })
+            },
+          },
         }
+      )
+      const { data: { user } } = await supabase.auth.getUser()
 
-        // Apply subscription-aware rate limiting for authenticated routes
-        if (routeConfig) {
-          const subscriptionTier = await getUserSubscriptionTier(user.id)
-
-          // Apply rate limiting with subscription awareness
-          const rateLimitResult = rateLimit(req, routeConfig.operation, user.id)
-
-          if (!rateLimitResult.success) {
-            logRateLimitViolation(`user:${user.id}`, routeConfig.operation, req)
-            return rateLimitResult.response!
-          }
-
-          // Add rate limit headers to successful requests
-          Object.entries(rateLimitResult.headers).forEach(([key, value]) => {
-            res.headers.set(key, String(value))
-          })
-        }
-
-        // Add user context for downstream API routes
-        res.headers.set('X-User-ID', user.id)
-        res.headers.set('X-User-Tier', await getUserSubscriptionTier(user.id))
+      if (!user) {
+        return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
       }
+
+      // Apply subscription-aware rate limiting for authenticated routes
+      if (routeConfig) {
+        const subscriptionTier = await getUserSubscriptionTier(user.id)
+
+        // Apply rate limiting with subscription awareness
+        const rateLimitResult = rateLimit(req, routeConfig.operation, user.id)
+
+        if (!rateLimitResult.success) {
+          logRateLimitViolation(`user:${user.id}`, routeConfig.operation, req)
+          return rateLimitResult.response!
+        }
+
+        // Add rate limit headers to successful requests
+        Object.entries(rateLimitResult.headers).forEach(([key, value]) => {
+          res.headers.set(key, String(value))
+        })
+      }
+
+      // Add user context for downstream API routes
+      res.headers.set('X-User-ID', user.id)
+      res.headers.set('X-User-Tier', await getUserSubscriptionTier(user.id))
+    }
     } else if (routeConfig && !routeConfig.requiresAuth) {
       // Apply general rate limiting for non-authenticated routes
       const rateLimitResult = rateLimit(req, routeConfig.operation)

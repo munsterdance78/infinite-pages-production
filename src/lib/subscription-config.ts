@@ -6,8 +6,8 @@ export const SUBSCRIPTION_TIERS = {
     name: 'Basic',
     price_monthly: 7.99,
     price_yearly: 79.99,
-    credits_per_month: 1332, // $7.99 * 0.7 * 1000 / 1.5 = 3730 credits available for AI costs (50% markup included in subscription)
-    max_credit_balance: 3996, // 3-month accumulation limit
+    credits_per_month: 5000, // 5,000 credits per month
+    max_credit_balance: 15000, // 3-month accumulation limit (5,000 * 3)
     features: {
       stories_limit: 5,
       cover_generations: 2,
@@ -26,14 +26,11 @@ export const SUBSCRIPTION_TIERS = {
     name: 'Premium',
     price_monthly: 14.99,
     price_yearly: 149.99,
-    credits_per_month: 2497, // $14.99 * 0.7 * 1000 / 1.5 = 6993 credits available for AI costs (50% markup included)
+    credits_per_month: 10000, // 10,000 credits per month
     max_credit_balance: null, // Unlimited accumulation
     features: {
       stories_limit: 'unlimited',
       cover_generations: 10,
-      download_access: true,
-      download_limit: 5,
-      download_cost_credits: 100,
       ai_operations: ['foundation', 'character', 'chapter', 'improvement', 'advanced'],
       cover_styles: ['realistic', 'artistic', 'fantasy', 'minimalist', 'vintage'],
       priority_support: true,
@@ -51,28 +48,31 @@ export type SubscriptionTier = keyof typeof SUBSCRIPTION_TIERS
 
 export const AI_OPERATION_COSTS = {
   foundation: {
-    basic_complexity: 8,
-    medium_complexity: 12,
-    high_complexity: 18
+    basic_complexity: 8,  // 8 credits ($0.008)
+    medium_complexity: 12, // 12 credits ($0.012)
+    high_complexity: 18   // 18 credits ($0.018)
   },
   character: {
-    basic_complexity: 5,
-    medium_complexity: 8,
-    high_complexity: 12
+    basic_complexity: 5,  // 5 credits ($0.005)
+    medium_complexity: 8, // 8 credits ($0.008)
+    high_complexity: 12   // 12 credits ($0.012)
   },
   chapter: {
-    basic_complexity: 10,
-    medium_complexity: 15,
-    high_complexity: 25
+    basic_complexity: 80,  // 80 credits ($0.08) per chapter generation
+    medium_complexity: 80, // 80 credits ($0.08) per chapter generation
+    high_complexity: 80    // 80 credits ($0.08) per chapter generation
+  },
+  reading: {
+    per_book: 250  // 250 credits ($0.25) per book reading/unlock
   },
   improvement: {
-    basic_complexity: 3,
-    medium_complexity: 6,
-    high_complexity: 10
+    basic_complexity: 3,  // 3 credits ($0.003)
+    medium_complexity: 6, // 6 credits ($0.006)
+    high_complexity: 10   // 10 credits ($0.010)
   },
   cover: {
-    basic_style: 8,
-    premium_style: 12
+    basic_style: 8,   // 8 credits ($0.008)
+    premium_style: 12 // 12 credits ($0.012)
   }
 } as const
 
@@ -116,8 +116,4 @@ export function getSubscriptionUpgradeMessage(currentTier: SubscriptionTier): st
 // Subscription enforcement - no free access
 export function requiresSubscription(): boolean {
   return true // All features require subscription
-}
-
-export function getTrialPeriodDays(): number {
-  return 7 // 7-day trial for new users
 }

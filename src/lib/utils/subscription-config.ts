@@ -117,7 +117,3 @@ export function getSubscriptionUpgradeMessage(currentTier: SubscriptionTier): st
 export function requiresSubscription(): boolean {
   return true // All features require subscription
 }
-
-export function getTrialPeriodDays(): number {
-  return 7 // 7-day trial for new users
-}

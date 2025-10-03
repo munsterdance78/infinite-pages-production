@@ -887,7 +887,7 @@ Higher duplicate count = similarity detection working
 ## Environment Setup
 
 ### Supabase Configuration
-- **URL:** `https://tktntttemkbmnqkalkch.supabase.co`
+- **URL:** `https://pjgnjfcvtrrhxmqdstre.supabase.co`
 - **Anon Key:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrdG50dHRlbWtibW5xa2Fsa2NoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkyNjczNTAsImV4cCI6MjA3NDg0MzM1MH0.kbfMla_CIz6Ywzp_IGL-KdT6zpH2coqDGpJDTOENHMQ`
 - **Service Role Key:** Available in `.env.local`
 
@@ -904,7 +904,7 @@ Higher duplicate count = similarity detection working
 ### Environment Variables Required
 ```bash
 # Required in .env.local:
-NEXT_PUBLIC_SUPABASE_URL=https://tktntttemkbmnqkalkch.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://pjgnjfcvtrrhxmqdstre.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
 SUPABASE_SERVICE_ROLE_KEY=eyJhbGci...
 NEXT_PUBLIC_SITE_URL=https://www.infinite-pages.com

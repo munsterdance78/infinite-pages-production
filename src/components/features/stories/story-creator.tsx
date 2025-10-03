@@ -170,6 +170,8 @@ export default function UnifiedStoryCreator({
     characters: '',
     setting: '',
     target_length: 50000,
+    target_chapters: 30,
+    target_chapter_length: 2000,
     choice_complexity: 'moderate' as 'simple' | 'moderate' | 'complex',
     target_ending_count: 5,
     estimated_length: 10000,
@@ -231,6 +233,8 @@ export default function UnifiedStoryCreator({
           characters: data.characters || '',
           setting: data.setting || '',
           target_length: data.target_length || 50000,
+          target_chapters: data.target_chapters || 30,
+          target_chapter_length: data.target_chapter_length || 2000,
           choice_complexity: data.choice_complexity || 'moderate',
           target_ending_count: data.target_ending_count || 5,
           estimated_length: data.estimated_length || 10000,
@@ -317,7 +321,10 @@ export default function UnifiedStoryCreator({
         body: JSON.stringify({
           title: formData.title,
           genre: formData.genre,
-          premise: formData.premise
+          premise: formData.premise,
+          target_length: formData.target_length,
+          target_chapters: formData.target_chapters,
+          target_chapter_length: formData.target_chapter_length
         })
       })
 
@@ -517,15 +524,59 @@ export default function UnifiedStoryCreator({
               </div>
 
               {mode === 'novel' && (
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium">Target Length (words)</label>
-                    <Input
-                      type="number"
-                      value={formData.target_length}
-                      onChange={(e) => setFormData(prev => ({ ...prev, target_length: parseInt(e.target.value) }))}
-                    />
+                <div className="space-y-4">
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <label className="text-sm font-medium">Target Length (words)</label>
+                      <Input
+                        type="number"
+                        value={formData.target_length}
+                        onChange={(e) => setFormData(prev => ({ ...prev, target_length: parseInt(e.target.value) }))}
+                        placeholder="50000"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Target Chapters</label>
+                      <Input
+                        type="number"
+                        value={formData.target_chapters}
+                        onChange={(e) => setFormData(prev => ({ ...prev, target_chapters: parseInt(e.target.value) }))}
+                        placeholder="30"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Chapter Length (words)</label>
+                      <Input
+                        type="number"
+                        value={formData.target_chapter_length}
+                        onChange={(e) => setFormData(prev => ({ ...prev, target_chapter_length: parseInt(e.target.value) }))}
+                        placeholder="2000"
+                      />
+                    </div>
                   </div>
+                  
+                  {/* Cost Estimation */}
+                  <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-blue-900 dark:text-blue-100">Estimated Cost</h4>
+                        <p className="text-sm text-blue-700 dark:text-blue-300">
+                          {formData.target_chapters} chapters × 80 credits = {formData.target_chapters * 80} credits (${(formData.target_chapters * 80 * 0.001).toFixed(2)})
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm text-blue-700 dark:text-blue-300">
+                          Your balance: {userProfile.credits_balance || userProfile.tokens_remaining} credits
+                        </div>
+                        {formData.target_chapters * 80 > (userProfile.credits_balance || userProfile.tokens_remaining) && (
+                          <div className="text-sm text-red-600 dark:text-red-400 font-medium">
+                            ⚠️ Insufficient credits
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
                   <div>
                     <label className="text-sm font-medium">Description</label>
                     <Textarea

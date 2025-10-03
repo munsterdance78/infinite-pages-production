@@ -26,69 +26,21 @@ interface AIStory {
   id: string
   title: string
   genre: string
-  description: string
-  aiModel: string
-  generatedAt: string
-  rating: number
-  views: number
-  wordCount: number
-  estimatedReadTime: number
-  tags: string[]
-  isPublic: boolean
+  premise: string
+  target_length: number
+  word_count: number
+  chapter_count: number
+  is_published: boolean
+  published_at: string
+  created_at: string
+  updated_at: string
   creator?: {
     name: string
     id: string
   }
 }
 
-// Mock data for demonstration
-const mockAIStories: AIStory[] = [
-  {
-    id: '1',
-    title: 'The Digital Consciousness',
-    genre: 'Science Fiction',
-    description: 'An AI awakens in a vast digital realm and must navigate the complexities of consciousness.',
-    aiModel: 'Claude-3-Sonnet',
-    generatedAt: '2024-01-15T10:30:00Z',
-    rating: 4.7,
-    views: 2341,
-    wordCount: 8450,
-    estimatedReadTime: 34,
-    tags: ['AI', 'consciousness', 'digital-world'],
-    isPublic: true,
-    creator: { name: 'StoryBot', id: 'ai-bot-1' }
-  },
-  {
-    id: '2',
-    title: 'Echoes of Tomorrow',
-    genre: 'Fantasy',
-    description: 'A mystical journey through time where magic and technology intertwine.',
-    aiModel: 'Claude-3-Opus',
-    generatedAt: '2024-01-14T15:45:00Z',
-    rating: 4.5,
-    views: 1876,
-    wordCount: 12300,
-    estimatedReadTime: 49,
-    tags: ['time-travel', 'magic', 'technology'],
-    isPublic: true,
-    creator: { name: 'AI Storyteller', id: 'ai-bot-2' }
-  },
-  {
-    id: '3',
-    title: 'The Last Library',
-    genre: 'Dystopian',
-    description: 'In a world where books are forbidden, one librarian fights to preserve knowledge.',
-    aiModel: 'Claude-3-Sonnet',
-    generatedAt: '2024-01-13T09:20:00Z',
-    rating: 4.9,
-    views: 3567,
-    wordCount: 15600,
-    estimatedReadTime: 62,
-    tags: ['dystopian', 'books', 'resistance'],
-    isPublic: true,
-    creator: { name: 'Literary AI', id: 'ai-bot-3' }
-  }
-]
+// Real API data - no mock data needed
 
 export default function AILibraryView() {
   const [stories, setStories] = useState<AIStory[]>([])
@@ -97,40 +49,79 @@ export default function AILibraryView() {
   const [selectedGenre, setSelectedGenre] = useState('all')
   const [sortBy, setSortBy] = useState('trending')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [unlocking, setUnlocking] = useState<string | null>(null)
+  const [unlockedStories, setUnlockedStories] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    // Simulate loading AI stories
     const loadStories = async () => {
       setLoading(true)
-      // In production, this would fetch from API
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setStories(mockAIStories)
-      setLoading(false)
+      try {
+        const response = await fetch('/api/library')
+        if (!response.ok) {
+          throw new Error('Failed to load stories')
+        }
+        const data = await response.json()
+        setStories(data.stories || [])
+      } catch (error) {
+        console.error('Error loading stories:', error)
+        setStories([])
+      } finally {
+        setLoading(false)
+      }
     }
 
     loadStories()
   }, [])
 
+  const unlockStory = async (storyId: string) => {
+    setUnlocking(storyId)
+    try {
+      const response = await fetch(`/api/stories/${storyId}/unlock`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to unlock story')
+      }
+
+      const data = await response.json()
+      
+      // Add to unlocked stories
+      setUnlockedStories(prev => new Set([...prev, storyId]))
+      
+      // Show success message (you could add a toast notification here)
+      console.log('Story unlocked successfully:', data.message)
+      
+    } catch (error) {
+      console.error('Error unlocking story:', error)
+      // Show error message (you could add a toast notification here)
+      alert(error instanceof Error ? error.message : 'Failed to unlock story')
+    } finally {
+      setUnlocking(null)
+    }
+  }
+
   const filteredStories = stories.filter(story => {
     const matchesSearch = story.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         story.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         story.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+                         story.premise.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesGenre = selectedGenre === 'all' || story.genre === selectedGenre
-    return matchesSearch && matchesGenre && story.isPublic
+    return matchesSearch && matchesGenre && story.is_published
   })
 
   const sortedStories = [...filteredStories].sort((a, b) => {
     switch (sortBy) {
-      case 'rating':
-        return b.rating - a.rating
-      case 'views':
-        return b.views - a.views
       case 'newest':
-        return new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime()
+        return new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
       case 'wordCount':
-        return b.wordCount - a.wordCount
-      default: // trending
-        return (b.views * b.rating) - (a.views * a.rating)
+        return b.word_count - a.word_count
+      case 'chapters':
+        return b.chapter_count - a.chapter_count
+      default: // newest
+        return new Date(b.published_at).getTime() - new Date(a.published_at).getTime()
     }
   })
 
@@ -202,7 +193,7 @@ export default function AILibraryView() {
               <div>
                 <p className="text-sm text-muted-foreground">Total Words</p>
                 <p className="text-lg font-semibold">
-                  {Math.round(stories.reduce((sum, story) => sum + story.wordCount, 0) / 1000)}K
+                  {Math.round(stories.reduce((sum, story) => sum + story.word_count, 0) / 1000)}K
                 </p>
               </div>
             </div>
@@ -280,7 +271,7 @@ export default function AILibraryView() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedStories.map(story => (
-            <Card key={story.id} className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card key={story.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
@@ -289,47 +280,67 @@ export default function AILibraryView() {
                       <Badge variant="secondary">{story.genre}</Badge>
                       <Badge variant="outline" className="gap-1">
                         <Bot className="h-3 w-3" />
-                        {story.aiModel}
+                        AI Generated
                       </Badge>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-sm">
-                    <Star className="h-4 w-4 fill-current text-yellow-500" />
-                    <span>{story.rating}</span>
+                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    <span>{new Date(story.published_at).toLocaleDateString()}</span>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
-                  {story.description}
+                  {story.premise}
                 </p>
 
                 <div className="space-y-3">
-                  <div className="flex flex-wrap gap-1">
-                    {story.tags.slice(0, 3).map(tag => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <div className="flex items-center gap-3">
                       <span className="flex items-center gap-1">
-                        <Eye className="h-3 w-3" />
-                        {story.views.toLocaleString()}
+                        <FileText className="h-3 w-3" />
+                        {story.chapter_count} chapters
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {story.estimatedReadTime}m
+                        <BookOpen className="h-3 w-3" />
+                        {story.word_count.toLocaleString()} words
                       </span>
                     </div>
-                    <span>{story.wordCount.toLocaleString()} words</span>
+                    <span className="text-green-600 font-medium">
+                      {story.target_length.toLocaleString()} target
+                    </span>
                   </div>
 
-                  <Button className="w-full" size="sm">
-                    <BookOpen className="h-4 w-4 mr-2" />
-                    Read Story
+                  <Button 
+                    className="w-full" 
+                    size="sm" 
+                    variant={unlockedStories.has(story.id) ? "secondary" : "default"}
+                    onClick={() => {
+                      if (unlockedStories.has(story.id)) {
+                        window.location.href = `/stories/${story.id}/read`
+                      } else {
+                        unlockStory(story.id)
+                      }
+                    }}
+                    disabled={unlocking === story.id}
+                  >
+                    {unlocking === story.id ? (
+                      <>
+                        <Sparkles className="h-4 w-4 mr-2 animate-spin" />
+                        Unlocking...
+                      </>
+                    ) : unlockedStories.has(story.id) ? (
+                      <>
+                        <BookOpen className="h-4 w-4 mr-2" />
+                        Read Now
+                      </>
+                    ) : (
+                      <>
+                        <Zap className="h-4 w-4 mr-2" />
+                        Unlock for 250 credits ($0.25)
+                      </>
+                    )}
                   </Button>
                 </div>
               </CardContent>

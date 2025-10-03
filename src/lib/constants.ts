@@ -31,8 +31,8 @@ export const ESTIMATED_CREDIT_COSTS = {
 // STANDARDIZED SUBSCRIPTION SYSTEM
 export const SUBSCRIPTION_LIMITS = {
   basic: {
-    MONTHLY_CREDITS: 1332,  // $7.99 * 0.7 * 1000 = 5593 credits available, but allocated as 1332 for balance
-    MAX_CREDIT_BALANCE: 3996, // 3-month accumulation maximum
+    MONTHLY_CREDITS: 5000,  // 5,000 credits per month
+    MAX_CREDIT_BALANCE: 15000, // 3-month accumulation maximum (5,000 * 3)
     MONTHLY_STORIES: 5,
     MONTHLY_CHAPTERS: 50,
     EXPORTS_ALLOWED: false,
@@ -41,7 +41,7 @@ export const SUBSCRIPTION_LIMITS = {
     CREDIT_REVERSION: true  // Excess credits revert to site
   },
   premium: {
-    MONTHLY_CREDITS: 2497,  // $14.99 * 0.7 * 1000 = 10493 credits available, allocated as 2497 for balance
+    MONTHLY_CREDITS: 10000,  // 10,000 credits per month
     MAX_CREDIT_BALANCE: null, // Unlimited accumulation
     MONTHLY_STORIES: 999999, // Unlimited
     MONTHLY_CHAPTERS: 999999, // Unlimited

@@ -2,6 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Victorian Theme Styles */
+@layer components {
+  .victorian-bg {
+    background: linear-gradient(135deg, #7c2d12 0%, #1f2937 50%, #111827 100%);
+    min-height: 100vh;
+  }
+  
+  .victorian-card {
+    @apply bg-white/10 border border-white/20 backdrop-blur-md;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+  
+  .victorian-card:hover {
+    @apply bg-white/15;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  }
+  
+  .victorian-border {
+    @apply border border-white/20;
+    border-image: linear-gradient(45deg, #d97706, #f59e0b, #d97706) 1;
+  }
+  
+  .victorian-text {
+    @apply text-white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .victorian-text-muted {
+    @apply text-white/70;
+  }
+  
+  .victorian-text-subtle {
+    @apply text-white/60;
+  }
+  
+  .victorian-accent {
+    @apply text-amber-300;
+    text-shadow: 0 2px 4px rgba(217, 119, 6, 0.3);
+  }
+  
+  .victorian-tab-active {
+    @apply bg-amber-500/20 border-amber-500 text-amber-300;
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.3);
+  }
+  
+  .victorian-badge {
+    @apply bg-white/10 border-white/30 text-white/80;
+  }
+  
+  .victorian-badge-high {
+    @apply bg-red-500/20 text-red-300 border-red-500/30;
+  }
+  
+  .victorian-badge-medium {
+    @apply bg-yellow-500/20 text-yellow-300 border-yellow-500/30;
+  }
+  
+  .victorian-badge-low {
+    @apply bg-green-500/20 text-green-300 border-green-500/30;
+  }
+  
+  .victorian-ornate-border {
+    position: relative;
+  }
+  
+  .victorian-ornate-border::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #d97706, #f59e0b, #d97706, #f59e0b);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0.6;
+  }
+  
+  .victorian-pattern {
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(217, 119, 6, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

@@ -548,7 +548,7 @@ export default function MyLibraryView() {
 
                     <div className="space-y-3">
                       <div className="flex flex-wrap gap-1">
-                        {story.tags.slice(0, 3).map(tag => (
+                        {(story.tags || []).slice(0, 3).map(tag => (
                           <Badge key={tag} variant="outline" className="text-xs">
                             {tag}
                           </Badge>

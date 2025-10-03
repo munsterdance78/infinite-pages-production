@@ -28,6 +28,8 @@ interface Story {
   premise: string
   user_id: string
   target_length: number
+  is_published: boolean
+  published_at: string | null
   created_at: string
   updated_at: string
 }
@@ -65,11 +67,7 @@ export default function StoryDetailView({ storyId }: StoryDetailViewProps) {
 
     try {
       // Fetch story details
-      const storyResponse = await fetch(`/api/stories/${storyId}`, {
-        headers: {
-          'x-development-bypass': 'true'
-        }
-      })
+      const storyResponse = await fetch(`/api/stories/${storyId}`)
 
       if (!storyResponse.ok) {
         throw new Error('Failed to load story')
@@ -79,11 +77,7 @@ export default function StoryDetailView({ storyId }: StoryDetailViewProps) {
       setStory(storyData.story)
 
       // Fetch chapters
-      const chaptersResponse = await fetch(`/api/stories/${storyId}/chapters`, {
-        headers: {
-          'x-development-bypass': 'true'
-        }
-      })
+      const chaptersResponse = await fetch(`/api/stories/${storyId}/chapters`)
 
       if (chaptersResponse.ok) {
         const chaptersData = await chaptersResponse.json()
@@ -108,8 +102,7 @@ export default function StoryDetailView({ storyId }: StoryDetailViewProps) {
       const response = await fetch(`/api/stories/${storyId}/chapters`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'x-development-bypass': 'true'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           chapterNumber: nextChapterNumber
@@ -133,6 +126,30 @@ export default function StoryDetailView({ storyId }: StoryDetailViewProps) {
       setError(err instanceof Error ? err.message : 'Failed to generate chapter')
     } finally {
       setGenerating(false)
+    }
+  }
+
+  const publishStory = async () => {
+    if (!story) return
+
+    try {
+      const response = await fetch(`/api/stories/${storyId}/publish`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to publish story')
+      }
+
+      // Update local story state
+      setStory(prev => prev ? { ...prev, is_published: true, published_at: new Date().toISOString() } : null)
+    } catch (err) {
+      console.error('Error publishing story:', err)
+      setError(err instanceof Error ? err.message : 'Failed to publish story')
     }
   }
 
@@ -185,47 +202,69 @@ export default function StoryDetailView({ storyId }: StoryDetailViewProps) {
             variant="ghost"
             size="sm"
             onClick={() => router.push('/my-library')}
-            className="mb-2"
+            className="mb-2 victorian-text-muted hover:victorian-text hover:bg-white/10"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Library
           </Button>
-          <h1 className="text-3xl font-bold mb-2">{story.title}</h1>
+          <h1 className="text-3xl font-serif font-bold mb-2 victorian-text">{story.title}</h1>
           <div className="flex items-center gap-2 mb-2">
-            <Badge variant="secondary">{story.genre}</Badge>
-            <span className="text-sm text-muted-foreground">
+            <Badge variant="secondary" className="victorian-badge">{story.genre}</Badge>
+            <span className="text-sm victorian-text-subtle">
               Created {new Date(story.created_at).toLocaleDateString()}
             </span>
           </div>
-          <p className="text-muted-foreground max-w-2xl">{story.premise}</p>
+          <p className="victorian-text-muted max-w-2xl">{story.premise}</p>
         </div>
-        <Button onClick={generateNextChapter} disabled={generating} className="gap-2">
-          {generating ? (
-            <>
-              <Sparkles className="h-4 w-4 animate-spin" />
-              Generating...
-            </>
-          ) : (
-            <>
-              <Plus className="h-4 w-4" />
-              Generate Chapter {chapters.length + 1}
-            </>
+        <div className="flex gap-2">
+          {!story.is_published && chapters.length > 0 && (
+            <Button 
+              onClick={publishStory} 
+              variant="outline" 
+              className="gap-2 victorian-border hover:bg-amber-500/20 hover:border-amber-500 hover:text-amber-300"
+            >
+              <Eye className="h-4 w-4" />
+              Publish to Library
+            </Button>
           )}
-        </Button>
+          {story.is_published && (
+            <Badge variant="default" className="gap-2 victorian-badge bg-amber-500/20 text-amber-300 border-amber-500/30">
+              <Eye className="h-4 w-4" />
+              Published
+            </Badge>
+          )}
+          <Button 
+            onClick={generateNextChapter} 
+            disabled={generating} 
+            className="gap-2 victorian-border hover:bg-amber-500/20 hover:border-amber-500 hover:text-amber-300"
+          >
+            {generating ? (
+              <>
+                <Sparkles className="h-4 w-4 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Plus className="h-4 w-4" />
+                Generate Chapter {chapters.length + 1}
+              </>
+            )}
+          </Button>
+        </div>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-blue-600" />
+              <FileText className="h-5 w-5 victorian-accent" />
               <div>
-                <p className="text-sm text-muted-foreground">Chapters</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm victorian-text-subtle">Chapters</p>
+                <p className="text-lg font-semibold victorian-text">
                   {chapters.length}
                   {story.target_length > 0 && (
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm victorian-text-subtle">
                       /{story.target_length}
                     </span>
                   )}
@@ -235,13 +274,13 @@ export default function StoryDetailView({ storyId }: StoryDetailViewProps) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-green-600" />
+              <BookOpen className="h-5 w-5 victorian-accent" />
               <div>
-                <p className="text-sm text-muted-foreground">Total Words</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm victorian-text-subtle">Total Words</p>
+                <p className="text-lg font-semibold victorian-text">
                   {totalWords.toLocaleString()}
                 </p>
               </div>
@@ -249,13 +288,13 @@ export default function StoryDetailView({ storyId }: StoryDetailViewProps) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-orange-600" />
+              <Clock className="h-5 w-5 victorian-accent" />
               <div>
-                <p className="text-sm text-muted-foreground">Read Time</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm victorian-text-subtle">Read Time</p>
+                <p className="text-lg font-semibold victorian-text">
                   {Math.ceil(totalWords / 250)} min
                 </p>
               </div>
@@ -263,13 +302,13 @@ export default function StoryDetailView({ storyId }: StoryDetailViewProps) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-purple-600" />
+              <DollarSign className="h-5 w-5 victorian-accent" />
               <div>
-                <p className="text-sm text-muted-foreground">Total Cost</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm victorian-text-subtle">Total Cost</p>
+                <p className="text-lg font-semibold victorian-text">
                   ${totalCost.toFixed(2)}
                 </p>
               </div>

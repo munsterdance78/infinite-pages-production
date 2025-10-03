@@ -149,8 +149,99 @@ export interface Database {
           chapter_count: number;
           total_tokens_used: number;
           total_cost_usd: number;
+          target_length: number;
+          target_chapters: number;
+          target_chapter_length: number;
           created_at: string;
           updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          title: string;
+          genre?: string | null;
+          premise?: string | null;
+          foundation?: {
+            premise?: string
+            characters?: Array<{ name: string; role: string }>
+            setting?: { time: string; place: string }
+            themes?: string[]
+            [key: string]: unknown
+          } | null;
+          outline?: {
+            acts?: Array<{ title: string; chapters: string[] }>
+            plot_points?: string[]
+            structure?: string
+            [key: string]: unknown
+          } | null;
+          characters?: {
+            main?: Array<{
+              name: string
+              role: string
+              description: string
+              arc?: string
+            }>
+            supporting?: Array<{
+              name: string
+              role: string
+              description?: string
+            }>
+            [key: string]: unknown
+          };
+          status?: string;
+          word_count?: number;
+          chapter_count?: number;
+          total_tokens_used?: number;
+          total_cost_usd?: number;
+          target_length?: number;
+          target_chapters?: number;
+          target_chapter_length?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          title?: string;
+          genre?: string | null;
+          premise?: string | null;
+          foundation?: {
+            premise?: string
+            characters?: Array<{ name: string; role: string }>
+            setting?: { time: string; place: string }
+            themes?: string[]
+            [key: string]: unknown
+          } | null;
+          outline?: {
+            acts?: Array<{ title: string; chapters: string[] }>
+            plot_points?: string[]
+            structure?: string
+            [key: string]: unknown
+          } | null;
+          characters?: {
+            main?: Array<{
+              name: string
+              role: string
+              description: string
+              arc?: string
+            }>
+            supporting?: Array<{
+              name: string
+              role: string
+              description?: string
+            }>
+            [key: string]: unknown
+          };
+          status?: string;
+          word_count?: number;
+          chapter_count?: number;
+          total_tokens_used?: number;
+          total_cost_usd?: number;
+          target_length?: number;
+          target_chapters?: number;
+          target_chapter_length?: number;
+          created_at?: string;
+          updated_at?: string;
         };
       };
       chapters: {
