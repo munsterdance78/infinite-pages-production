@@ -177,7 +177,7 @@ export async function GET(request: NextRequest) {
           generation_cost_usd, created_at
         )
       `)
-      .eq('user_id' as any, user.id)
+      .eq('user_id' as any, user.id as any)
       .order('updated_at', { ascending: false })
 
     if (error) {
@@ -208,7 +208,7 @@ export async function POST(request: NextRequest) {
     let { data: profileData, error: profileError } = await supabase
       .from('profiles')
       .select('tokens_remaining, subscription_tier, stories_created, tokens_used_total, words_generated')
-      .eq('id' as any, user.id)
+      .eq('id' as any, user.id as any)
       .single()
 
     // If profile doesn't exist, create a default one
@@ -327,7 +327,7 @@ export async function POST(request: NextRequest) {
     const { data: monthlyStories, error: storiesError } = await supabase
       .from('stories')
       .select('id')
-      .eq('user_id' as any, user.id)
+      .eq('user_id' as any, user.id as any)
       .gte('created_at', monthStart.toISOString())
 
     if (storiesError) {
@@ -475,7 +475,7 @@ export async function POST(request: NextRequest) {
         stories_created: profile.stories_created + 1,
         words_generated: (profile.words_generated || 0) + wordCount
       })
-      .eq('id' as any, user.id)
+      .eq('id' as any, user.id as any)
 
     if (updateError) {
       console.error('Database error updating profile:', updateError)

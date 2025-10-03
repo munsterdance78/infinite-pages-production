@@ -20,7 +20,7 @@ export async function GET(
     const { data: story, error: storyError } = await supabase
       .from('stories')
       .select('id, user_id')
-      .eq('id' as any, storyId)
+      .eq('id' as any, storyId as any)
       .single()
 
     if (storyError || !story) {
@@ -45,42 +45,42 @@ export async function GET(
       supabase
         .from('character_facts')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .eq('story_id' as any, storyId as any)
         .order('character_name', { ascending: true }),
 
       // Character voice patterns
       supabase
         .from('character_voice_patterns')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .eq('story_id' as any, storyId as any)
         .order('character_name', { ascending: true }),
 
       // Location facts
       supabase
         .from('location_facts')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .eq('story_id' as any, storyId as any)
         .order('location_name', { ascending: true }),
 
       // Plot event facts
       supabase
         .from('plot_event_facts')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .eq('story_id' as any, storyId as any)
         .order('chapter_position', { ascending: true, nullsLast: true }),
 
       // Theme facts
       supabase
         .from('theme_facts')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .eq('story_id' as any, storyId as any)
         .order('theme_name', { ascending: true }),
 
       // World state changes
       supabase
         .from('world_state_changes')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .eq('story_id' as any, storyId as any)
         .order('created_at', { ascending: true })
     ])
 
