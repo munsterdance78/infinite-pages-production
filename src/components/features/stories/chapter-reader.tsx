@@ -127,14 +127,20 @@ export default function ChapterReader({ storyId }: ChapterReaderProps) {
   const goToPreviousChapter = () => {
     const currentIndex = chapters.findIndex(ch => ch.chapter_number === currentChapter)
     if (currentIndex > 0) {
-      setCurrentChapter(chapters[currentIndex - 1].chapter_number)
+      const previousChapter = chapters[currentIndex - 1]
+      if (previousChapter) {
+        setCurrentChapter(previousChapter.chapter_number)
+      }
     }
   }
 
   const goToNextChapter = () => {
     const currentIndex = chapters.findIndex(ch => ch.chapter_number === currentChapter)
     if (currentIndex < chapters.length - 1) {
-      setCurrentChapter(chapters[currentIndex + 1].chapter_number)
+      const nextChapter = chapters[currentIndex + 1]
+      if (nextChapter) {
+        setCurrentChapter(nextChapter.chapter_number)
+      }
     }
   }
 
