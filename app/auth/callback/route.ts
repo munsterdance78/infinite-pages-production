@@ -26,31 +26,9 @@ export async function GET(request: Request) {
       {
         cookies: {
           get(name: string) {
-            const cookie = cookieStore.get(name)
-            if (!cookie) {
-              console.log('[Auth Callback] Get cookie:', name, 'missing')
-              return undefined
-            }
-
-            let value = cookie.value
-
-            // Handle base64-prefixed cookies from SSR
-            if (value && value.startsWith('base64-')) {
-              try {
-                value = Buffer.from(value.substring(7), 'base64').toString('utf-8')
-                console.log('[Auth Callback] Decoded base64 cookie:', name)
-              } catch (e) {
-                console.error('[Auth Callback] Failed to decode base64 cookie:', name, e)
-                return undefined
-              }
-            } else {
-              console.log('[Auth Callback] Get cookie:', name, 'exists')
-            }
-
-            return value
+            return cookieStore.get(name)?.value
           },
           set(name: string, value: string, options: CookieOptions) {
-            console.log('[Auth Callback] Set cookie:', name, 'length:', value.length)
             try {
               cookieStore.set({
                 name,
@@ -66,7 +44,6 @@ export async function GET(request: Request) {
             }
           },
           remove(name: string, options: CookieOptions) {
-            console.log('[Auth Callback] Remove cookie:', name)
             try {
               cookieStore.set({
                 name,
@@ -92,13 +69,18 @@ export async function GET(request: Request) {
       error: exchangeError?.message
     })
 
-    if (!exchangeError && data?.session) {
-      console.log('[Auth Callback] Session established for:', data.user?.email)
+    if (exchangeError) {
+      console.error('[Auth Callback] Exchange error:', exchangeError)
+      return NextResponse.redirect(`${origin}/auth/signin?error=${encodeURIComponent(exchangeError.message)}`)
+    }
+
+    if (data?.session && data?.user) {
+      console.log('[Auth Callback] Session established for:', data.user.email)
       console.log('[Auth Callback] Redirecting to:', next)
       return NextResponse.redirect(`${origin}${next}`)
     }
 
-    console.error('[Auth Callback] Exchange error:', exchangeError)
+    console.error('[Auth Callback] No session or user after exchange')
   }
 
   // Return to signin if error or no code
