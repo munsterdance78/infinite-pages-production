@@ -19,12 +19,17 @@ export async function POST(
     const { data: story, error: storyError } = await supabase
       .from('stories')
       .select('id, user_id, is_published')
-      .eq('id' as any, storyId)
-      .eq('user_id' as any, user.id)
+      .filter('id', 'eq', storyId)
+      .filter('user_id', 'eq', user.id)
       .single()
 
     if (storyError || !story) {
       return NextResponse.json({ error: 'Story not found or access denied' }, { status: 404 })
+    }
+
+    // Type guard to ensure story has the expected properties
+    if (!story || typeof story !== 'object' || !('is_published' in story)) {
+      return NextResponse.json({ error: 'Invalid story data' }, { status: 500 })
     }
 
     if (story.is_published) {
@@ -32,13 +37,13 @@ export async function POST(
     }
 
     // Update story to published
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from('stories')
       .update({
         is_published: true,
         published_at: new Date().toISOString()
       })
-      .eq('id' as any, storyId)
+      .filter('id', 'eq', storyId)
 
     if (updateError) {
       console.error('Error publishing story:', updateError)

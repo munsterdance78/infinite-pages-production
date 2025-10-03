@@ -20,12 +20,17 @@ export async function GET(
     const { data: story, error: storyError } = await supabase
       .from('stories')
       .select('id, user_id')
-      .eq('id' as any, storyId)
+      .filter('id', 'eq', storyId)
       .single()
 
     if (storyError || !story) {
       console.error('Error fetching story or story not found:', storyError?.message)
       return NextResponse.json({ error: 'Story not found or access denied' }, { status: 404 })
+    }
+
+    // Type guard to ensure story has the expected properties
+    if (!story || typeof story !== 'object' || !('user_id' in story)) {
+      return NextResponse.json({ error: 'Invalid story data' }, { status: 500 })
     }
 
     if (story.user_id !== user.id) {
@@ -45,42 +50,42 @@ export async function GET(
       supabase
         .from('character_facts')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .filter('story_id', 'eq', storyId)
         .order('character_name', { ascending: true }),
 
       // Character voice patterns
       supabase
         .from('character_voice_patterns')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .filter('story_id', 'eq', storyId)
         .order('character_name', { ascending: true }),
 
       // Location facts
       supabase
         .from('location_facts')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .filter('story_id', 'eq', storyId)
         .order('location_name', { ascending: true }),
 
       // Plot event facts
       supabase
         .from('plot_event_facts')
         .select('*')
-        .eq('story_id' as any, storyId)
-        .order('chapter_position', { ascending: true, nullsLast: true }),
+        .filter('story_id', 'eq', storyId)
+        .order('chapter_position', { ascending: true, nullsFirst: false }),
 
       // Theme facts
       supabase
         .from('theme_facts')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .filter('story_id', 'eq', storyId)
         .order('theme_name', { ascending: true }),
 
       // World state changes
       supabase
         .from('world_state_changes')
         .select('*')
-        .eq('story_id' as any, storyId)
+        .filter('story_id', 'eq', storyId)
         .order('created_at', { ascending: true })
     ])
 
