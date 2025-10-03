@@ -22,8 +22,8 @@ export async function GET(request: NextRequest) {
         updated_at,
         user_id
       `)
-      .eq('is_published', true)
-      .order('published_at', { ascending: false })
+      .eq('is_published' as any, true)
+      .order('published_at' as any, { ascending: false })
 
     if (error) {
       console.error('Error fetching published stories:', error)
