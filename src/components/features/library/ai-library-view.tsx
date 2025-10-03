@@ -18,7 +18,8 @@ import {
   Sparkles,
   BookOpen,
   Users,
-  Zap
+  Zap,
+  FileText
 } from 'lucide-react'
 import { ALLOWED_GENRES } from '@/lib/utils/constants'
 
