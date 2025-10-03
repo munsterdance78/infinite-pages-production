@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
         updated_at,
         user_id
       `)
-      .eq('is_published', true)
+      .is('is_published', true)
       .order('published_at', { ascending: false })
 
     if (error) {
