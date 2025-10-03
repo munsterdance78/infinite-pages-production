@@ -11,8 +11,9 @@ export type { Database }
 export type Profile = Database['public']['Tables']['profiles']['Row']
 export type Story = Database['public']['Tables']['stories']['Row']
 export type Chapter = Database['public']['Tables']['chapters']['Row']
-export type CreatorEarning = Database['public']['Tables']['creator_earnings']['Row']
-export type AIUsageLog = Database['public']['Tables']['ai_usage_logs']['Row']
+// Note: creator_earnings and ai_usage_logs tables don't exist in current schema
+// export type CreatorEarning = Database['public']['Tables']['creator_earnings']['Row']
+// export type AIUsageLog = Database['public']['Tables']['ai_usage_logs']['Row']
 // export type SubscriptionPlan = Database['public']['Tables']['subscription_plans']['Row']
 
 // Insert types for new records (commented out - not available in current schema)
@@ -35,11 +36,12 @@ export interface StoryWithChapters extends Story {
   total_words: number
 }
 
-export interface StoryWithEarnings extends Story {
-  earnings: CreatorEarning[]
-  total_earnings: number
-  views: number
-}
+// Note: CreatorEarning type not available in current schema
+// export interface StoryWithEarnings extends Story {
+//   earnings: CreatorEarning[]
+//   total_earnings: number
+//   views: number
+// }
 
 export interface ProfileWithStats extends Profile {
   story_count: number
@@ -140,7 +142,7 @@ export interface AIUsageAggregates {
 export interface CachedStoryData {
   story: Story
   chapters: Chapter[]
-  earnings: CreatorEarning[]
+  // earnings: CreatorEarning[] // Not available in current schema
   cache_timestamp: string
   cache_expiry: string
 }
@@ -256,10 +258,11 @@ export function isChapter(obj: unknown): obj is Chapter {
          'id' in obj && 'story_id' in obj && 'chapter_number' in obj
 }
 
-export function isCreatorEarning(obj: unknown): obj is CreatorEarning {
-  return typeof obj === 'object' && obj !== null &&
-         'id' in obj && 'user_id' in obj && 'amount_usd' in obj
-}
+// Note: CreatorEarning type not available in current schema
+// export function isCreatorEarning(obj: unknown): obj is CreatorEarning {
+//   return typeof obj === 'object' && obj !== null &&
+//          'id' in obj && 'user_id' in obj && 'amount_usd' in obj
+// }
 
 // Utility types for database operations
 export type DatabaseInsert<T extends keyof Database['public']['Tables']> =

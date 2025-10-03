@@ -19,8 +19,8 @@ export async function POST(
     const { data: story, error: storyError } = await supabase
       .from('stories')
       .select('id, user_id, is_published')
-      .filter('id', 'eq', storyId)
-      .filter('user_id', 'eq', user.id)
+      .eq('id', storyId)
+      .eq('user_id', user.id)
       .single()
 
     if (storyError || !story) {
@@ -37,13 +37,13 @@ export async function POST(
     }
 
     // Update story to published
-    const { error: updateError } = await (supabase as any)
+    const { error: updateError } = await supabase
       .from('stories')
       .update({
         is_published: true,
         published_at: new Date().toISOString()
       })
-      .filter('id', 'eq', storyId)
+      .eq('id', storyId)
 
     if (updateError) {
       console.error('Error publishing story:', updateError)

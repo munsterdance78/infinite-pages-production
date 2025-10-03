@@ -36,8 +36,8 @@ export type {
   Profile,
   Story,
   Chapter,
-  CreatorEarning,
-  AIUsageLog,
+  // CreatorEarning, // Not available in current schema
+  // AIUsageLog, // Not available in current schema
   // SubscriptionPlan, (commented out - not available)
   // ProfileInsert,
   // StoryInsert,
@@ -49,7 +49,7 @@ export type {
   // ChapterUpdate,
   // CreatorEarningUpdate,
   StoryWithChapters,
-  StoryWithEarnings,
+  // StoryWithEarnings, // Not available in current schema
   ProfileWithStats,
   ChapterWithStory,
   StoryFilters,
@@ -94,7 +94,7 @@ export type {
   // ConfirmDialogProps,
   // TableColumn,
   // TableProps,
-  CreatorEarningsProps,
+  // CreatorEarningsProps, // Not available in current schema
   // EarningsChartProps,
   // PayoutHistoryProps,
   // PremiumUpgradeProps,
@@ -174,7 +174,7 @@ export {
   isProfile as isDatabaseProfile,
   isStory as isDatabaseStory,
   isChapter as isDatabaseChapter,
-  isCreatorEarning as isDatabaseCreatorEarning
+  // isCreatorEarning as isDatabaseCreatorEarning // Not available in current schema
 } from './database'
 
 export {

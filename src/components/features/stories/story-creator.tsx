@@ -200,7 +200,34 @@ export default function UnifiedStoryCreator({
         .order('updated_at', { ascending: false })
 
       if (error) throw error
-      setStories(data || [])
+      
+      // Transform raw database records to UnifiedStory format
+      const unifiedStories: UnifiedStory[] = (data || []).map(story => {
+        const unifiedStory: UnifiedStory = {
+          id: story.id,
+          user_id: story.user_id,
+          title: story.title,
+          genre: story.genre,
+          premise: story.premise,
+          type: 'story' as CreationMode, // Default to 'story' type
+          status: (story.status as StoryStatus) || 'draft',
+          completed_chapters: story.chapter_count || 0,
+          total_words: story.word_count || 0,
+          created_at: story.created_at || new Date().toISOString(),
+          updated_at: story.updated_at || new Date().toISOString()
+        }
+        
+        // Only add optional properties if they have values
+        if (story.foundation) unifiedStory.foundation = story.foundation
+        if (story.target_length) unifiedStory.target_length = story.target_length
+        if (story.target_chapters) unifiedStory.total_chapters = story.target_chapters
+        if (story.total_tokens_used) unifiedStory.total_tokens = story.total_tokens_used
+        if (story.total_cost_usd) unifiedStory.cost_usd = story.total_cost_usd
+        
+        return unifiedStory
+      })
+      
+      setStories(unifiedStories)
     } catch (error) {
       console.error('Error loading stories:', error)
     } finally {

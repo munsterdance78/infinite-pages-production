@@ -3,7 +3,7 @@
  */
 
 import type { ReactNode, ComponentProps, HTMLAttributes } from 'react'
-import type { Profile, Story, Chapter, CreatorEarning } from './database'
+import type { Profile, Story, Chapter } from './database'
 
 // Re-export base components
 export type {
@@ -65,14 +65,15 @@ export interface DashboardTabProps {
 }
 
 // Creator-specific component props
-export interface CreatorEarningsProps {
-  className?: string
-  earnings: CreatorEarning[]
-  period: 'week' | 'month' | 'quarter' | 'year'
-  onPeriodChange?: (period: string) => void
-  showWithdrawButton?: boolean
-  onWithdraw?: () => void
-}
+// Note: CreatorEarningsProps disabled due to missing CreatorEarning type
+// export interface CreatorEarningsProps {
+//   className?: string
+//   earnings: CreatorEarning[]
+//   period: 'week' | 'month' | 'quarter' | 'year'
+//   onPeriodChange?: (period: string) => void
+//   showWithdrawButton?: boolean
+//   onWithdraw?: () => void
+// }
 
 export interface SubscriptionBadgeProps {
   className?: string

@@ -220,30 +220,30 @@ export class ClaudeAnalyticsService {
         if (data) {
           events = data.map((row: {
             id: string
-            user_id: string
+            user_id: string | null
             operation: string
             model: string
-            input_tokens: number
-            output_tokens: number
-            cost: number
-            response_time: number
-            success: boolean
+            input_tokens: number | null
+            output_tokens: number | null
+            cost: number | null
+            response_time: number | null
+            success: boolean | null
             error?: string
-            cached: boolean
+            cached: boolean | null
             created_at: string
             metadata?: unknown
           }): AnalyticsEvent => ({
             id: row.id,
-            userId: row.user_id,
+            userId: row.user_id || 'unknown',
             operation: row.operation,
             model: row.model,
-            inputTokens: row.input_tokens,
-            outputTokens: row.output_tokens,
-            cost: row.cost,
-            responseTime: row.response_time,
-            success: row.success,
+            inputTokens: row.input_tokens || 0,
+            outputTokens: row.output_tokens || 0,
+            cost: row.cost || 0,
+            responseTime: row.response_time || 0,
+            success: row.success || false,
             error: row.error,
-            cached: row.cached,
+            cached: row.cached || false,
             timestamp: new Date(row.created_at),
             metadata: row.metadata as AnalyticsEvent['metadata']
           }))

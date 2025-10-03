@@ -20,8 +20,8 @@ export async function POST(
     const { data: existingUnlock, error: unlockCheckError } = await supabase
       .from('story_reads')
       .select('id')
-      .eq('reader_id' as any, user.id)
-      .eq('story_id' as any, storyId)
+      .eq('reader_id', user.id)
+      .eq('story_id', storyId)
       .single()
 
     if (unlockCheckError && unlockCheckError.code !== 'PGRST116') {
@@ -41,7 +41,7 @@ export async function POST(
     const { data: story, error: storyError } = await supabase
       .from('stories')
       .select('id, user_id, title, is_published')
-      .eq('id' as any, storyId)
+      .eq('id', storyId)
       .single()
 
     if (storyError || !story) {
@@ -61,14 +61,14 @@ export async function POST(
     const { data: readerProfile, error: readerError } = await supabase
       .from('profiles')
       .select('tokens_remaining, credits_balance')
-      .eq('id' as any, user.id)
+      .eq('id', user.id)
       .single()
 
     if (readerError || !readerProfile) {
       return NextResponse.json({ error: 'Reader profile not found' }, { status: 404 })
     }
 
-    const readerCredits = readerProfile.credits_balance || readerProfile.tokens_remaining
+    const readerCredits = readerProfile.credits_balance || readerProfile.tokens_remaining || 0
     const unlockCost = 250
 
     if (readerCredits < unlockCost) {
@@ -82,7 +82,7 @@ export async function POST(
     const { data: creatorProfile, error: creatorError } = await supabase
       .from('profiles')
       .select('tokens_remaining, credits_balance')
-      .eq('id' as any, story.user_id)
+      .eq('id', story.user_id)
       .single()
 
     if (creatorError || !creatorProfile) {

@@ -22,7 +22,7 @@ export async function GET(
     const { data: story, error: storyError } = await supabase
       .from('stories')
       .select('user_id, is_published')
-      .filter('id', 'eq', storyId)
+      .eq('id', storyId)
       .single()
 
     if (storyError || !story) {
@@ -32,13 +32,6 @@ export async function GET(
       })
     }
 
-    // Type guard to ensure story has the expected properties
-    if (!story || typeof story !== 'object' || !('user_id' in story) || !('is_published' in story)) {
-      return NextResponse.json({ 
-        hasAccess: false, 
-        reason: 'Invalid story data' 
-      }, { status: 500 })
-    }
 
     // Creator always has access
     if (story.user_id === user.id) {
@@ -61,8 +54,8 @@ export async function GET(
     const { data: unlock, error: unlockError } = await supabase
       .from('story_reads')
       .select('id, unlocked_at')
-      .filter('reader_id', 'eq', user.id)
-      .filter('story_id', 'eq', storyId)
+      .eq('reader_id', user.id)
+      .eq('story_id', storyId)
       .single()
 
     if (unlockError && unlockError.code !== 'PGRST116') {
@@ -73,11 +66,11 @@ export async function GET(
       })
     }
 
-    if (unlock && typeof unlock === 'object' && 'unlocked_at' in unlock) {
+    if (unlock) {
       return NextResponse.json({ 
         hasAccess: true, 
         reason: 'User has unlocked this story',
-        unlockedAt: unlock.unlocked_at
+        unlockedAt: (unlock as any).unlocked_at
       })
     }
 
