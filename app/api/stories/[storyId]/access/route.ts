@@ -22,7 +22,7 @@ export async function GET(
     const { data: story, error: storyError } = await supabase
       .from('stories')
       .select('user_id, is_published')
-      .eq('id' as any, storyId as any)
+      .eq('id' as any, storyId)
       .single()
 
     if (storyError || !story) {

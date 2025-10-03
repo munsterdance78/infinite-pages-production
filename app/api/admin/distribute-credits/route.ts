@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
         const { error: updateError } = await ((supabase as any)
           .from('profiles')
           .update(updateData)
-          .eq('id' as any, subscriber.id as any))
+          .eq('id' as any, subscriber.id))
 
         if (updateError) {
           console.error(`Failed to update credits for user ${subscriber.id}:`, updateError)
@@ -256,7 +256,7 @@ export async function GET(request: NextRequest) {
         amount,
         metadata
       `)
-      .eq('transaction_type' as any, 'monthly_distribution' as any)
+      .eq('transaction_type' as any, 'monthly_distribution')
       .order('created_at', { ascending: false })
       .limit(1000))
 
