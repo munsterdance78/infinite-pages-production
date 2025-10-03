@@ -530,7 +530,6 @@ export async function middleware(req: NextRequest) {
       // Add user context for downstream API routes
       res.headers.set('X-User-ID', user.id)
       res.headers.set('X-User-Tier', await getUserSubscriptionTier(user.id))
-      }
     } else if (routeConfig && !routeConfig.requiresAuth) {
       // Apply general rate limiting for non-authenticated routes
       const rateLimitResult = rateLimit(req, routeConfig.operation)
