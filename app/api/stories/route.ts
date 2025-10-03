@@ -236,6 +236,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Use upsert with onConflict to handle race conditions safely
+      // Only insert essential columns that are guaranteed to exist
       const { data: newProfile, error: createError } = await (adminClient
         .from('profiles') as any)
         .upsert({
@@ -246,15 +247,7 @@ export async function POST(request: NextRequest) {
           tokens_remaining: 50000,
           stories_created: 0,
           tokens_used_total: 0,
-          words_generated: 0,
-          credits_balance: 0,
-          credits_earned_total: 0,
-          credits_spent_total: 0,
-          cache_hits: 0,
-          cache_discount_earned: 0,
-          is_creator: false,
-          total_earnings_usd: 0,
-          pending_payout_usd: 0
+          words_generated: 0
         }, {
           onConflict: 'id',
           ignoreDuplicates: false
