@@ -131,11 +131,11 @@ export default function AILibraryView() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Bot className="h-8 w-8 text-blue-600" />
+          <h1 className="text-3xl font-bold flex items-center gap-2 victorian-text">
+            <Bot className="h-8 w-8 victorian-accent" />
             AI Library
           </h1>
-          <p className="text-muted-foreground">Discover amazing stories created by AI</p>
+          <p className="victorian-text-muted">Discover amazing stories created by AI</p>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="gap-1">
@@ -147,37 +147,37 @@ export default function AILibraryView() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Bot className="h-5 w-5 text-blue-600" />
+              <Bot className="h-5 w-5 victorian-accent" />
               <div>
-                <p className="text-sm text-muted-foreground">Total Stories</p>
-                <p className="text-lg font-semibold">{stories.length}</p>
+                <p className="text-sm victorian-text-subtle">Total Stories</p>
+                <p className="text-lg font-semibold victorian-text">{stories.length}</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Eye className="h-5 w-5 text-green-600" />
+              <Eye className="h-5 w-5 victorian-accent" />
               <div>
-                <p className="text-sm text-muted-foreground">Total Views</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm victorian-text-subtle">Total Views</p>
+                <p className="text-lg font-semibold victorian-text">
                   {stories.reduce((sum, story) => sum + (story as any).views || 0, 0).toLocaleString()}
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <Star className="h-5 w-5 text-yellow-600" />
+              <Star className="h-5 w-5 victorian-accent" />
               <div>
-                <p className="text-sm text-muted-foreground">Avg Rating</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm victorian-text-subtle">Avg Rating</p>
+                <p className="text-lg font-semibold victorian-text">
                   {stories.length > 0
                     ? (stories.reduce((sum, story) => sum + ((story as any).rating || 0), 0) / stories.length).toFixed(1)
                     : '0.0'
@@ -187,13 +187,13 @@ export default function AILibraryView() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="p-4">
             <div className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-purple-600" />
+              <BookOpen className="h-5 w-5 victorian-accent" />
               <div>
-                <p className="text-sm text-muted-foreground">Total Words</p>
-                <p className="text-lg font-semibold">
+                <p className="text-sm victorian-text-subtle">Total Words</p>
+                <p className="text-lg font-semibold victorian-text">
                   {Math.round(stories.reduce((sum, story) => sum + story.word_count, 0) / 1000)}K
                 </p>
               </div>
@@ -260,11 +260,11 @@ export default function AILibraryView() {
           ))}
         </div>
       ) : sortedStories.length === 0 ? (
-        <Card>
+        <Card className="victorian-card">
           <CardContent className="text-center py-12">
-            <Bot className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-lg font-medium mb-2">No AI stories found</h3>
-            <p className="text-muted-foreground">
+            <Bot className="h-12 w-12 mx-auto mb-4 victorian-accent" />
+            <h3 className="text-lg font-medium mb-2 victorian-text">No AI stories found</h3>
+            <p className="victorian-text-muted">
               Try adjusting your search criteria or check back later for new AI-generated content.
             </p>
           </CardContent>
@@ -272,32 +272,32 @@ export default function AILibraryView() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sortedStories.map(story => (
-            <Card key={story.id} className="hover:shadow-lg transition-shadow">
+            <Card key={story.id} className="victorian-card hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="space-y-1">
-                    <CardTitle className="text-lg line-clamp-2">{story.title}</CardTitle>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Badge variant="secondary">{story.genre}</Badge>
-                      <Badge variant="outline" className="gap-1">
+                    <CardTitle className="text-lg line-clamp-2 victorian-text">{story.title}</CardTitle>
+                    <div className="flex items-center gap-2 text-sm victorian-text-subtle">
+                      <Badge variant="secondary" className="victorian-badge">{story.genre}</Badge>
+                      <Badge variant="outline" className="gap-1 victorian-border">
                         <Bot className="h-3 w-3" />
                         AI Generated
                       </Badge>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1 text-sm victorian-text-subtle">
                     <Clock className="h-3 w-3" />
                     <span>{new Date(story.published_at).toLocaleDateString()}</span>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+                <p className="text-sm victorian-text-muted mb-4 line-clamp-3">
                   {story.premise}
                 </p>
 
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <div className="flex items-center justify-between text-xs victorian-text-subtle">
                     <div className="flex items-center gap-3">
                       <span className="flex items-center gap-1">
                         <FileText className="h-3 w-3" />
@@ -308,13 +308,13 @@ export default function AILibraryView() {
                         {story.word_count.toLocaleString()} words
                       </span>
                     </div>
-                    <span className="text-green-600 font-medium">
+                    <span className="victorian-accent font-medium">
                       {story.target_length.toLocaleString()} target
                     </span>
                   </div>
 
                   <Button 
-                    className="w-full" 
+                    className="w-full victorian-border" 
                     size="sm" 
                     variant={unlockedStories.has(story.id) ? "secondary" : "default"}
                     onClick={() => {

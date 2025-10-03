@@ -13,8 +13,15 @@ export default async function AILibraryPage() {
   // For now, creating the page structure for the foundation
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <AILibraryView />
+    <div className="victorian-bg min-h-screen" style={{
+      backgroundImage: 'url(/victorian-street-scene.jpg)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundAttachment: 'fixed'
+    }}>
+      <div className="container mx-auto px-4 py-8">
+        <AILibraryView />
+      </div>
     </div>
   )
 }
