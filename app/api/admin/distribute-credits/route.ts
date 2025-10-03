@@ -91,18 +91,16 @@ export async function POST(request: NextRequest) {
     console.log(`Processing credit distribution for ${distributionYear}-${distributionMonth + 1}`)
 
     // Get all active subscribers for the month
-    type UserProfile = Pick<Database['public']['Tables']['profiles']['Row'], 'id' | 'subscription_tier' | 'subscription_status' | 'credits_balance' | 'credits_earned_total'>
+    type UserProfile = Pick<Database['public']['Tables']['profiles']['Row'], 'id' | 'subscription_tier' | 'credits_balance'>
     const { data } = await supabase
       .from('profiles')
       .select(`
         id,
         subscription_tier,
-        subscription_status,
-        credits_balance,
-        credits_earned_total
+        credits_balance
       `)
-      .in('subscription_status', ['active', 'trialing'])
       .not('subscription_tier', 'is', null)
+      .not('credits_balance', 'is', null)
 
     const activeSubscribers = data as UserProfile[] | null
 
@@ -164,8 +162,7 @@ export async function POST(request: NextRequest) {
       if (!dryRun) {
         // Add credits to user's balance
         const updateData = {
-          credits_balance: (subscriber.credits_balance || 0) + creditsToDistribute,
-          credits_earned_total: (subscriber.credits_earned_total || 0) + creditsToDistribute
+          credits_balance: (subscriber.credits_balance || 0) + creditsToDistribute
         }
         const { error: updateError } = await ((supabase as any)
           .from('profiles')
