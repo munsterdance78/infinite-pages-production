@@ -113,22 +113,22 @@ export async function POST(request: NextRequest) {
     console.log(`Found ${activeSubscribers.length} active subscribers`)
 
     // Get story reading activity for the month for all users
-    type StoryPurchase = Pick<Database['public']['Tables']['story_purchases']['Row'], 'user_id' | 'story_id' | 'created_at'>
+    type StoryRead = Pick<Database['public']['Tables']['story_reads']['Row'], 'reader_id' | 'story_id' | 'unlocked_at'>
     const { data: readingData } = await supabase
-      .from('story_purchases')
-      .select('user_id, story_id, created_at')
-      .gte('created_at', startOfMonth.toISOString())
-      .lte('created_at', endOfMonth.toISOString())
+      .from('story_reads')
+      .select('reader_id, story_id, unlocked_at')
+      .gte('unlocked_at', startOfMonth.toISOString())
+      .lte('unlocked_at', endOfMonth.toISOString())
 
-    const readingActivity = readingData as StoryPurchase[] | null
+    const readingActivity = readingData as StoryRead[] | null
 
     // Calculate reading activity per user
     const userReadingStats = new Map<string, { storiesRead: number; uniqueStories: Set<string> }>()
     if (readingActivity) {
-      for (const purchase of readingActivity) {
-        const userId = purchase.user_id
+      for (const read of readingActivity) {
+        const userId = read.reader_id
         const existing = userReadingStats.get(userId) || { storiesRead: 0, uniqueStories: new Set<string>() }
-        existing.uniqueStories.add(purchase.story_id)
+        existing.uniqueStories.add(read.story_id)
         existing.storiesRead = existing.uniqueStories.size
         userReadingStats.set(userId, existing)
       }
