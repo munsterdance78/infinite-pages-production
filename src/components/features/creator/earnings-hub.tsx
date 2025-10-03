@@ -18,7 +18,6 @@ import {
   RefreshCw,
   Eye,
   EyeOff,
-  DollarSign,
   AlertCircle,
   Crown,
   Wallet,
