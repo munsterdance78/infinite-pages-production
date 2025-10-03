@@ -15,6 +15,14 @@ export const metadata: Metadata = {
   keywords: ['AI', 'story generation', 'writing', 'creative writing', 'artificial intelligence'],
   authors: [{ name: 'Infinite-Pages Team' }],
   robots: 'index, follow',
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' }
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     title: 'Infinite Pages - Where Every Story Becomes Infinite',
     description: 'Transform any idea into boundless story universes that grow endlessly. Your AI creative partner awaits - explore limitless possibilities together.',
