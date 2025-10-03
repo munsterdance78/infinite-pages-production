@@ -580,6 +580,278 @@ export type Database = {
           updated_at?: string
         }
       }
+      story_facts: {
+        Row: {
+          id: string
+          story_id: string
+          chapter_id: string | null
+          fact_type: string
+          fact_data: Json
+          confidence: number | null
+          extraction_model: string | null
+          extraction_cost_usd: number | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          story_id: string
+          chapter_id?: string | null
+          fact_type: string
+          fact_data: Json
+          confidence?: number | null
+          extraction_model?: string | null
+          extraction_cost_usd?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          story_id?: string
+          chapter_id?: string | null
+          fact_type?: string
+          fact_data?: Json
+          confidence?: number | null
+          extraction_model?: string | null
+          extraction_cost_usd?: number | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      story_outline: {
+        Row: {
+          id: string
+          story_id: string
+          outline_data: Json
+          narrative_architecture: Json | null
+          character_arcs: Json | null
+          conflict_escalation: Json | null
+          mystery_management: Json | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          story_id: string
+          outline_data: Json
+          narrative_architecture?: Json | null
+          character_arcs?: Json | null
+          conflict_escalation?: Json | null
+          mystery_management?: Json | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          story_id?: string
+          outline_data?: Json
+          narrative_architecture?: Json | null
+          character_arcs?: Json | null
+          conflict_escalation?: Json | null
+          mystery_management?: Json | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      character_voice_patterns: {
+        Row: {
+          id: string
+          character_name: string
+          story_id: string
+          speech_patterns: Json
+          vocabulary_style: string
+          tonal_characteristics: string
+          dialogue_examples: Json
+          consistency_markers: Json
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          character_name: string
+          story_id: string
+          speech_patterns?: Json
+          vocabulary_style?: string
+          tonal_characteristics?: string
+          dialogue_examples?: Json
+          consistency_markers?: Json
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          character_name?: string
+          story_id?: string
+          speech_patterns?: Json
+          vocabulary_style?: string
+          tonal_characteristics?: string
+          dialogue_examples?: Json
+          consistency_markers?: Json
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      subscription_logs: {
+        Row: {
+          id: string
+          user_id: string
+          event_type: string
+          subscription_tier: string | null
+          subscription_status: string | null
+          credits_granted: number | null
+          stripe_session_id: string | null
+          stripe_subscription_id: string | null
+          stripe_invoice_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          event_type: string
+          subscription_tier?: string | null
+          subscription_status?: string | null
+          credits_granted?: number | null
+          stripe_session_id?: string | null
+          stripe_subscription_id?: string | null
+          stripe_invoice_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          event_type?: string
+          subscription_tier?: string | null
+          subscription_status?: string | null
+          credits_granted?: number | null
+          stripe_session_id?: string | null
+          stripe_subscription_id?: string | null
+          stripe_invoice_id?: string | null
+          created_at?: string
+        }
+      }
+      infinite_pages_cache: {
+        Row: {
+          id: string
+          content_type: string
+          user_id: string | null
+          content_hash: string
+          cached_content: Json
+          metadata: Json
+          hit_count: number
+          token_cost_saved: number
+          last_accessed: string
+          expires_at: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          content_type: string
+          user_id?: string | null
+          content_hash: string
+          cached_content: Json
+          metadata?: Json
+          hit_count?: number
+          token_cost_saved?: number
+          last_accessed?: string
+          expires_at: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          content_type?: string
+          user_id?: string | null
+          content_hash?: string
+          cached_content?: Json
+          metadata?: Json
+          hit_count?: number
+          token_cost_saved?: number
+          last_accessed?: string
+          expires_at?: string
+          created_at?: string
+        }
+      }
+      claude_analytics: {
+        Row: {
+          id: string
+          user_id: string | null
+          operation: string
+          model: string
+          input_tokens: number
+          output_tokens: number
+          total_tokens: number
+          cost: number
+          response_time: number
+          success: boolean
+          cached: boolean
+          metadata: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id?: string | null
+          operation: string
+          model: string
+          input_tokens?: number
+          output_tokens?: number
+          total_tokens?: number
+          cost?: number
+          response_time?: number
+          success?: boolean
+          cached?: boolean
+          metadata?: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string | null
+          operation?: string
+          model?: string
+          input_tokens?: number
+          output_tokens?: number
+          total_tokens?: number
+          cost?: number
+          response_time?: number
+          success?: boolean
+          cached?: boolean
+          metadata?: Json
+          created_at?: string
+        }
+      }
+      story_purchases: {
+        Row: {
+          id: string
+          user_id: string
+          story_id: string
+          creator_id: string
+          purchase_type: 'chapter' | 'bundle' | 'premium_unlock'
+          chapters_unlocked: number[]
+          credits_spent: number
+          creator_earnings: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          story_id: string
+          creator_id: string
+          purchase_type: 'chapter' | 'bundle' | 'premium_unlock'
+          chapters_unlocked: number[]
+          credits_spent: number
+          creator_earnings: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          story_id?: string
+          creator_id?: string
+          purchase_type?: 'chapter' | 'bundle' | 'premium_unlock'
+          chapters_unlocked?: number[]
+          credits_spent?: number
+          creator_earnings?: number
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
